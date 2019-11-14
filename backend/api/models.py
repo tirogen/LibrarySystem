@@ -11,3 +11,9 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
         fields = ('url', 'subject', 'body', 'pk')
+
+class Librarian(models.Model):
+    username = models.CharField(max_length=200, primary_key=True)
+    password = models.CharField(max_length=200)
+    email = models.EmailField()
+    gender = models.CharField(choices=("Male", "Female"))
