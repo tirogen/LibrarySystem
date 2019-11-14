@@ -16,4 +16,4 @@ class Librarian(models.Model):
     username = models.CharField(max_length=200, primary_key=True)
     password = models.CharField(max_length=200)
     email = models.EmailField()
-    gender = models.CharField(choices=("Male", "Female"))
+    gender = models.CharField(max_length=1, choices=[("M","Male"), ("F","Female")], default="F")
