@@ -43,7 +43,7 @@ export default {
     }
   },
   computed: mapState({
-    reservedRooms: state => state.reservedRooms
+    reservedRooms: state => state.librarian.reservedRooms
   }),
   created(){
     this.$store.dispatch('librarian/getReservedRooms')
