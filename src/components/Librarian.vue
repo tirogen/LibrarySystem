@@ -1,9 +1,9 @@
 <template>
   <div>
-    <--THREE-->
+    --THREE--
     <LibrarianReserved />
-    <--TWO-->
-    <--SIX-->
+    --TWO--
+    --SIX--
   </div>
 </template>
 

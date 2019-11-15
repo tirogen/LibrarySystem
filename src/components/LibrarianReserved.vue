@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Reserved Rooms</h2>
     <b-table :items="items" :fields="fields" striped responsive="sm">
       <template v-slot:cell(show_details)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
