@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'LibrarianReserved',
   props: {
@@ -39,6 +41,12 @@ export default {
         {'Room name': 'Semina Room 6', 'Reserver': 'Nithi Tunti', 'Start time': '10:30' , 'Duration': '2 hrs'},
       ]
     }
+  },
+  computed: mapState({
+    reservedRooms: state => state.reservedRooms
+  }),
+  created(){
+    this.$store.dispatch('librarian/getReservedRooms')
   }
 }
 </script>

@@ -9,7 +9,7 @@ import store from '@/store'
 import router from '@/router'
 
 Vue.config.productionTip = false
-
+Vue.config.devtools = true
 // Vue.use(VueRouter)
 
 const vue = new Vue({
