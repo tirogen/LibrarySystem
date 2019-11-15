@@ -16,7 +16,7 @@ class Librarian(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
     Password = models.CharField(max_length=20, default="123456789")
     Email = models.EmailField(max_length=50)
-    Gender = models.CharField(max_length=20, choices=[("Male","Male"), ("Female","Female")], default="F")
+    Gender = models.CharField(max_length=20, choices=[("Male","Male"), ("Female","Female")], default="Male")
     Tel = models.CharField(max_length=10)
     DateOfBirth = models.DateField(auto_now=False, auto_now_add=False)
     Address = models.CharField(max_length=50)
@@ -35,7 +35,6 @@ class Student(models.Model):
     Address = models.CharField(max_length=50)
     FName = models.CharField(max_length=20)
     LName = models.CharField(max_length=20)
-    Reliable = models.IntegerField(default=10)
 
 class Penalty(models.Model):
     Name = models.CharField(max_length=20)
