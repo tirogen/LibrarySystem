@@ -60,15 +60,15 @@ class BookTime(models.Model):
     EndDate = models.DateField()
     RenewTimes = models.IntegerField(default=0)
 
-class Room(models.Model):
-    Name = models.CharField(max_length=20)
-    Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
-    Librarian = models.ForeignKey(Librarian, on_delete=models.SET_NULL, null=True)
-
 class RoomType(models.Model):
     Type = models.CharField(max_length=20, primary_key=True)
     Capacity = models.IntegerField()
 
+class Room(models.Model):
+    Name = models.CharField(max_length=20)
+    Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
+    Librarian = models.ForeignKey(Librarian, on_delete=models.SET_NULL, null=True)
+    RoomType = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
 
 class Gadget(models.Model):
     Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
