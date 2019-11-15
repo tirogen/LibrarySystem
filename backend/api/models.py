@@ -16,7 +16,7 @@ class Librarian(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
     Password = models.CharField(max_length=20, default="123456789")
     Email = models.EmailField(max_length=50)
-    Gender = models.CharField(max_length=1, choices=[("M","Male"), ("F","Female")], default="F")
+    Gender = models.CharField(max_length=20, choices=[("Male","Male"), ("Female","Female")], default="F")
     Tel = models.CharField(max_length=10)
     DateOfBirth = models.DateField(auto_now=False, auto_now_add=False)
     Address = models.CharField(max_length=50)
@@ -29,7 +29,7 @@ class Student(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
     Password = models.CharField(max_length=20, default="123456789")
     Email = models.EmailField(max_length=50)
-    Gender = models.CharField(max_length=1, choices=[("M","Male"), ("F","Female")], default="F")
+    Gender = models.CharField(max_length=20, choices=[("Male","Male"), ("Female","Female")], default="Female")
     Tel = models.CharField(max_length=10)
     DateOfBirth = models.DateField(auto_now=False, auto_now_add=False)
     Address = models.CharField(max_length=50)
@@ -38,47 +38,66 @@ class Student(models.Model):
     Reliable = models.IntegerField(default=10)
 
 class Penalty(models.Model):
-    PenaltyID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=20)
     Point = models.IntegerField()
 
-class Penalty_Time(models.Model):
-    class Meta:
-        unique_together = (('Date', 'Time'),)
-    Date = models.DateField(primary_key=True, auto_now_add=True)
+class PenaltyTime(models.Model):
+    Date = models.DateField(auto_now_add=True)
     Time = models.TimeField(auto_now_add=True)
 
-class Book(models.Model):
-    BookID = models.AutoField(primary_key=True)
-    Status = models.CharField(max_length=1, choices=[("A","Available"), ("R","Rented")], default="A")
-    Category = models.CharField(max_length=3, choices=[("FIC","Fiction"), ("BUS","Business"), ("SC","Science"), ("N/A", "None")], default="N/A")
+class Isbn(models.Model):
+    Isbn = models.CharField(max_length=13, primary_key=True)
+    Category = models.CharField(max_length=20, choices=[("Fiction","Fiction"), ("Business","Business"), ("Science","Science"), ("None", "None")], default="None")
     Author = models.CharField(max_length=40)
-    ISBN = models.CharField(max_length=13)
     Name = models.CharField(max_length=20)
 
-class Book_Time(models.Model):
-    class Meta:
-        unique_together = (('StartDate', 'EndDate'),)
-    StartDate = models.DateField(primary_key=True)
+class Book(models.Model):
+    Status = models.CharField(max_length=20, choices=[("Available","Available"), ("Rented","Rented"), ("Broken", "Broken"), ("Lost", "Lost")], default="Available")
+    Isbn = models.ForeignKey(Isbn, on_delete=models.SET_NULL, null=True)
+
+class BookTime(models.Model):
+    StartDate = models.DateField()
     EndDate = models.DateField()
     RenewTimes = models.IntegerField(default=0)
 
 class Room(models.Model):
-    RoomID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=20)
+    Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
+    Librarian = models.ForeignKey(Librarian, on_delete=models.SET_NULL, null=True)
+
+class RoomType(models.Model):
+    Type = models.CharField(max_length=20, primary_key=True)
     Capacity = models.IntegerField()
-    Type = models.CharField(max_length=1, choices=[("M","MeetingRoom"), ("S","SleepingRoom")], default="M")
-    Status = models.CharField(max_length=1, choices=[("A","Available"), ("N","NotAvailable")], default="A")
+
 
 class Gadget(models.Model):
-    GadgetID = models.AutoField(primary_key=True)
-    Status = models.CharField(max_length=1, choices=[("A","Available"), ("N","NotAvailable")], default="A")
+    Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
     PurchasedDate = models.DateField()
     Name = models.CharField(max_length=20)
+    Room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
 
-class Room_Time():
-    class Meta:
-        unique_together = (('StartTime', 'EndTime', 'Date'),)
+class RoomTime(models.Model):
     StartTime = models.TimeField()
     EndTime = models.TimeField()
     Date = models.DateField()
+
+class Punish(models.Model):
+    Penalty = models.ForeignKey(Penalty, on_delete=models.CASCADE)
+    PunishTime = models.ForeignKey(PenaltyTime, on_delete=models.CASCADE)
+    Student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+class Borrow(models.Model):
+    Student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    Book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    BookTime = models.ForeignKey(BookTime, on_delete=models.CASCADE)
+
+class Reserve(models.Model):
+    Student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    Room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    RoomTime = models.ForeignKey(RoomTime, on_delete=models.CASCADE)
+    TimeIn = models.TimeField()
+    TimeOut = models.TimeField()
+
+class ReserveFriend(models.Model):
+    Reserve = models.ForeignKey(Reserve, on_delete=models.CASCADE)
+    Friend = models.ForeignKey(Student, on_delete=models.CASCADE)
