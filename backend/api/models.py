@@ -28,7 +28,7 @@ class Librarian(models.Model):
 class LibrarianSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Librarian
-        fields = ('Username', 'Email', 'Gender')
+        fields = ('Username', 'Email', 'Gender', 'Tel', 'DateOfBirth', 'Address', 'FName', 'LName', 'StartWork', 'Salary')
 
 class Student(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
