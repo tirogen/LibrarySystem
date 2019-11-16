@@ -10,13 +10,9 @@
 
       <template v-slot:row-details="row">
         <b-card>
-          <b-button variant="primary">Confirm for use this room</b-button>
-        </b-card>
-        <b-card>
-          <b-button variant="danger">Delete this reserved</b-button>
-        </b-card>
-        <b-card>
-          <b-button size="sm" @click="row.toggleDetails">Hide Manage</b-button>
+          <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
+          <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button size="sm" class="m-2" @click="row.toggleDetails">Hide Manage</b-button>
         </b-card>
       </template>
     </b-table>
