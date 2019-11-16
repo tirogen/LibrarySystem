@@ -1,26 +1,22 @@
 <template>
   <div>
     <h2>Reserved Rooms</h2>
-    <b-table :items="items" :fields="fields" striped responsive="sm">
-      <template v-slot:cell(show_details)="row">
+    <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
+      <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+          {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
         </b-button>
       </template>
 
       <template v-slot:row-details="row">
         <b-card>
-          <b-row class="mb-2">
-            <b-col sm="3" class="text-sm-right"><b>Room name:</b></b-col>
-            <b-col>{{ row.item['Room name'] }}</b-col>
-          </b-row>
-
-          <b-row class="mb-2">
-            <b-col sm="3" class="text-sm-right"><b>Reserver:</b></b-col>
-            <b-col>{{ row.item.Reserver }}</b-col>
-          </b-row>
-
-          <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
+          <b-button variant="primary">Confirm for use this room</b-button>
+        </b-card>
+        <b-card>
+          <b-button variant="danger">Delete this reserved</b-button>
+        </b-card>
+        <b-card>
+          <b-button size="sm" @click="row.toggleDetails">Hide Manage</b-button>
         </b-card>
       </template>
     </b-table>
@@ -28,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   name: 'LibrarianReserved',
@@ -37,10 +33,7 @@ export default {
   },
   data() {
     return {
-      fields: ['Room name', 'Reserver', 'Start time', 'Duration', 'show_details'],
-      items: [
-        {'Room name': 'Semina Room 6', 'Reserver': 'Nithi Tunti', 'Start time': '10:30' , 'Duration': '2 hrs'},
-      ]
+      fields: ['Room', 'Name', 'Time In', 'Time Out', 'Manage'],
     }
   },
   computed: mapState({

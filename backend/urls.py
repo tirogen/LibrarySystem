@@ -13,7 +13,6 @@ from .api.reservedRoom import GetTop20
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
-router.register('reservedRoom/getTop20', GetTop20)
 
 urlpatterns = [
 
@@ -25,4 +24,6 @@ urlpatterns = [
 
     # http://localhost:8000/api/admin/
     path('api/admin/', admin.site.urls),
+
+    path('api/reservedRoom/getTop20/', GetTop20),
 ]
