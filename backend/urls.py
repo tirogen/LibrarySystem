@@ -9,11 +9,11 @@ from django.urls import path, include
 from rest_framework import routers
 
 from .api.views import index_view, MessageViewSet
-from .api.reservedRoom import getTop20
+from .api.reservedRoom import GetTop20
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
-router.register('reservedRoom/getTop20', getTop20)
+router.register('reservedRoom/getTop20', GetTop20)
 
 urlpatterns = [
 
