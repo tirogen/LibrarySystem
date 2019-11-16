@@ -11,3 +11,4 @@ class getTop20(viewsets.ModelViewSet):
         INNER JOIN api_librarian ON api_room.Librarian_id=api_librarian.Username\
         WHERE id=3;")
     serializer_class = LibrarianSerializer
+    serializer_class = LibrarianSerializer
