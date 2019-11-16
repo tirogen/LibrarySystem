@@ -18,9 +18,7 @@ router.register('messages', MessageViewSet)
 
 urlpatterns = [
 
-    # url(r'^test/$', test),
-
-    path('test/<int:id>/', test),
+    path('test/', test),
 
     # http://localhost:8000/
     path('', index_view, name='index'),
