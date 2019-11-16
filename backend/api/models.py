@@ -25,6 +25,11 @@ class Librarian(models.Model):
     StartWork = models.DateField(auto_now=False, auto_now_add=False)
     Salary = models.IntegerField()
 
+class LibrarianSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Librarian
+        fields = ('Username', 'Email', 'Gender')
+
 class Student(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
     Password = models.CharField(max_length=20, default="123456789")
@@ -68,6 +73,11 @@ class Room(models.Model):
     Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
     Librarian = models.ForeignKey(Librarian, on_delete=models.SET_NULL, null=True)
     RoomType = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
+
+class RoomSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'Name', 'Status', 'Librarian_id')
 
 class Gadget(models.Model):
     Status = models.CharField(max_length=20, choices=[("Available","Available"), ("NotAvailable","NotAvailable")], default="Available")
