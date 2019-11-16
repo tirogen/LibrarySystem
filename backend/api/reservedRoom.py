@@ -5,6 +5,6 @@ from rest_framework import viewsets
 from .models import Message, MessageSerializer
 
 
-class getTop20(viewsets.ModelViewSet):
+class GetTop20(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
