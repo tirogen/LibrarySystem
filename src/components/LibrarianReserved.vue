@@ -12,10 +12,10 @@
         <b-card>
           <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
           <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
-          <b-button size="sm" class="m-2" @click="row.toggleDetails">Hide Manage</b-button>
         </b-card>
       </template>
     </b-table>
+    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 
