@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <b-container>
-      <h1>Library System</h1>
       <div id="nav">
        <router-link :to="{ name: 'home' }">Home</router-link> |
        <router-link :to="{ name: 'student' }">Student</router-link> |

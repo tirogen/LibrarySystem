@@ -9,8 +9,8 @@ from django.urls import path, include
 from rest_framework import routers
 from django.conf.urls import url
 from .api.views import index_view, MessageViewSet
-# from .api.reservedRoom import GetTop20
-from .api.reservedRoom import test
+from .api.reservedRoom import GetTop20
+# from .api.reservedRoom import test
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -19,7 +19,7 @@ urlpatterns = [
 
     # url(r'^test/$', test),
 
-    path('test/<int:id>/', test),
+    # path('test/<int:id>/', test),
 
     # http://localhost:8000/
     path('', index_view, name='index'),
