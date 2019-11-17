@@ -107,6 +107,12 @@ class Reserve(models.Model):
     TimeIn = models.TimeField()
     TimeOut = models.TimeField()
 
+class ReserveSerializer(serializers.HyperlinkedModelSerializer):
+    room = RoomSerializer(many=True, read_only=True)
+    class Meta:
+        model = Reserve
+        fields = ('room', 'TimeIn', 'TimeOut')
+
 class ReserveFriend(models.Model):
     Reserve = models.ForeignKey(Reserve, on_delete=models.CASCADE)
     Friend = models.ForeignKey(Student, on_delete=models.CASCADE)
