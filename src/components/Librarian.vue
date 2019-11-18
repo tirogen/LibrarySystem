@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     --THREE--
+    <Book />
     <Gadget />
     --TWO--
     <LibrarianReserved />
@@ -13,6 +14,8 @@
 import LibrarianReserved from './LibrarianReserved'
 import LibrarianPunish from './LibrarianPunish'
 import Gadget from './LibrarianGadget'
+import Book from './LibrarianBook'
+
 
 
 export default {
@@ -23,7 +26,8 @@ export default {
   components: {
     LibrarianReserved,
     Gadget,
-    LibrarianPunish
+    LibrarianPunish,
+    Book
   }
 }
 </script>

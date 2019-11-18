@@ -35,7 +35,6 @@ export default {
     reservedRooms: state => state.librarian.reservedRooms
   }),
   mounted(){
-    console.log("here");
     this.$store.dispatch('librarian/getReservedRooms')
   }
 }

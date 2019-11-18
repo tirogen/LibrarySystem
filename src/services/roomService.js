@@ -6,16 +6,20 @@ export default {
               .then(response => response.data)
   },
   fectchRooms() {
-    return api.get('Room/getRoom/')
+    return api.get('reservedRoom/getRoom')
               .then(response => response.data)
   },
   postGadget(newGadget) {
-
     return api.post('Gadget/getGadget/', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
-  }) 
-              .then(response => response)
+      title: "asdasd",
+      body: "asd"
+    }).then((response) => {
+      response => response.data
+    })
+    .catch((e) => {
+      console.error(e)
+    })
+
   } 
   
 }

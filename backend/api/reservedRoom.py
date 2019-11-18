@@ -19,3 +19,16 @@ def GetTop20(request):
             "Name": row[3]+" "+row[4],
         })
     return Response(response)
+
+@api_view(['GET'])
+def getRoom(request) :
+    cursor = connection.cursor()
+    cursor.execute("SELECT api_room.id, api_room.Name, api_room.RoomType_id FROM api_room")
+    response = []
+    for row in cursor.fetchall():
+        response.append({
+            "id": row[0],
+            "roomName": row[1],
+            "roomType": row[2],
+        })
+    return Response(response)

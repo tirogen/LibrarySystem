@@ -1,26 +1,26 @@
 <template>
   <div class="jumbotron bg-overlay">
-    <h2>Gadget
-    <b-button v-b-modal.modal-1>ADD GADGET</b-button>
+    <h2>Book
+    <b-button v-b-modal.modal-1>ADD BOOK</b-button>
     </h2>
-    <!-- Add GadGet Modal -->
+    <!-- Add Book Modal -->
     <b-modal id="modal-1" title="BootstrapVue">
         <div class="modal-content">
             <div class="modal-body">
-                  <label for="GadgetName">Gadget Name</label>
+                  <label for="newBook">Book THING</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="GadgetName"
-                    placeholder="Enter Gadget Name"
-                    v-model="newGadget.GadgetName"
-                    required="required" >
+                    id="BookName"
+                    placeholder="Enter Book Name"
+                    v-model="newBook.id"
+                    required="required">
             </div>
         </div>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b>Custom Footer</b>
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="success" v-on:click="addGadget()">
+        <b-button size="sm" variant="success" v-on:click="addBook()">
           OK
         </b-button>
         <b-button size="sm" variant="danger" @click="cancel()">
@@ -28,8 +28,8 @@
         </b-button>
       </template>
     </b-modal>
-    <!-- End of add Gadget modal -->
-    <b-table :items="gadgets" :fields="fields" striped responsive="sm">
+    <!-- End of add Book modal -->
+    <b-table :items="books" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
@@ -49,37 +49,36 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-  name: 'Gadget',
+  name: 'Book',
   props: {
 
   },
   data() {
     return {
-      fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
-      newGadget: { 'GadgetName': null, 'Status': null, 'PurchasedDate': null, 'Roomname': null}
+      fields: ['id', 'ISBN', 'Status', 'Manage'],
+      // need to add book name
+      newBook: { 'id': null, 'ISBN': null, 'status': null}
     }
   },
   mounted() {
-   this.fetchGadgets();
+   this.fetchBooks();
   },
   computed: mapState({
-    isLoading: state => state.room.isLoading,
-    isSuccess: state => state.room.isSuccess,
-    isError: state => state.room.isError,
-    gadgets: state => {
-      return state.room.gadgets
-    },
-    rooms: state => {
-      return state.room.rooms
+    isLoading: state => state.book.isLoading,
+    isSuccess: state => state.book.isSuccess,
+    isError: state => state.book.isError,
+    books: state => {
+      console.log(state.book.books)
+      return state.book.books
     }
   }),
 
   methods: {
-    fetchGadgets: function(){
-        this.$store.dispatch('room/fetchGadgets')
+    fetchBooks: function(){
+        this.$store.dispatch('book/getBooks')
     },
-    addGadget: function(){
-      this.$store.dispatch('room/postGadget', this.newGadget)
+    addBook: function(){
+      this.$store.dispatch('book/add', this.newBook)
     }
   }
 }

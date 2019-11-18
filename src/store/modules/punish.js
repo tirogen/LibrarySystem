@@ -12,7 +12,6 @@ const getters = {
 
 const actions = {
   getAllPenalty ({ commit }) {
-      console.log("here");
     punishService.fetchAllPenalty()
     .then(penalty => {
         console.log(penalty);
