@@ -7,10 +7,10 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-
 from .api.views import index_view, MessageViewSet
 from .api.reservedRoom import GetTop20
 from .api.punish import GetAllPenalty, CalculatePoint
+from .api.Gadget import getGadget
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -25,8 +25,9 @@ urlpatterns = [
 
     # http://localhost:8000/api/admin/
     path('api/admin/', admin.site.urls),
-
     path('api/reservedRoom/getTop20/', GetTop20),
+    path('api/Gadget/getGadget/', getGadget),
+
 
     #penalty
     path('api/punish/getAllPenalty/', GetAllPenalty),
