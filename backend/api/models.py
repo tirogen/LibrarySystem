@@ -28,7 +28,7 @@ class Librarian(models.Model):
 class LibrarianSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Librarian
-        fields = ('Username', 'Email', 'Gender')
+        fields = ('Username', 'Email', 'Gender', 'Tel', 'DateOfBirth', 'Address', 'FName', 'LName', 'StartWork', 'Salary')
 
 class Student(models.Model):
     Username = models.CharField(max_length=20, primary_key=True)
@@ -84,6 +84,11 @@ class Gadget(models.Model):
     PurchasedDate = models.DateField()
     Name = models.CharField(max_length=20)
     Room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
+
+class GadgetSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Gadget
+        fields = ('id', 'Status', 'PurchasedDate', 'Name','Room_id')
 
 class RoomTime(models.Model):
     StartTime = models.TimeField()
