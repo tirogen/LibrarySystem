@@ -10,6 +10,7 @@ from rest_framework import routers
 
 from .api.views import index_view, MessageViewSet
 from .api.reservedRoom import GetTop20
+from .api.punish import GetAllPenalty, CalculatePoint
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -26,4 +27,8 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
 
     path('api/reservedRoom/getTop20/', GetTop20),
+
+    #penalty
+    path('api/punish/getAllPenalty/', GetAllPenalty),
+    path('api/punish/calculatePoint/<str:id>/', CalculatePoint),
 ]

@@ -3,12 +3,14 @@
     --THREE--
     <LibrarianReserved />
     --TWO--
+    <LibrarianPunish />
     --SIX--
   </div>
 </template>
 
 <script>
 import LibrarianReserved from './LibrarianReserved'
+import LibrarianPunish from './LibrarianPunish'
 
 export default {
   name: 'Librarian',
@@ -17,6 +19,7 @@ export default {
   },
   components: {
     LibrarianReserved
+    LibrarianPunish
   }
 }
 </script>
