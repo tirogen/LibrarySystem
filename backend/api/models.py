@@ -85,6 +85,11 @@ class Gadget(models.Model):
     Name = models.CharField(max_length=20)
     Room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
 
+class GadgetSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Gadget
+        fields = ('id', 'Status', 'PurchasedDate', 'Name','Room_id')
+
 class RoomTime(models.Model):
     StartTime = models.TimeField()
     EndTime = models.TimeField()

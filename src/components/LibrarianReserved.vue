@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="jumbotron bg-overlay">
     <h2>Reserved Rooms</h2>
     <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
@@ -7,7 +7,6 @@
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
         </b-button>
       </template>
-
       <template v-slot:row-details="row">
         <b-card>
           <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
@@ -35,7 +34,7 @@ export default {
   computed: mapState({
     reservedRooms: state => state.librarian.reservedRooms
   }),
-  created(){
+  mounted(){
     this.$store.dispatch('librarian/getReservedRooms')
   }
 }
