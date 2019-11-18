@@ -35,7 +35,6 @@
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
         </b-button>
       </template>
-
       <template v-slot:row-details="row">
         <b-card>
           <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
