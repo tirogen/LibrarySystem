@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="jumbotron bg-overlay">
     <h2>Library Punish</h2>
-    <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
+    <b-table :items="penalty" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
@@ -21,7 +21,6 @@
 
 <script>
 import {mapState} from 'vuex'
-
 export default {
   name: 'LibrarianPunish',
   props: {
@@ -32,8 +31,15 @@ export default {
       fields: ['Room', 'Name', 'Time In', 'Time Out', 'Manage'],
     }
   },
-
+  computed: mapState({
+    reservedRooms: state => state.librarian.reservedRooms
+  }),
+  mounted(){
+    console.log("here");
+    this.$store.dispatch('librarian/getReservedRooms')
+  }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

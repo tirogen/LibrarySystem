@@ -2,10 +2,10 @@
   <div class="container">
     --THREE--
     <Gadget />
-    <LibrarianReserved />
     --TWO--
-    <LibrarianPunish />
+    <LibrarianReserved />
     --SIX--
+    <LibrarianPunish></LibrarianPunish>
   </div>
 </template>
 
@@ -22,7 +22,8 @@ export default {
   },
   components: {
     LibrarianReserved,
-    Gadget
+    Gadget,
+    LibrarianPunish
   }
 }
 </script>
