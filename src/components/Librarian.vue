@@ -18,7 +18,7 @@ export default {
 
   },
   components: {
-    LibrarianReserved
+    LibrarianReserved,
     LibrarianPunish
   }
 }
