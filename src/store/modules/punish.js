@@ -1,29 +1,27 @@
 import punishService from '../../services/punishService'
 
 const state = {
-  penalty: []
+  penalties: []
 }
 
 const getters = {
-  penalty: state => {
-    return state.penalty
+  penalties: state => {
+    return state.penalties
   }
 }
 
 const actions = {
-  getAllPenalty ({ commit }) {
-      console.log("here");
-    punishService.fetchAllPenalty()
-    .then(penalty => {
-        console.log(penalty);
-      commit('setPenalty', penalty)
+  GetAllPenalties ({ commit }) {
+    punishService.fetchAllPenalties()
+    .then(penalties => {
+      commit('setPenalties', penalties)
     })
   },
 }
 
 const mutations = {
-  setPenalty (state, penalty) {
-    state.penalty = penalty
+  setPenalties (state, penalties) {
+    state.penalties = penalties
   },
 }
 
