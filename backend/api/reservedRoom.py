@@ -26,9 +26,11 @@ def getRoom(request) :
     cursor.execute("SELECT api_room.id, api_room.Name, api_room.RoomType_id FROM api_room")
     response = []
     for row in cursor.fetchall():
-        response.append({
+        obj = {
             "id": row[0],
             "roomName": row[1],
             "roomType": row[2],
-        })
+        }
+        if obj not in response :
+            response.append(obj)
     return Response(response)

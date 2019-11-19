@@ -56,11 +56,12 @@ export default {
   data() {
     return {
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
-      newGadget: { 'GadgetName': null, 'Status': null, 'PurchasedDate': null, 'Roomname': null}
+      newGadget: { 'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null}
     }
   },
   mounted() {
-   this.fetchGadgets();
+   this.fetchGadgets()
+   this.fetchRooms()
   },
   computed: mapState({
     isLoading: state => state.room.isLoading,
@@ -80,6 +81,9 @@ export default {
     },
     addGadget: function(){
       this.$store.dispatch('room/postGadget', this.newGadget)
+    },
+    fetchRooms: function() {
+      this.$store.dispatch('room/fetchRooms')
     }
   }
 }

@@ -4,7 +4,7 @@
     <b-button v-b-modal.modal-1>ADD BOOK</b-button>
     </h2>
     <!-- Add Book Modal -->
-    <b-modal id="modal-1" title="BootstrapVue">
+    <b-modal id="modal-2" title="BootstrapVue">
         <div class="modal-content">
             <div class="modal-body">
                   <label for="newBook">Book THING</label>
@@ -68,7 +68,6 @@ export default {
     isSuccess: state => state.book.isSuccess,
     isError: state => state.book.isError,
     books: state => {
-      console.log(state.book.books)
       return state.book.books
     }
   }),
