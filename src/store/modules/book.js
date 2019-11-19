@@ -22,7 +22,7 @@ const actions = {
       commit('success')
     })
     .catch(err => {
-      commit('error')
+      commit('error', err)
     })
   }
 }

@@ -16,7 +16,8 @@ export const baseMutation = {
         state.isError = false
         state.isLoading = false
     },
-    error: (state) => {
+    error: (state, errorData) => {
+        state.errorData = errorData
         state.isError = true
         state.isSuccess = false
         state.isLoading = false
