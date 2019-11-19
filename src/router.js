@@ -22,6 +22,11 @@ export default new Router({
       path: '/librarian',
       name: 'librarian',
       component: Librarian
+    },
+    {
+      path: '/student',
+      name: 'student',
+      component: VueDemo
     }
   ]
 })
