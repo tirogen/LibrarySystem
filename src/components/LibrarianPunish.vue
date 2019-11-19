@@ -32,7 +32,7 @@ export default {
     }
   },
   computed: mapState({
-    reservedRooms: state => state.librarian.reservedRooms
+    penalty: state => state.punish.penalty
   }),
   mounted(){
     this.$store.dispatch('librarian/getReservedRooms')
