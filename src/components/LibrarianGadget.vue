@@ -1,33 +1,66 @@
 <template>
   <div class="jumbotron bg-overlay">
     <h2>Gadget
-    <b-button v-b-modal.modal-1>ADD GADGET</b-button>
+    <b-button v-b-modal.modal-1 @click="fetchRooms()">ADD GADGET</b-button>
     </h2>
     <!-- Add GadGet Modal -->
-    <b-modal id="modal-1" title="BootstrapVue">
-        <div class="modal-content">
-            <div class="modal-body">
-                  <label for="GadgetName">Gadget Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="GadgetName"
-                    placeholder="Enter Gadget Name"
-                    v-model="newGadget.GadgetName"
-                    required="required" >
-            </div>
+    <div>
+    <b-modal
+      id="modal-1"
+      v-model="show"
+      title="ADD GADGET"
+    >
+      <b-container fluid>
+        <div>
+        <b-row class="mb-1 text-center">
+          <b-col cols="1.7"></b-col>
+          <b-col>RoomName</b-col>
+          <b-col>RoomType</b-col>
+        </b-row>
+
+        <b-row class="mb-1">
+          <b-col cols="1.5">Room</b-col>
+          <b-col>
+            <b-form-select
+              v-model="roomType"
+              :options="roomTypes"
+            ></b-form-select>
+          </b-col>
+          <b-col>
+            <b-form-select
+              v-model="newGadget.roomName"
+              :options="roomNames"
+            ></b-form-select>
+          </b-col>
+        </b-row>
         </div>
-      <template v-slot:modal-footer="{ ok, cancel }">
-        <b>Custom Footer</b>
-        <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="success" v-on:click="addGadget()">
-          OK
-        </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
-          Cancel
-        </b-button>
+
+        <b-row class="mb-1 pad">
+          <b-col cols="1.5" class="pad">Room Name</b-col>
+          <b-col>
+              <b-form-input
+                id="name-input"
+                v-model="newGadget.name"
+                required
+              ></b-form-input>
+          </b-col>
+        </b-row>
+      </b-container>
+      <template v-slot:modal-footer>
+        <div class="w-100">
+          <p class="float-left">Submit to add gadget</p>
+          <b-button
+            variant="primary"
+            size="sm"
+            class="float-right"
+            @click="show=false"
+          >
+            Close
+          </b-button>
+        </div>
       </template>
     </b-modal>
+  </div>
     <!-- End of add Gadget modal -->
     <b-table :items="gadgets" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
@@ -56,12 +89,16 @@ export default {
   data() {
     return {
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
-      newGadget: { 'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null}
+      newGadget: { 'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
+      show: false,
+      roomName: "",
+      roomType: "",
+      nameOption: "",
+      roomNames: []
     }
   },
   mounted() {
    this.fetchGadgets()
-   this.fetchRooms()
   },
   computed: mapState({
     isLoading: state => state.room.isLoading,
@@ -72,9 +109,18 @@ export default {
     },
     rooms: state => {
       return state.room.rooms
+    },
+    roomTypes: state=> {
+      console.log(Object.keys(state.room.rooms))
+      return Object.keys(state.room.rooms)
     }
-  }),
-
+  })
+  ,
+  watch: {
+     roomType: ()=> {
+        this.roomNames = this.rooms[this.roomType].keys
+     },
+  },
   methods: {
     fetchGadgets: function(){
         this.$store.dispatch('room/fetchGadgets')
@@ -111,5 +157,9 @@ a {
 
 img {
   width: 250px;
+}
+pad {
+  position: relative;
+  top: 100px;
 }
 </style>
