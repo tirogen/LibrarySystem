@@ -1,6 +1,9 @@
 import messageService from '../../services/messageService'
+import {cloneDeep} from "lodash";
+import {baseState, baseMutations} from "../state";
 
 const state = {
+  ...cloneDeep(baseState),
   messages: []
 }
 
@@ -30,6 +33,7 @@ const actions = {
 }
 
 const mutations = {
+  ...cloneDeep(baseMutations),
   setMessages (state, messages) {
     state.messages = messages
   },

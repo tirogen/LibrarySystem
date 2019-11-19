@@ -1,23 +1,23 @@
 <template>
   <div class="jumbotron bg-overlay">
     <h2>Gadget
-    <b-button v-b-modal.modal-1 @click="fetchRooms()">ADD GADGET</b-button>
+      <b-button v-b-modal.modal-1 @click="fetchRooms()">ADD GADGET</b-button>
     </h2>
     <!-- Add GadGet Modal -->
     <div>
-    <b-modal
-      id="modal-1"
-      v-model="show"
-      title="ADD GADGET"
-    >
-      <b-container fluid>
-        <div>
-        <b-row class="mb-1 text-center">
-          <b-col cols="1.7"></b-col>
-          <b-col>RoomName</b-col>
-          <b-col>RoomType</b-col>
-        </b-row>
-
+      <b-modal
+        id="modal-1"
+        v-model="show"
+        title="ADD GADGET"
+      >
+        <b-container fluid>
+          <div>
+            <b-row class="mb-1 text-center">
+              <b-col cols="1.7"></b-col>
+              <b-col>RoomName</b-col>
+              <b-col>RoomType</b-col>
+            </b-row>
+            
         <b-row class="mb-1">
           <b-col cols="1.5">Room</b-col>
           <b-col>
@@ -35,32 +35,32 @@
         </b-row>
         </div>
 
-        <b-row class="mb-1 pad">
-          <b-col cols="1.5" class="pad">Room Name</b-col>
-          <b-col>
+          <b-row class="mb-1 pad">
+            <b-col cols="1.5" class="pad">Room Name</b-col>
+            <b-col>
               <b-form-input
                 id="name-input"
                 v-model="gadgetName"
                 required
               ></b-form-input>
-          </b-col>
-        </b-row>
-      </b-container>
-      <template v-slot:modal-footer>
-        <div class="w-100">
-          <p class="float-left">Submit to add gadget</p>
-          <b-button
-            variant="primary"
-            size="sm"
-            class="float-right"
-            @click="show=false"
-          >
-            Close
-          </b-button>
-        </div>
-      </template>
-    </b-modal>
-  </div>
+            </b-col>
+          </b-row>
+        </b-container>
+        <template v-slot:modal-footer>
+          <div class="w-100">
+            <p class="float-left">Submit to add gadget</p>
+            <b-button
+              variant="primary"
+              size="sm"
+              class="float-right"
+              @click="show=false"
+            >
+              Close
+            </b-button>
+          </div>
+        </template>
+      </b-modal>
+    </div>
     <!-- End of add Gadget modal -->
     <b-table :items="gadgets" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
@@ -80,23 +80,23 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import {mapState} from 'vuex';
+
 export default {
   name: 'Gadget',
-  props: {
-
-  },
+  props: {},
   data() {
     return {
       gadgetName: "",
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
-      newGadget: { 'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
+      newGadget: {'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
       show: false,
       roomName: "",
       roomType: "",
       nameOption: ""      
     }
   },
+  
   computed: mapState({
     isLoading: state => state.room.isLoading,
     isSuccess: state => state.room.isSuccess,
@@ -121,14 +121,15 @@ export default {
   //   //   //  this.roomNames = Object.keys(dat[this.roomType])
   //   //  },
   // },
+
   methods: {
-    fetchGadgets: function(){
-        this.$store.dispatch('room/fetchGadgets')
+    fetchGadgets: function () {
+      this.$store.dispatch('room/fetchGadgets')
     },
-    addGadget: function(){
+    addGadget: function () {
       this.$store.dispatch('room/postGadget', this.newGadget)
     },
-    fetchRooms: function() {
+    fetchRooms: function () {
       this.$store.dispatch('room/fetchRooms')
     }
   },
@@ -162,6 +163,7 @@ a {
 img {
   width: 250px;
 }
+
 pad {
   position: relative;
   top: 100px;
