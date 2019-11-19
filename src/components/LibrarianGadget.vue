@@ -14,8 +14,8 @@
           <div>
             <b-row class="mb-1 text-center">
               <b-col cols="1.7"></b-col>
-              <b-col>RoomName</b-col>
               <b-col>RoomType</b-col>
+              <b-col>RoomName</b-col>
             </b-row>
             
         <b-row class="mb-1">
@@ -24,12 +24,14 @@
             <b-form-select
               v-model="roomType"
               :options="roomTypes"
+              required
             ></b-form-select>
           </b-col>
           <b-col>
             <b-form-select
               v-model="roomName"
               :options="roomNames"
+              required
             ></b-form-select>
           </b-col>
         </b-row>
@@ -137,16 +139,18 @@ export default {
       this.$store.dispatch('room/fetchGadgets')
     },
     addGadget: function () {
+      this.handleGadget()
       this.handleGadgetValue()
       .then(success => {
         if(success) {
+          this.show = false
 
+          // this.$store.dispatch('room/postGadget', this.newGadget)
+          //animate View
         } else {
-          alert("not pass valid")
+          alert("data is not valid")
         }
       })  
-      this.show = false
-      // this.$store.dispatch('room/postGadget', this.newGadget)
     },
     fetchRooms: function () {
       this.$store.dispatch('room/fetchRooms')
@@ -154,14 +158,16 @@ export default {
     handleGadget: function() {
       this.newGadget.Name = this.gadgetName
       this.newGadget.Status = "Available"
-      alert(Date().toString)
-      
+      console.log(this.newGadget)
     },
     handleGadgetValue: async function() {
       // check form is valid
-
+      if(this.roomName === "" || this.roomType === "" || this.gadgetName === "") {
+          return false
+          // need to check format
+      }
       //
-      return false
+      return true
     }
   },
   mounted() {
