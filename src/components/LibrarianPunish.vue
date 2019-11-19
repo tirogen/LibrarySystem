@@ -31,17 +31,10 @@ export default {
     }
   },
   computed: mapState({
-<<<<<<< HEAD
-    penalties: state => state.punish.penalties
-  }),
-  mounted(){
-    this.$store.dispatch('punish/GetAllPenalties')
-=======
     penalty: state => state.punish.penalty
   }),
   mounted(){
     this.$store.dispatch('librarian/getReservedRooms')
->>>>>>> refs/remotes/origin/master
   }
 }
 
