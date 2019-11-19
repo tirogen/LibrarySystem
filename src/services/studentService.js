@@ -8,5 +8,9 @@ export default {
 
   fetchRoomTypes(){
     return api.get('room/roomTypes').then(response => response.data)
+  },
+
+  getAvailableTimeSlot(type, date){
+    return api.get(`room/${type}/0`).then(response => response.data)
   }
 }

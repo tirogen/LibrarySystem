@@ -19,18 +19,21 @@ def roomTypes(request):
 
 
 @api_view(['GET'])
-def CalculatePoint(request, id):
-    statement = ("SELECT api_punish.Student_id ,SUM(api_penalty.Point) TotalPoint\
-                                FROM api_punish\
-                                INNER JOIN api_penalty\
-                                ON api_punish.Penalty_id = api_penalty.id\
-                                WHERE api_punish.Student_id = %s;")
+def getAvailableTimeSlot(request, type, date):
+    statement = "SELECT api_room.Name, api_roomtime.Date, api_roomtime.StartTime, api_roomtime.EndTime FROM api_reserve \
+                INNER JOIN api_room \
+                INNER JOIN api_roomtime \
+                ON api_reserve.RoomTime_id=api_roomtime.id \
+                AND api_reserve.Room_id=api_room.id \
+                AND api_room.RoomType_id=%s;"
     cursor = connection.cursor()
-    cursor.execute(statement, [id])
+    cursor.execute(statement, [type])
     response = []
-    for col in cursor.fetchall():
+    for record in cursor.fetchall():
         response.append({
-            "Student_id": col[0],
-            "TotalPoint": 100 - col[1]
+            "name": record[0],
+            "date": record[1],
+            "start_time": record[2],
+            "end_time": record[3]
         })
     return Response(response, status=status.HTTP_200_OK)

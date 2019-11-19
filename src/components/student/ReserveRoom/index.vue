@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div v-if="isLoading" class="w-100 py-5 d-flex align-items-center justify-content-center">
+    <div class="pr-3"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>
+    <div><strong style="font-size: 24px">  Loading...  </strong></div>
+  </div>
+  <div v-else>
     <div class="pt-3">
       <h4><strong>Select Room Type</strong></h4>
     </div>
@@ -12,7 +16,14 @@
         </div>
       </div>
     </div>
-
+    <div class="row">
+      <div class="col-6">
+<!--        <b-form-select v-model="selected" :options="options"></b-form-select>-->
+      </div>
+      <div class="col-6">
+<!--        <b-form-select v-model="selected" :options="options"></b-form-select>-->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,12 +35,17 @@ export default {
   data() {
     return {
       selectedType: '',
+      selectedDate: '',
+      selectedTime: '',
     }
   },
   mounted() {
     this.$store.dispatch('student/fetchRoomTypes')
   },
   computed: {
+    isLoading() {
+      return this.$store.state.student.isLoading
+    },
     roomTypes() {
       return this.$store.state.student.roomTypes
     }
@@ -44,6 +60,7 @@ export default {
     },
     selectRoomType(type) {
       this.selectedType = type
+      this.$store.dispatch('student/getAvailableTimeSlot', type, null)
     }
   }
 
