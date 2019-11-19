@@ -5,4 +5,8 @@ export default {
     return api.get(`reservedRoom/getTop20/`)
               .then(response => response.data)
   },
+
+  fetchRoomTypes(){
+    return api.get('room/roomTypes').then(response => response.data)
+  }
 }
