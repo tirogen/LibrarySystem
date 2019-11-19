@@ -9,7 +9,7 @@
         <div id="nav">
           <router-link :to="{ name: 'home' }" class="router-link">Home</router-link>
           |
-          <router-link :to="{ name: 'student' }" class="router-link">Student</router-link>
+          <router-link to="/student" class="router-link">Student</router-link>
           |
           <router-link :to="{ name: 'librarian' }" class="router-link">Librarian</router-link>
         </div>

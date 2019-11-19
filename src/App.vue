@@ -1,27 +1,16 @@
 <template>
   <div id="app" class="mt-0">
-<!--    <b-container>-->
-<!--      <h1>Library System</h1>-->
-<!--      <div id="nav">-->
-<!--       <router-link :to="{ name: 'home' }">Home</router-link> |-->
-<!--       <router-link :to="{ name: 'student' }">Student</router-link> |-->
-<!--       <router-link :to="{ name: 'librarian' }">Librarian</router-link>-->
-<!--      </div>-->
-<!--      <router-view/>-->
-<!--    </b-container>-->
     <Layout>
       <router-view/>
     </Layout>
   </div>
 </template>
 <script>
-  import Layout from "./layout/Layout";
-  export default {
-      components: {Layout},
-      comments: {
-          Layout
-      }
-  }
+import Layout from "./layout/Layout";
+
+export default {
+  components: {Layout},
+}
 </script>
 <style>
 #app {
