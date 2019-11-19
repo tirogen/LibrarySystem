@@ -1,6 +1,6 @@
 import punishService from '../../services/punishService'
 import {cloneDeep} from "lodash";
-import {baseState, baseMutation} from "../state";
+import {baseState, baseMutations} from "../state";
 
 const state = {
   ...cloneDeep(baseState),
@@ -24,7 +24,7 @@ const actions = {
 }
 
 const mutations = {
-  ...cloneDeep(baseMutation),
+  ...cloneDeep(baseMutations),
   setPenalty (state, penalty) {
     state.penalty = penalty
   },

@@ -1,6 +1,6 @@
 import bookService from '../../services/bookService'
 import {cloneDeep} from "lodash";
-import {baseState, baseMutation} from "../state";
+import {baseState, baseMutations} from "../state";
 
 const state = {
   ...cloneDeep(baseState),
@@ -28,7 +28,7 @@ const actions = {
 }
 
 const mutations = {
-  ...cloneDeep(baseMutation),
+  ...cloneDeep(baseMutations),
   setBooks (state, books) {
     state.books = books
   },
