@@ -33,9 +33,9 @@ const actions = {
     })
   },
   postGadget ({commit}, newGadget) {
-    roomService.postGadget(response)
-    .then(response => {
-      commit('setGadgets',response.data)
+    roomService.postGadget(newGadget)
+    .then(gadgets => {
+      commit('setGadgets',gadgets)
     })
   }
 }
