@@ -32,14 +32,16 @@ def getGadget(request):
         # Name = request.data['Name']
         # Status = request.data['Status']
         # RoomType_id = request.data['RoomType_id']
-		print("ANKASDASDDA")
-		# insert_stmt = (
-		# 	"INSERT INTO api_gadget (Name, Status, PurchasedDate, RoomType_id)"
-		# 	"VALUES (%s, %s, %s, %s, %s)"
-		# )
+		# print(request.data['Status'])
+		cursor = connection.cursor()
+		insert_stmt = (
+			"INSERT INTO api_gadget (Name, Status, PurchasedDate, RoomType_id)"
+			"VALUES (%s, %s, %s, %s)"
+		)
+		cursor.execute(insert_stmt,request)
         # Gadget.objects.raw(insert_stmt)
 		res=get()
-		return Response(data=res)
+		return Response(res)
 	elif request.method == 'DELETE':
 		print("this is id from DELETE request")
 		print(id)

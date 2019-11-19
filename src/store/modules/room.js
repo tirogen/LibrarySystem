@@ -5,7 +5,7 @@ import {baseState, baseMutation} from "../state";
 const state = {
   ...cloneDeep(baseState),
   gadgets: [],
-  rooms: []
+  rooms: {}
 }
 
 const getters = {
@@ -15,15 +15,15 @@ const getters = {
 }
 
 const actions = {
-  fectchRooms ({ commit }) {
+  fetchRooms ({ commit }) {
     commit('loading')
-    roomService.fectchRooms()
+    roomService.fetchRooms()
     .then(rooms => {
       commit('setRooms', rooms)
       commit('success')
     })
     .catch(err => {
-      commit('error')
+      commit('errors')
     })
   },
   fetchGadgets ({ commit }) {
@@ -37,12 +37,16 @@ const actions = {
     .then(gadgets => {
       commit('setGadgets',gadgets)
     })
+    .catch(err => {
+      commit('errors')
+    })
   }
 }
 
 const mutations = {
   ...cloneDeep(baseMutation),
   setGadgets (state, gadgets) {
+    // console.log(gadgets)
     state.gadgets = gadgets
   },
   setRooms (state, rooms) {

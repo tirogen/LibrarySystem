@@ -24,11 +24,27 @@ def GetTop20(request):
 def getRoom(request) :
     cursor = connection.cursor()
     cursor.execute("SELECT api_room.id, api_room.Name, api_room.RoomType_id FROM api_room")
-    response = []
+    obj = dict()
+    # obj = {
+    #         roomType : {
+    #           roomName: id,
+    #         },
+    # }
     for row in cursor.fetchall():
-        response.append({
-            "id": row[0],
-            "roomName": row[1],
-            "roomType": row[2],
-        })
-    return Response(response)
+        room_id = row[0];
+        roomName = row[1];
+        roomType = row[2];
+        if obj == dict() :
+            obj = {
+                roomType : {
+                    roomName : room_id
+                }
+            }
+        elif roomType not in obj.keys() :
+            obj[roomType] = {
+                roomName : room_id
+            }
+        else :
+            if roomName not in obj[roomType].keys():
+                obj[roomType][roomName] = room_id
+    return Response(obj)
