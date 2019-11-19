@@ -1,11 +1,11 @@
 import roomService from '../../services/roomService'
+import { cloneDeep } from 'lodash'
+import {baseState, baseMutations} from "../state";
 
 const state = {
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
+  ...cloneDeep(baseState),
   gadgets: [],
-  rooms: []
+  rooms: {}
 }
 
 const getters = {
@@ -15,15 +15,15 @@ const getters = {
 }
 
 const actions = {
-  fectchRooms ({ commit }) {
+  fetchRooms ({ commit }) {
     commit('loading')
-    roomService.fectchRooms()
+    roomService.fetchRooms()
     .then(rooms => {
       commit('setRooms', rooms)
       commit('success')
     })
     .catch(err => {
-      commit('error')
+      commit('errors')
     })
   },
   fetchGadgets ({ commit }) {
@@ -33,31 +33,24 @@ const actions = {
     })
   },
   postGadget ({commit}, newGadget) {
-    roomService.postGadget(response)
-    .then(response => {
-      commit('setGadgets',response.data)
+    roomService.postGadget(newGadget)
+    .then(gadgets => {
+      commit('setGadgets',gadgets)
+    })
+    .catch(err => {
+      commit('errors')
     })
   }
 }
 
 const mutations = {
+  ...cloneDeep(baseMutations),
   setGadgets (state, gadgets) {
     state.gadgets = gadgets
   },
   setRooms (state, rooms) {
     state.rooms = rooms
   },
-  loading (state){
-    state.isLoading = true
-  },
-  success (state){
-    state.isSuccess = true,
-    state.isLoading = false
-  },
-  errors (state) {
-    state.isError = true,
-    state.isLoading = false
-  }
 }
 
 export default {
