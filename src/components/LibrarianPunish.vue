@@ -1,13 +1,12 @@
 <template>
   <div class="jumbotron bg-overlay">
-    <h2>Library Punish</h2>
-    <b-table :items="penalty" :fields="fields" striped responsive="sm">
+    <h2>Punishment</h2>
+    <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
         </b-button>
       </template>
-
       <template v-slot:row-details="row">
         <b-card>
           <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
@@ -28,7 +27,7 @@ export default {
   },
   data() {
     return {
-      fields: ['Room', 'Name', 'Time In', 'Time Out', 'Manage'],
+      fields: ['id', 'Name', 'Point', 'Manage'],
     }
   },
   computed: mapState({

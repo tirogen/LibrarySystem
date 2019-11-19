@@ -8,8 +8,8 @@ const state = {
 }
 
 const getters = {
-  penalty: state => {
-    return state.penalty
+  penalties: state => {
+    return state.penalties
   }
 }
 
