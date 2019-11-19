@@ -1,9 +1,9 @@
 import bookService from '../../services/bookService'
+import {cloneDeep} from "lodash";
+import {baseState, baseMutation} from "../state";
 
 const state = {
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
+  ...cloneDeep(baseState),
   books: [],
 }
 
@@ -28,20 +28,10 @@ const actions = {
 }
 
 const mutations = {
+  ...cloneDeep(baseMutation),
   setBooks (state, books) {
     state.books = books
   },
-  loading (state){
-    state.isLoading = true
-  },
-  success (state){
-    state.isSuccess = true,
-    state.isLoading = false
-  },
-  errors (state) {
-    state.isError = true,
-    state.isLoading = false
-  }
 }
 
 export default {
