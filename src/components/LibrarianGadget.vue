@@ -10,41 +10,49 @@
         v-model="show"
         title="ADD GADGET"
       >
-        <b-container fluid>
-          <div>
-            <b-row class="mb-1 text-center">
-              <b-col cols="1.7"></b-col>
-              <b-col>RoomType</b-col>
-              <b-col>RoomName</b-col>
-            </b-row>
-            
-        <b-row class="mb-1">
-          <b-col cols="1.5">Room</b-col>
-          <b-col>
-            <b-form-select
-              v-model="roomType"
-              :options="roomTypes"
-              required
-            ></b-form-select>
-          </b-col>
-          <b-col>
-            <b-form-select
-              v-model="roomName"
-              :options="roomNames"
-              required
-            ></b-form-select>
-          </b-col>
-        </b-row>
-        </div>
+        <b-container fluid class="bv-example-row bv-example-row-flex-cols">
 
-          <b-row class="mb-1 pad">
-            <b-col cols="1.5" class="pad">Gadget Name</b-col>
+          <b-row class="mb-1 text-center" align-v="start">
+            <b-col cols="1.7"></b-col>
+            <b-col>RoomType</b-col>
+            <b-col>RoomName</b-col>
+          </b-row>
+          <b-row class="mb-1" >
+            <b-col cols="1.5" >Room</b-col>
+            <b-col>
+              <b-form-select
+                v-model="roomType"
+                :options="roomTypes"
+                required
+              ></b-form-select>
+            </b-col>
+            <b-col>
+              <b-form-select
+                v-model="roomName"
+                :options="roomNames"
+                required
+              ></b-form-select>
+            </b-col>
+          </b-row>
+          <b-row class="mb-1">
+            <b-col cols="1.5" class="">Gadget Name</b-col>
             <b-col>
               <b-form-input
                 id="name-input"
                 v-model="gadgetName"
                 required
               ></b-form-input>
+            </b-col>
+          </b-row>
+          <b-row class="mb-1">
+            <b-col cols="4.5" class="">Purchase Date </b-col>
+            <b-col  class="text-center" >
+              <datepicker v-model="cal.date" :language="th" :disabled-dates="cal.disabledDates" name="uniquename"></datepicker>
+            </b-col>
+          </b-row>
+          <b-row align-h="start">
+            <b-col >
+              CLICK BOX TO CHANGE PURCHASE DATE
             </b-col>
           </b-row>
         </b-container>
@@ -91,12 +99,48 @@
 
 <script>
 import {mapState} from 'vuex';
+import Datepicker from 'vuejs-datepicker';
+import {en,th} from 'vuejs-datepicker/dist/locale'
+
 
 export default {
   name: 'Gadget',
   props: {},
   data() {
     return {
+      en: en,
+      th: th,
+      cal : {
+        date: new Date(),
+        disabledDates: {
+          // to: new Date(), // Disable all dates up to specific date
+          from: new Date(), // Disable all dates after specific date
+          // days: [6, 0], // Disable Saturday's and Sunday's
+          // daysOfMonth: [29, 30, 31], // Disable 29th, 30th and 31st of each month
+          // dates: [ // Disable an array of dates
+          //   new Date(2016, 9, 16),
+          //   new Date(2016, 9, 17),
+          //   new Date(2016, 9, 18)
+          // ],
+          // ranges: [{ // Disable dates in given ranges (exclusive).
+          //   from: new Date(2016, 11, 25),
+          //   to: new Date(2016, 11, 30)
+          // }, {
+          //   from: new Date(2017, 1, 12),
+          //   to: new Date(2017, 2, 25)
+          // }],
+          // a custom function that returns true if the date is disabled
+          // this can be used for wiring you own logic to disable a date if none
+          // of the above conditions serve your purpose
+          // this function should accept a date and return true if is disabled
+          customPredictor: function(date) {
+            // disables the date if it is a multiple of 5
+            if(date.getDate() % 333 == 0){
+              return true
+            }
+          }
+        }
+      },
       gadgetName: "",
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
       newGadget: {'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
@@ -173,7 +217,11 @@ export default {
   mounted() {
    this.fetchGadgets()
    this.fetchRooms()
+  },
+  components: {
+    Datepicker
   }
+ 
 }
 </script>
 
@@ -200,9 +248,7 @@ a {
 img {
   width: 250px;
 }
-
-pad {
-  position: relative;
-  top: 100px;
-}
+/* .colBackground{
+    background-color: lightseagreen;
+} */
 </style>
