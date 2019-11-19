@@ -5,7 +5,7 @@ from django.db import connection
 from backend.api.models import Penalty, Punish
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def Penalty(request, id=None):
     if(request.method == 'GET' and id==None):
         statement = ("SELECT * FROM api_penalty;")
@@ -25,7 +25,11 @@ def Penalty(request, id=None):
         cursor = connection.cursor()
         cursor.execute(statement, [request.data["Name"], request.data["Point"]])
         return Response(request.data, status = status.HTTP_200_OK)
-    
+    elif(request.method == 'DELETE' and id!=None):
+        statement = ("DELETE FROM `api_penalty` WHERE id=%s")
+        cursor = connection.cursor()
+        res = cursor.execute(statement, id)
+        return Response(res, status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def CalculatePoint(request, id):

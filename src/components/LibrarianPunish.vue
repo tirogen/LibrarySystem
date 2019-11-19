@@ -1,7 +1,7 @@
 <template>
   <div class="jumbotron bg-overlay">
     <h2>Punishment</h2>
-    <b-table :items="penalties" :fields="fields" striped responsive="sm">
+    <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
