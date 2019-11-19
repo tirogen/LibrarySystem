@@ -17,30 +17,30 @@
               <b-col>RoomName</b-col>
               <b-col>RoomType</b-col>
             </b-row>
-
-            <b-row class="mb-1">
-              <b-col cols="1.5">Room</b-col>
-              <b-col>
-                <b-form-select
-                  v-model="roomType"
-                  :options="roomTypes"
-                ></b-form-select>
-              </b-col>
-              <b-col>
-                <b-form-select
-                  v-model="newGadget.roomName"
-                  :options="roomNames"
-                ></b-form-select>
-              </b-col>
-            </b-row>
-          </div>
+            
+        <b-row class="mb-1">
+          <b-col cols="1.5">Room</b-col>
+          <b-col>
+            <b-form-select
+              v-model="roomType"
+              :options="roomTypes"
+            ></b-form-select>
+          </b-col>
+          <b-col>
+            <b-form-select
+              v-model="roomName"
+              :options="roomNames"
+            ></b-form-select>
+          </b-col>
+        </b-row>
+        </div>
 
           <b-row class="mb-1 pad">
             <b-col cols="1.5" class="pad">Room Name</b-col>
             <b-col>
               <b-form-input
                 id="name-input"
-                v-model="newGadget.name"
+                v-model="gadgetName"
                 required
               ></b-form-input>
             </b-col>
@@ -87,19 +87,16 @@ export default {
   props: {},
   data() {
     return {
+      gadgetName: "",
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
       newGadget: {'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
       show: false,
       roomName: "",
       roomType: "",
-      nameOption: "",
-      roomNames: []
+      nameOption: ""      
     }
   },
-  mounted() {
-    this.fetchGadgets()
-    this.fetchRooms()
-  },
+  
   computed: mapState({
     isLoading: state => state.room.isLoading,
     isSuccess: state => state.room.isSuccess,
@@ -108,20 +105,23 @@ export default {
       return state.room.gadgets
     },
     rooms: state => {
-      return state.room.rooms
+      return state.room.rooms;
     },
-    roomTypes: state => {
-      console.log(Object.keys(state.room.rooms))
+    roomTypes: state=> {
       return Object.keys(state.room.rooms)
+    },
+    roomNames: function() {
+      return Object.keys(this.rooms.roomType)
     }
   })
   ,
-  watch: {
-    roomType: (newRoomType, oldRoomType) => {
-      console.log(newRoomType, oldRoomType)
-      this.roomNames = this.rooms[this.roomType].keys
-    },
-  },
+  // watch: {
+  //   //  roomType: ()=> {
+  //   //   //  dat = this.$store.state.room.rooms
+  //   //   //  this.roomNames = Object.keys(dat[this.roomType])
+  //   //  },
+  // },
+
   methods: {
     fetchGadgets: function () {
       this.$store.dispatch('room/fetchGadgets')
@@ -132,6 +132,10 @@ export default {
     fetchRooms: function () {
       this.$store.dispatch('room/fetchRooms')
     }
+  },
+  mounted() {
+   this.fetchGadgets()
+   this.fetchRooms()
   }
 }
 </script>
