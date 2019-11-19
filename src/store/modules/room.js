@@ -1,11 +1,12 @@
 import roomService from '../../services/roomService'
 import { cloneDeep } from 'lodash'
-import {baseState, baseMutation} from "../state";
+import {baseState, baseMutations} from "../state";
 
 const state = {
   ...cloneDeep(baseState),
   gadgets: [],
-  rooms: {}
+  rooms: {},
+  roomNames: [],
 }
 
 const getters = {
@@ -15,6 +16,9 @@ const getters = {
 }
 
 const actions = {
+  fetchRoomNames ({commit}, roomType) {
+    commit('setRoomNames',roomType)
+  },
   fetchRooms ({ commit }) {
     commit('loading')
     roomService.fetchRooms()
@@ -44,14 +48,16 @@ const actions = {
 }
 
 const mutations = {
-  ...cloneDeep(baseMutation),
+  ...cloneDeep(baseMutations),
   setGadgets (state, gadgets) {
-    // console.log(gadgets)
     state.gadgets = gadgets
   },
   setRooms (state, rooms) {
     state.rooms = rooms
   },
+  setRoomNames(state, roomType) {
+    state.roomNames = Object.keys(state.rooms[roomType])
+  }
 }
 
 export default {

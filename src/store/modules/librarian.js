@@ -1,6 +1,9 @@
 import librarianService from '../../services/librarianService'
+import {cloneDeep} from "lodash";
+import {baseState, baseMutations} from "../state";
 
 const state = {
+  ...cloneDeep(baseState),
   reservedRooms: []
 }
 
@@ -20,6 +23,7 @@ const actions = {
 }
 
 const mutations = {
+  ...cloneDeep(baseMutations),
   setReservedRooms (state, reservedRooms) {
     state.reservedRooms = reservedRooms
   },

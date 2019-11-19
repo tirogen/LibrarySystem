@@ -1,8 +1,8 @@
 import api from '@/services/api'
 
 export default {
-  fetchAllPenalties() {
-    return api.get(`punish/penalty`, {timeout: 10000})
+  fetchReservedRooms() {
+    return api.get(`reservedRoom/getTop20/`)
               .then(response => response.data)
   },
 }
