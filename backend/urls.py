@@ -8,8 +8,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .api.views import index_view, MessageViewSet
+from .api.punish import Penalty, CalculatePoint
 from .api.reservedRoom import GetTop20, getRoom
-from .api.punish import GetAllPenalty, CalculatePoint
 from .api.Gadget import getGadget
 from .api.book import getBook
 from .api.room import roomTypes
@@ -35,6 +35,7 @@ urlpatterns = [
     #room
     path('api/room/roomTypes', roomTypes),
     #penalty
-    path('api/punish/getAllPenalty/', GetAllPenalty),
-    path('api/punish/calculatePoint/<str:id>/', CalculatePoint)
+    path('api/punish/penalty/', Penalty),
+    path('api/punish/penalty/<str:id>/', Penalty),
+    path('api/punish/calculatePoint/(<str:id>/', CalculatePoint),
 ]

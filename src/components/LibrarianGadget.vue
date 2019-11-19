@@ -17,30 +17,30 @@
               <b-col>RoomName</b-col>
               <b-col>RoomType</b-col>
             </b-row>
-
-            <b-row class="mb-1">
-              <b-col cols="1.5">Room</b-col>
-              <b-col>
-                <b-form-select
-                  v-model="roomType"
-                  :options="roomTypes"
-                ></b-form-select>
-              </b-col>
-              <b-col>
-                <b-form-select
-                  v-model="newGadget.roomName"
-                  :options="roomNames"
-                ></b-form-select>
-              </b-col>
-            </b-row>
-          </div>
+            
+        <b-row class="mb-1">
+          <b-col cols="1.5">Room</b-col>
+          <b-col>
+            <b-form-select
+              v-model="roomType"
+              :options="roomTypes"
+            ></b-form-select>
+          </b-col>
+          <b-col>
+            <b-form-select
+              v-model="roomName"
+              :options="roomNames"
+            ></b-form-select>
+          </b-col>
+        </b-row>
+        </div>
 
           <b-row class="mb-1 pad">
-            <b-col cols="1.5" class="pad">Room Name</b-col>
+            <b-col cols="1.5" class="pad">Gadget Name</b-col>
             <b-col>
               <b-form-input
                 id="name-input"
-                v-model="newGadget.name"
+                v-model="gadgetName"
                 required
               ></b-form-input>
             </b-col>
@@ -48,14 +48,22 @@
         </b-container>
         <template v-slot:modal-footer>
           <div class="w-100">
-            <p class="float-left">Submit to add gadget</p>
+            <!-- <p class="float-left">Submit to add gadget</p> -->
+             <b-button
+              variant="primary"
+              size="sm"
+              class="float"
+              @click="addGadget()"
+            >
+              CONFIRM
+            </b-button>
             <b-button
               variant="primary"
               size="sm"
               class="float-right"
               @click="show=false"
             >
-              Close
+              CANCEL
             </b-button>
           </div>
         </template>
@@ -87,18 +95,14 @@ export default {
   props: {},
   data() {
     return {
+      gadgetName: "",
       fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
       newGadget: {'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
       show: false,
       roomName: "",
       roomType: "",
-      nameOption: "",
-      roomNames: []
+      nameOption: "" 
     }
-  },
-  mounted() {
-    this.fetchGadgets()
-    this.fetchRooms()
   },
   computed: mapState({
     isLoading: state => state.room.isLoading,
@@ -108,30 +112,61 @@ export default {
       return state.room.gadgets
     },
     rooms: state => {
-      return state.room.rooms
+      return state.room.rooms;
     },
-    roomTypes: state => {
-      console.log(Object.keys(state.room.rooms))
+    roomTypes: state=> {
       return Object.keys(state.room.rooms)
+    },
+    roomNames: (state) => {
+      return state.room.roomNames
     }
   })
   ,
   watch: {
-    roomType: (newRoomType, oldRoomType) => {
-      console.log(newRoomType, oldRoomType)
-      this.roomNames = this.rooms[this.roomType].keys
-    },
+     roomType: function() {
+      this.$store.dispatch('room/fetchRoomNames',this.roomType)
+      //  this.roomNames = Object.keys(dat[this.roomType])
+     },
+     roomName: function() {
+       this.newGadget.Room_id = this.rooms[this.roomType][this.roomName]
+     }
   },
+
   methods: {
     fetchGadgets: function () {
       this.$store.dispatch('room/fetchGadgets')
     },
     addGadget: function () {
-      this.$store.dispatch('room/postGadget', this.newGadget)
+      this.handleGadgetValue()
+      .then(success => {
+        if(success) {
+
+        } else {
+          alert("not pass valid")
+        }
+      })  
+      this.show = false
+      // this.$store.dispatch('room/postGadget', this.newGadget)
     },
     fetchRooms: function () {
       this.$store.dispatch('room/fetchRooms')
+    },
+    handleGadget: function() {
+      this.newGadget.Name = this.gadgetName
+      this.newGadget.Status = "Available"
+      alert(Date().toString)
+      
+    },
+    handleGadgetValue: async function() {
+      // check form is valid
+
+      //
+      return false
     }
+  },
+  mounted() {
+   this.fetchGadgets()
+   this.fetchRooms()
   }
 }
 </script>
