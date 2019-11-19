@@ -46,7 +46,6 @@ const actions = {
 const mutations = {
   ...cloneDeep(baseMutation),
   setGadgets (state, gadgets) {
-    // console.log(gadgets)
     state.gadgets = gadgets
   },
   setRooms (state, rooms) {

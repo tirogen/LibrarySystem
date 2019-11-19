@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import VueDemo from '@/components/VueDemo'
 import Messages from '@/components/Messages'
 import Librarian from '@/components/Librarian'
+import Student from '@/components/student'
+//Routes import below//
+import studentRoutes from './components/student/routes'
 
 Vue.use(Router)
 
@@ -23,10 +26,6 @@ export default new Router({
       name: 'librarian',
       component: Librarian
     },
-    {
-      path: '/student',
-      name: 'student',
-      component: VueDemo
-    }
+    studentRoutes,
   ]
 })
