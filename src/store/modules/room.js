@@ -1,9 +1,9 @@
 import roomService from '../../services/roomService'
+import { cloneDeep } from 'lodash'
+import {baseState, baseMutation} from "../state";
 
 const state = {
-  isLoading: false,
-  isSuccess: false,
-  isError: false,
+  ...cloneDeep(baseState),
   gadgets: [],
   rooms: []
 }
@@ -41,23 +41,13 @@ const actions = {
 }
 
 const mutations = {
+  ...cloneDeep(baseMutation),
   setGadgets (state, gadgets) {
     state.gadgets = gadgets
   },
   setRooms (state, rooms) {
     state.rooms = rooms
   },
-  loading (state){
-    state.isLoading = true
-  },
-  success (state){
-    state.isSuccess = true,
-    state.isLoading = false
-  },
-  errors (state) {
-    state.isError = true,
-    state.isLoading = false
-  }
 }
 
 export default {
