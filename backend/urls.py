@@ -12,6 +12,7 @@ from .api.punish import Penalty, CalculatePoint
 from .api.reservedRoom import GetTop20, getRoom
 from .api.Gadget import getGadget
 from .api.book import getBook
+from .api.room import roomTypes
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -31,7 +32,8 @@ urlpatterns = [
     path('api/Gadget/getGadget/', getGadget),
     path('api/book/getBook/',getBook),
 
-
+    #room
+    path('api/room/roomTypes', roomTypes),
     #penalty
     path('api/punish/penalty/', Penalty),
     path('api/punish/penalty/<str:id>/', Penalty),

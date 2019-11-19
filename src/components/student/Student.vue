@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>HELL YEAH</h1>
+    <h1>HELL YEAH <i class="fas fa-check fa-3x"></i></h1>
     <b-button variant="outline-primary">
       <router-link to="/student/reserve-room/">
         Reserve Room >
