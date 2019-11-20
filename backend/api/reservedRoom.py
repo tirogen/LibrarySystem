@@ -2,13 +2,19 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db import connection
 
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET'])
 def GetTop20(request):
     cursor = connection.cursor()
-    cursor.execute("SELECT api_room.Name, api_reserve.TimeIn, api_reserve.TimeOut, api_student.FName, api_student.LName \
+    cursor.execute("SELECT api_room.Name, \
+                            api_reserve.TimeIn, api_reserve.TimeOut, \
+                            api_student.FName, api_student.LName, \
+                            api_roomtime.StartTime, api_roomtime.EndTime, api_roomtime.Date \
                     FROM api_reserve \
                     INNER JOIN api_room ON api_reserve.Room_id=api_room.id \
                     INNER JOIN api_student ON api_reserve.Student_id=api_student.Username \
+                    INNER JOIN api_roomtime ON api_reserve.RoomTime_id=api_roomtime.id \
+                    WHERE  api_roomtime.Date = CURDATE() \
+                    ORDER BY api_roomtime.StartTime \
                     LIMIT 20")
     response = []
     for row in cursor.fetchall():

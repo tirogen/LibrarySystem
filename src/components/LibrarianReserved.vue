@@ -10,7 +10,7 @@
       <template v-slot:row-details="row">
         <b-card>
           <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
-          <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button size="sm" variant="danger" class="m-2" @click="showDeleteConfirm">Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -29,6 +29,26 @@ export default {
   data() {
     return {
       fields: ['Room', 'Name', 'Time In', 'Time Out', 'Manage'],
+    }
+  },
+  methods: {
+    showDeleteConfirm() {
+        this.$bvModal.msgBoxConfirm('Please confirm that you want to delete.', {
+          title: 'Please Confirm',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'YES',
+          cancelTitle: 'NO',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+            if(value){
+              //delete
+            }
+        })
     }
   },
   computed: mapState({
