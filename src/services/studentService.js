@@ -1,16 +1,21 @@
 import api from '@/services/api'
+import moment from 'moment'
 
 export default {
   fetchReservedRooms() {
-    return api.get(`reservedRoom/getTop20/`)
-              .then(response => response.data)
+    return api.get(`reservedRoom/getTop20/`).then(response => response.data)
   },
 
-  fetchRoomTypes(){
-    return api.get('room/roomTypes').then(response => response.data)
+  fetchRoomTypes() {
+    return api.get('room/types/')
   },
 
-  fetchReservedTimeSlot(type, date){
-    return api.get(`room/${type}/0`).then(response => response.data)
-  }
+  fetchReservedTimeSlot(type) {
+    const date = moment().format('YYYY-MM-DD')
+    return api.get(`room/${type}/${date}/`)
+  },
+
+  fetchRoomNameByType(type) {
+    return api.get(`room/names/${type}/`)
+  },
 }

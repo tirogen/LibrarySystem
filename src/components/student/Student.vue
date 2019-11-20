@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   mounted() {
@@ -21,11 +21,10 @@ export default {
   },
   computed: {
     ...mapState({
-      reservedRooms: state => state.student.reservedRooms
+      reservedRooms: state => state.student.reservedRooms,
     }),
   },
-  methods: {
-  }
+  methods: {},
 }
 </script>
 
