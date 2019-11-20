@@ -2,7 +2,7 @@ import punishService from '../../services/punishService'
 
 const state = {
   penalties: [],
-  punishInfo: {},
+  punishInfo: [],
   firstname: '',
   lastname: '',
 }
