@@ -58,7 +58,7 @@ export default {
     },
     selectRoomType(type) {
       this.selectedType = type
-      this.$store.dispatch('student/getAvailableTimeSlot', type, null)
+      this.$store.dispatch('student/fetchReservedTimeSlot', type, null)
     }
   }
 
