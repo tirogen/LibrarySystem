@@ -27,7 +27,8 @@ def Penalty(request, id=None):
     elif(request.method == 'DELETE'):
         statement = ("DELETE FROM `api_penalty` WHERE id=%s")
         cursor = connection.cursor()
-        return Response(id, status = status.HTTP_200_OK)
+        cursor.execute(statement, [id])
+        return Response({'id': id}, status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def CalculatePoint(request, id):
@@ -59,7 +60,7 @@ def CalculatePoint(request, id):
 
 @api_view(['GET'])
 def GetPunishInfo(request, FName, LName):
-    statement = ("SELECT pn.id, s.FName, s.LName, p.Name, pt.Date, pt.Time FROM `api_punish` as pn\
+    statement = ("SELECT pn.id, p.Name, p.Point,pt.Date, pt.Time Total FROM `api_punish` as pn\
                     LEFT JOIN `api_penalty` AS p ON pn.Penalty_id=p.id\
                     LEFT JOIN `api_student` AS s ON pn.Student_id=s.Username\
                     LEFT JOIN `api_punishtime` AS pt ON pn.PunishTime_id=pt.id\
@@ -69,12 +70,11 @@ def GetPunishInfo(request, FName, LName):
     response = []
     for row in cursor.fetchall():
         response.append({
-            "ID": row[0],
-            "Firstname": row[1],
-            "Lastname": row[2],
-            "Penalty": row[3],
-            "Date": row[4],
-            "Time": row[5]
+            "id": row[0],
+            "Penalty": row[1],
+            "Point": -row[2],
+            "Date": row[3],
+            "Time": row[4],
         })
     return Response(response, status = status.HTTP_200_OK)
 

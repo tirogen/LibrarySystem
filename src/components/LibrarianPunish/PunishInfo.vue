@@ -7,8 +7,15 @@
             <b-col>
                 <b-form-input v-model="lastname" placeholder="Lastname"></b-form-input>
             </b-col>
-            <b-button class="fas fa-search" v-on:click="getPunishInfo">search</b-button>
+            <b-button v-on:click="getPunishInfo"><i class="fas fa-search"></i></b-button>
         </b-row>
+        <b-row class="py-md-2">
+        </b-row>
+        <b-table :items="punishInfo" :fields="fields" striped responsive="sm">
+          <template v-slot:cell(Manage)="row">
+            <b-button size="sm" variant="danger" class="m-2">Pardon</b-button>
+          </template>
+        </b-table>
     </b-container>
 </template>
 
@@ -21,19 +28,21 @@ export default {
   },
   data() {
     return {
-      Firstname: "",
-      Lastname: "",
-      PunishInfo: "",
+      firstname: '',
+      lastname: '',
+      fields: ['Penalty', 'Point','Date', 'Time', 'Manage'],
     }
   },
   methods: {
       getPunishInfo: function() {
-          this.Pinfo = this.$store.dispatch("punish/getPunishInfo")
+          let data = {
+                        'firstname': this.firstname,
+                        'lastname': this.lastname
+                      }
+          this.punishinfo = this.$store.dispatch("punish/getPunishInfo", data);
       }
   },
   computed: mapState({
-    firstname: state => state.punish.firstname,
-    lastname: state => state.punish.lastname,
     punishInfo: state => state.punish.punishInfo,
 
   }),

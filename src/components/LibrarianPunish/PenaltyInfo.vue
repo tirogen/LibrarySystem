@@ -1,29 +1,29 @@
 <template>
-  <div class="jumbotron bg-overlay">
-    <h2>Punishment</h2>
-    <b-tabs>
-      <b-tab title="Penalty Type">
-      <PenaltyInfo></PenaltyInfo>
-      </b-tab>
-      <b-tab title="Punish Menu">
-      <PunishInfo></PunishInfo>
-      </b-tab>
-    </b-tabs>
-  </div>
+    <b-table :items="penalties" :fields="fields" striped responsive="sm">
+        <template v-slot:cell(Manage)="row">
+            <b-button size="sm" @click="row.toggleDetails" class="mr-2">
+            {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
+            </b-button>
+        </template>
+        <template v-slot:row-details="row">
+            <b-card>
+            <b-button size="sm" variant="primary" class="m-2">Edit</b-button>
+            <b-button v-on:click="deletePenalty(row.item.id)" size="sm" variant="danger" class="m-2">Delete</b-button>
+            </b-card>
+        </template>
+    </b-table>
 </template>
 
 <script>
 import {mapState} from 'vuex'
 import PunishInfo from './PunishInfo.vue'
-import PenaltyInfo from './PenaltyInfo.vue'
 export default {
   name: 'LibrarianPunish',
   props: {
 
   },
   components: {
-    PunishInfo,
-    PenaltyInfo,
+    PunishInfo
   },
   data() {
     return {
