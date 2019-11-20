@@ -1,11 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db import connection
+from rest_framework import status
 
 @api_view(['GET'])
 def GetTop20(request):
     cursor = connection.cursor()
-    cursor.execute("SELECT api_room.Name, \
+    cursor.execute("SELECT api_room.Name, api_roomtime.id, \
                             api_reserve.TimeIn, api_reserve.TimeOut, \
                             api_student.FName, api_student.LName, \
                             api_roomtime.StartTime, api_roomtime.EndTime, api_roomtime.Date \
@@ -20,11 +21,23 @@ def GetTop20(request):
     for row in cursor.fetchall():
         response.append({
             "Room": row[0],
-            "Time In": row[1],
-            "Time Out": row[2],
-            "Name": row[3]+" "+row[4],
+            "Time In": row[2],
+            "Time Out": row[3],
+            "Name": row[4]+" "+row[5],
+            "Start Time": row[6],
+            "End Time": row[7],
+            "Date": row[8],
+            "id": row[1],
         })
     return Response(response)
+
+@api_view(['Delete'])
+def deleteReservedRoom(request, id=None):
+    if(request.method == 'DELETE' and id!=None):
+        statement = ("DELETE FROM api_roomtime WHERE id="+id)
+        cursor = connection.cursor()
+        res = cursor.execute(statement)
+        return Response(res, status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def getRoom(request) :
