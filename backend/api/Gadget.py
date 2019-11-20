@@ -36,16 +36,16 @@ def manageGadget(request):
 	elif request.method == 'POST':
 		Name = request.data['Name']
 		Status = request.data['Status']
-		RoomType_id = request.data['RoomType_id']
+		Room_id = request.data['Room_id']
 		PurchasedDate = request.data['PurchasedDate']
-		print(Name + Status + RoomType_id + PurchasedDate)
-	
-		# cursor = connection.cursor()
-		# insert_stmt = (
-		# 	"INSERT INTO api_gadget (Name, Status, PurchasedDate, RoomType_id)"
-		# 	"VALUES (%s, %s, %s, %s)"
-		# )
-		# cursor.execute(insert_stmt,request)
+		ls = (Name,Status,PurchasedDate,Room_id)
+		print(Name + Status + str(Room_id) + PurchasedDate)
+		cursor = connection.cursor()
+		insert_stmt = (
+			"INSERT INTO api_gadget (Name, Status, PurchasedDate, Room_id)"
+			"VALUES (%s, %s, %s, %s)"
+		)
+		cursor.execute(insert_stmt,ls)
         # Gadget.objects.raw(insert_stmt)
 		res=get()
 		return Response(res)

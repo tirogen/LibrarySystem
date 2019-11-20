@@ -1,80 +1,54 @@
 <template>
   <div class="jumbotron bg-overlay">
-    <h2>Gadget
+    <h2>
+      Gadget
       <b-button v-b-modal.modal-1 @click="fetchRooms()">ADD GADGET</b-button>
     </h2>
     <!-- Add GadGet Modal -->
     <div>
-      <b-modal
-        id="modal-1"
-        v-model="show"
-        title="ADD GADGET"
-      >
+      <b-modal id="modal-1" v-model="show" title="ADD GADGET">
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
-
           <b-row class="mb-1 text-center" align-v="start">
             <b-col cols="1.7"></b-col>
             <b-col>RoomType</b-col>
             <b-col>RoomName</b-col>
           </b-row>
-          <b-row class="mb-1" >
-            <b-col cols="1.5" >Room</b-col>
+          <b-row class="mb-1">
+            <b-col cols="1.5">Room</b-col>
             <b-col>
-              <b-form-select
-                v-model="roomType"
-                :options="roomTypes"
-                required
-              ></b-form-select>
+              <b-form-select v-model="roomType" :options="roomTypes" required></b-form-select>
             </b-col>
             <b-col>
-              <b-form-select
-                v-model="roomName"
-                :options="roomNames"
-                required
-              ></b-form-select>
+              <b-form-select v-model="roomName" :options="roomNames" required></b-form-select>
             </b-col>
           </b-row>
           <b-row class="mb-1">
-            <b-col cols="1.5" class="">Gadget Name</b-col>
+            <b-col cols="1.5" class>Gadget Name</b-col>
             <b-col>
-              <b-form-input
-                id="name-input"
-                v-model="gadgetName"
-                required
-              ></b-form-input>
+              <b-form-input id="name-input" v-model="gadgetName" required></b-form-input>
             </b-col>
           </b-row>
           <b-row class="mb-1">
-            <b-col cols="4.5" class="">Purchase Date </b-col>
-            <b-col  class="text-center" >
-              <datepicker :format="customFormatter" v-model="cal.date" :language="th" :disabled-dates="cal.disabledDates" name="uniquename"></datepicker>
+            <b-col cols="4.5" class>Purchase Date</b-col>
+            <b-col class="text-center">
+              <datepicker
+                :format="customFormatter"
+                v-model="cal.date"
+                :language="th"
+                :disabled-dates="cal.disabledDates"
+                name="uniquename"
+              ></datepicker>
             </b-col>
           </b-row>
           <b-row align-h="start">
-            <b-col >
-              CLICK BOX TO CHANGE PURCHASE DATE
-            </b-col>
+            <b-col>CLICK BOX TO CHANGE PURCHASE DATE</b-col>
           </b-row>
         </b-container>
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-             <b-button
-              variant="primary"
-              size="sm"
-              class="float"
-              @click="addGadget()"
-            >
-              CONFIRM
-            </b-button>
-            <b-button
-              variant="primary"
-              size="sm"
-              class="float-right"
-              @click="show=false"
-            >
-              CANCEL
-            </b-button>
+            <b-button variant="primary" size="sm" class="float" @click="addGadget()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>
       </b-modal>
@@ -82,9 +56,11 @@
     <!-- End of add Gadget modal -->
     <b-table :items="gadgets" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
-        </b-button>
+        <b-button
+          size="sm"
+          @click="row.toggleDetails"
+          class="mr-2"
+        >{{ row.detailsShowing ? 'Hide' : 'Show'}} Manage</b-button>
       </template>
       <template v-slot:row-details="row">
         <b-card>
@@ -97,22 +73,22 @@
   </div>
 </template>
 <script>
-import {mapState} from 'vuex';
-import Datepicker from 'vuejs-datepicker';
-import {en,th} from 'vuejs-datepicker/dist/locale'
+import { mapState } from "vuex";
+import Datepicker from "vuejs-datepicker";
+import { en, th } from "vuejs-datepicker/dist/locale";
 
 export default {
-  name: 'Gadget',
+  name: "Gadget",
   props: {},
   data() {
     return {
       en: en,
       th: th,
-      cal : {
+      cal: {
         date: new Date(),
         disabledDates: {
           // to: new Date(), // Disable all dates up to specific date
-          from: new Date(), // Disable all dates after specific date
+          from: new Date() // Disable all dates after specific date
           // days: [6, 0], // Disable Saturday's and Sunday's
           // daysOfMonth: [29, 30, 31], // Disable 29th, 30th and 31st of each month
           // dates: [ // Disable an array of dates
@@ -140,105 +116,105 @@ export default {
         }
       },
       gadgetName: "",
-      fields: ['GadgetName', 'Status', 'PurchasedDate', 'RoomName', 'Manage'],
-      newGadget: {'Name': null, 'Status': null, 'PurchasedDate': null, 'Room_id': null},
+      fields: ["GadgetName", "Status", "PurchasedDate", "RoomName", "Manage"],
+      newGadget: {
+        Name: null,
+        Status: null,
+        PurchasedDate: null,
+        Room_id: null
+      },
       show: false,
       roomName: "",
       roomType: "",
-      nameOption: "" 
-    }
+      nameOption: ""
+    };
   },
-  computed: mapState({
-    isLoading: state => state.room.isLoading,
-    isSuccess: state => state.room.isSuccess,
-    isError: state => state.room.isError,
-    gadgets: state => {
-      return state.room.gadgets
-    },
-    rooms: state => {
-      return state.room.rooms;
-    },
-    roomTypes: state=> {
-      return Object.keys(state.room.rooms)
-    },
-    roomNames: (state) => {
-      return state.room.roomNames
-    }
-  })
-  ,
+  computed: {
+    ...mapState({
+      isLoading: state => state.room.isLoading,
+      isSuccess: state => state.room.isSuccess,
+      isError: state => state.room.isError,
+      gadgets: state => state.room.gadgets,
+      rooms: state => state.room.rooms,
+      roomTypes: state => Object.keys(state.room.rooms),
+      roomNames: state => state.room.roomNames
+    })
+  },
   watch: {
-     roomType: function() {
-      this.$store.dispatch('room/fetchRoomNames',this.roomType)
+    roomType: function() {
+      this.$store.dispatch("room/fetchRoomNames", this.roomType);
       //  this.roomNames = Object.keys(dat[this.roomType])
-     },
-     roomName: function() {
-       this.newGadget.Room_id = this.rooms[this.roomType][this.roomName]
-     }
+    },
+    roomName: function() {
+      this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+    }
   },
 
   methods: {
-    customFormatter(date){
-      let mo = date.getMonth()+1
-      if(mo <= 9) {
+    customFormatter(date) {
+      let mo = date.getMonth() + 1;
+      if (mo <= 9) {
         var m = "0" + mo;
       } else {
         m = mo;
       }
-      let dd = date.getDate()
-      if(dd <= 9) {
+      let dd = date.getDate();
+      if (dd <= 9) {
         var d = "0" + dd;
       } else {
         d = dd;
       }
-      let dateFormat = date.getFullYear() + "-" + m + "-" + d
-      this.newGadget.PurchasedDate = dateFormat
-      return dateFormat
+      let dateFormat = date.getFullYear() + "-" + m + "-" + d;
+      this.newGadget.PurchasedDate = dateFormat;
+      return dateFormat;
     },
-    fetchGadgets: function () {
-      this.$store.dispatch('room/fetchGadgets')
+    fetchGadgets: function() {
+      this.$store.dispatch("room/fetchGadgets");
     },
-    addGadget: function () {
-      this.handleGadget()
-      this.handleGadgetValue()
-      .then(success => {
-        if(success) {
-          this.show = false
+    addGadget: function() {
+      this.handleGadget();
+      this.handleGadgetValue().then(success => {
+        if (success) {
+          this.show = false;
 
-          this.$store.dispatch('room/postGadget', this.newGadget)
+          this.$store.dispatch("room/postGadget", this.newGadget);
           //animate View
         } else {
-          alert("data is not valid")
+          alert("data is not valid");
         }
-      })  
+      });
     },
-    fetchRooms: function () {
-      this.$store.dispatch('room/fetchRooms')
+    fetchRooms: function() {
+      this.$store.dispatch("room/fetchRooms");
     },
     handleGadget: function() {
-      this.newGadget.Name = this.gadgetName
-      this.newGadget.Status = "Available"
+      this.newGadget.Name = this.gadgetName;
+      this.newGadget.Status = "Available";
       // this.newGadget.PurchasedDate = this.date
-      console.log(this.newGadget)
+      console.log(this.newGadget);
     },
     handleGadgetValue: async function() {
       // check form is valid
-      if(this.roomName === "" || this.roomType === "" || this.gadgetName === "") {
-          return false
-          // need to check format
+      if (
+        this.roomName === "" ||
+        this.roomType === "" ||
+        this.gadgetName === ""
+      ) {
+        return false;
+        // need to check format
       }
       //
-      return true
+      return true;
     }
   },
   mounted() {
-   this.fetchGadgets()
-   this.fetchRooms()
+    this.fetchGadgets();
+    this.fetchRooms();
   },
   components: {
     Datepicker
   }
- 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
