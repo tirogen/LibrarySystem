@@ -47,7 +47,7 @@
           <b-row class="mb-1">
             <b-col cols="4.5" class="">Purchase Date </b-col>
             <b-col  class="text-center" >
-              <datepicker v-model="cal.date" :language="th" :disabled-dates="cal.disabledDates" name="uniquename"></datepicker>
+              <datepicker :format="customFormatter" v-model="cal.date" :language="th" :disabled-dates="cal.disabledDates" name="uniquename"></datepicker>
             </b-col>
           </b-row>
           <b-row align-h="start">
@@ -96,12 +96,10 @@
     <b-button block variant="primary">See all</b-button>
   </div>
 </template>
-
 <script>
 import {mapState} from 'vuex';
 import Datepicker from 'vuejs-datepicker';
 import {en,th} from 'vuejs-datepicker/dist/locale'
-
 
 export default {
   name: 'Gadget',
@@ -133,12 +131,12 @@ export default {
           // this can be used for wiring you own logic to disable a date if none
           // of the above conditions serve your purpose
           // this function should accept a date and return true if is disabled
-          customPredictor: function(date) {
-            // disables the date if it is a multiple of 5
-            if(date.getDate() % 333 == 0){
-              return true
-            }
-          }
+          // customPredictor: function(date) {
+          //   // disables the date if it is a multiple of 5
+          //   if(date.getDate() % 333 == 0){
+          //     return true
+          //   }
+          // }
         }
       },
       gadgetName: "",
@@ -179,6 +177,23 @@ export default {
   },
 
   methods: {
+    customFormatter(date){
+      let mo = date.getMonth()+1
+      if(mo <= 9) {
+        var m = "0" + mo;
+      } else {
+        m = mo;
+      }
+      let dd = date.getDate()
+      if(dd <= 9) {
+        var d = "0" + dd;
+      } else {
+        d = dd;
+      }
+      let dateFormat = date.getFullYear() + "-" + m + "-" + d
+      this.newGadget.PurchasedDate = dateFormat
+      return dateFormat
+    },
     fetchGadgets: function () {
       this.$store.dispatch('room/fetchGadgets')
     },
@@ -189,7 +204,7 @@ export default {
         if(success) {
           this.show = false
 
-          // this.$store.dispatch('room/postGadget', this.newGadget)
+          this.$store.dispatch('room/postGadget', this.newGadget)
           //animate View
         } else {
           alert("data is not valid")
@@ -202,6 +217,7 @@ export default {
     handleGadget: function() {
       this.newGadget.Name = this.gadgetName
       this.newGadget.Status = "Available"
+      // this.newGadget.PurchasedDate = this.date
       console.log(this.newGadget)
     },
     handleGadgetValue: async function() {
