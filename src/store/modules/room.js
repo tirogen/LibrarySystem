@@ -44,6 +44,38 @@ const actions = {
     .catch(err => {
       commit('errors')
     })
+  },
+  deleteGadget ({commit}, id) {
+    commit('loading')
+    roomService.deleteGadget(id)
+    .then(res => {
+      // commit('setGadgets',gadgets)
+      console.log(res)
+      if (res.status == "") {
+        commit('success')
+      } else {
+        commit('errors')
+      }
+    })
+    .catch(err => {
+      commit('errors')
+    })
+  },
+  updateGadget ({commit}, updateGadget) {
+    commit('loading')
+    roomService.deleteGadget(updateGadget)
+    .then(res => {
+      // commit('setGadgets',gadgets)
+      console.log(res)
+      if (res.status == "") {
+        commit('success')
+      } else {
+        commit('errors')
+      }
+    })
+    .catch(err => {
+      commit('errors')
+    })
   }
 }
 

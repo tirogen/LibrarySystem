@@ -64,7 +64,7 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
+          <b-button size="sm" variant="primary" class="m-2">Update</b-button>
           <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
         </b-card>
       </template>
@@ -126,7 +126,8 @@ export default {
       show: false,
       roomName: "",
       roomType: "",
-      nameOption: ""
+      nameOption: "",
+      deletedid: ""
     };
   },
   computed: {
@@ -205,6 +206,13 @@ export default {
       }
       //
       return true;
+    },
+    deletedGadget: function() {
+      // get data
+      this.$store.dispatch('room/deleteGadget',this.deletedid)
+    },
+    updateGadget: function() {
+
     }
   },
   mounted() {
