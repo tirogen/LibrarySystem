@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from django.core import serializers
+
+import logging
+
 def get():
 	cursor = connection.cursor()
 	cursor.execute("SELECT api_gadget.Name, api_gadget.Status, api_gadget.PurchasedDate, api_room.Name \
@@ -24,25 +29,27 @@ def get():
 	return response
 
 @api_view(['GET', 'POST', 'DELETE'])
-def getGadget(request):
+def manageGadget(request):
 	if request.method == 'GET':
 	    res =get()
 	    return Response(res)
 	elif request.method == 'POST':
-        # Name = request.data['Name']
-        # Status = request.data['Status']
-        # RoomType_id = request.data['RoomType_id']
-		# print(request.data['Status'])
+		Name = request.data['Name']
+		Status = request.data['Status']
+		Room_id = request.data['Room_id']
+		PurchasedDate = request.data['PurchasedDate']
+		ls = (Name,Status,PurchasedDate,Room_id)
+		print(Name + Status + str(Room_id) + PurchasedDate)
 		cursor = connection.cursor()
 		insert_stmt = (
-			"INSERT INTO api_gadget (Name, Status, PurchasedDate, RoomType_id)"
+			"INSERT INTO api_gadget (Name, Status, PurchasedDate, Room_id)"
 			"VALUES (%s, %s, %s, %s)"
 		)
-		cursor.execute(insert_stmt,request)
+		cursor.execute(insert_stmt,ls)
         # Gadget.objects.raw(insert_stmt)
 		res=get()
 		return Response(res)
-	elif request.method == 'DELETE':
+	elif request.method == 'DELETE' :
 		print("this is id from DELETE request")
 		print(id)
         #oom.objects.delete(id)

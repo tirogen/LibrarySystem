@@ -26,8 +26,8 @@ def GetTop20(request):
         })
     return Response(response)
 
-@api_view(['GET'])
-def getRoom(request) :
+@api_view(['GET','POST'])
+def manageRoom(request) :
     cursor = connection.cursor()
     cursor.execute("SELECT api_room.id, api_room.Name, api_room.RoomType_id FROM api_room")
     obj = dict()
