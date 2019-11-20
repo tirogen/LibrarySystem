@@ -11,19 +11,18 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   mounted() {
-    this.fetchReservedRooms()
+    this.$store.dispatch('student/fetchReservedRooms')
   },
-  computed: mapState({
-    reservedRooms: state => state.student.reservedRooms
-  }),
+  computed: {
+    ...mapState({
+      reservedRooms: state => state.student.reservedRooms
+    }),
+  },
   methods: {
-    ...mapActions({
-      fetchReservedRooms: 'student/fetchReservedRooms'
-    })
   }
 }
 </script>
