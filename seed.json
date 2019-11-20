@@ -1,0 +1,1299 @@
+[
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "auth",
+      "model": "user"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "api",
+      "model": "book"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "api",
+      "model": "booktime"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "api",
+      "model": "isbn"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "api",
+      "model": "librarian"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "api",
+      "model": "message"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+      "app_label": "api",
+      "model": "penalty"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+      "app_label": "api",
+      "model": "penaltytime"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+      "app_label": "api",
+      "model": "reserve"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+      "app_label": "api",
+      "model": "roomtime"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+      "app_label": "api",
+      "model": "roomtype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+      "app_label": "api",
+      "model": "student"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+      "app_label": "api",
+      "model": "room"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+      "app_label": "api",
+      "model": "reservefriend"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+      "app_label": "api",
+      "model": "punish"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 21,
+    "fields": {
+      "app_label": "api",
+      "model": "gadget"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 22,
+    "fields": {
+      "app_label": "api",
+      "model": "borrow"
+    }
+  },
+  {
+    "model": "api.message",
+    "pk": 1,
+    "fields": {
+      "subject": "hellow",
+      "body": "some thing"
+    }
+  },
+  {
+    "model": "api.librarian",
+    "pk": "librarian1",
+    "fields": {
+      "Password": "librarian1",
+      "Email": "librarian1@gmail.com",
+      "Gender": "Male",
+      "Tel": "0123456789",
+      "DateOfBirth": "1998-01-03",
+      "Address": "Bangkok",
+      "FName": "Gody",
+      "LName": "Godza",
+      "StartWork": "2019-10-01",
+      "Salary": 50000
+    }
+  },
+  {
+    "model": "api.librarian",
+    "pk": "librarian2",
+    "fields": {
+      "Password": "librarian2",
+      "Email": "librarian2@gmail.com",
+      "Gender": "Female",
+      "Tel": "098765432",
+      "DateOfBirth": "1997-09-18",
+      "Address": "Chiangmai",
+      "FName": "Caty",
+      "LName": "Catza",
+      "StartWork": "2019-07-16",
+      "Salary": 40000
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "student1",
+    "fields": {
+      "Password": "student1",
+      "Email": "student1@hotmail.com",
+      "Gender": "Male",
+      "Tel": "0899999999",
+      "DateOfBirth": "2019-11-07",
+      "Address": "159/123 aabb",
+      "FName": "Kitty",
+      "LName": "Katta"
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "student2",
+    "fields": {
+      "Password": "student2",
+      "Email": "student2@hotmail.com",
+      "Gender": "Male",
+      "Tel": "09999999",
+      "DateOfBirth": "2019-11-19",
+      "Address": "student2 adress",
+      "FName": "s2 firstname",
+      "LName": "s2 lastname"
+    }
+  },
+  {
+    "model": "api.penalty",
+    "pk": 1,
+    "fields": {
+      "Name": "Lose book",
+      "Point": 10
+    }
+  },
+  {
+    "model": "api.penalty",
+    "pk": 2,
+    "fields": {
+      "Name": "Broken book",
+      "Point": 15
+    }
+  },
+  {
+    "model": "api.penalty",
+    "pk": 3,
+    "fields": {
+      "Name": "Waste Room",
+      "Point": 5
+    }
+  },
+  {
+    "model": "api.penaltytime",
+    "pk": 1,
+    "fields": {
+      "Date": "2019-11-15",
+      "Time": "15:17:00"
+    }
+  },
+  {
+    "model": "api.penaltytime",
+    "pk": 2,
+    "fields": {
+      "Date": "2019-11-13",
+      "Time": "16:05:12.180"
+    }
+  },
+  {
+    "model": "api.penaltytime",
+    "pk": 3,
+    "fields": {
+      "Date": "2019-10-17",
+      "Time": "12:20:24"
+    }
+  },
+  {
+    "model": "api.isbn",
+    "pk": "0123456789012",
+    "fields": {
+      "Category": "Science",
+      "Author": "Nithipud",
+      "Name": "Chemistry"
+    }
+  },
+  {
+    "model": "api.isbn",
+    "pk": "0123456789123",
+    "fields": {
+      "Category": "Fiction",
+      "Author": "Nithipud",
+      "Name": "HarryPotter"
+    }
+  },
+  {
+    "model": "api.book",
+    "pk": 1,
+    "fields": {
+      "Status": "Available",
+      "Isbn": "0123456789012"
+    }
+  },
+  {
+    "model": "api.book",
+    "pk": 2,
+    "fields": {
+      "Status": "NotAvailable",
+      "Isbn": "0123456789012"
+    }
+  },
+  {
+    "model": "api.book",
+    "pk": 3,
+    "fields": {
+      "Status": "Rented",
+      "Isbn": "0123456789123"
+    }
+  },
+  {
+    "model": "api.book",
+    "pk": 4,
+    "fields": {
+      "Status": "Broken",
+      "Isbn": "0123456789012"
+    }
+  },
+  {
+    "model": "api.booktime",
+    "pk": 1,
+    "fields": {
+      "StartDate": "2019-11-13",
+      "EndDate": "2019-11-20",
+      "RenewTimes": 2
+    }
+  },
+  {
+    "model": "api.booktime",
+    "pk": 2,
+    "fields": {
+      "StartDate": "2019-11-15",
+      "EndDate": "2019-11-22",
+      "RenewTimes": 2
+    }
+  },
+  {
+    "model": "api.roomtype",
+    "pk": "Seminar Room",
+    "fields": {
+      "Capacity": 8
+    }
+  },
+  {
+    "model": "api.roomtype",
+    "pk": "Study Room",
+    "fields": {
+      "Capacity": 6
+    }
+  },
+  {
+    "model": "api.roomtype",
+    "pk": "The Box",
+    "fields": {
+      "Capacity": 4
+    }
+  },
+  {
+    "model": "api.room",
+    "pk": 3,
+    "fields": {
+      "Name": "Box A",
+      "Status": "Available",
+      "Librarian": "librarian1",
+      "RoomType": "The Box"
+    }
+  },
+  {
+    "model": "api.room",
+    "pk": 4,
+    "fields": {
+      "Name": "Seminar A",
+      "Status": "NotAvailable",
+      "Librarian": "librarian1",
+      "RoomType": "Seminar Room"
+    }
+  },
+  {
+    "model": "api.gadget",
+    "pk": 1,
+    "fields": {
+      "Status": "Available",
+      "PurchasedDate": "2019-08-02",
+      "Name": "White Board",
+      "Room": 3
+    }
+  },
+  {
+    "model": "api.gadget",
+    "pk": 2,
+    "fields": {
+      "Status": "NotAvailable",
+      "PurchasedDate": "2019-11-11",
+      "Name": "Chair",
+      "Room": 4
+    }
+  },
+  {
+    "model": "api.roomtime",
+    "pk": 1,
+    "fields": {
+      "StartTime": "12:00:00",
+      "EndTime": "13:00:00",
+      "Date": "2019-11-21"
+    }
+  },
+  {
+    "model": "api.roomtime",
+    "pk": 2,
+    "fields": {
+      "StartTime": "13:00:00",
+      "EndTime": "14:00:00",
+      "Date": "2019-11-17"
+    }
+  },
+  {
+    "model": "api.punish",
+    "pk": 1,
+    "fields": {
+      "Penalty": 2,
+      "PunishTime": 1,
+      "Student": "student1"
+    }
+  },
+  {
+    "model": "api.punish",
+    "pk": 2,
+    "fields": {
+      "Penalty": 3,
+      "PunishTime": 2,
+      "Student": "student1"
+    }
+  },
+  {
+    "model": "api.borrow",
+    "pk": 1,
+    "fields": {
+      "Student": "student1",
+      "Book": 1,
+      "BookTime": 1
+    }
+  },
+  {
+    "model": "api.borrow",
+    "pk": 2,
+    "fields": {
+      "Student": "student1",
+      "Book": 2,
+      "BookTime": 2
+    }
+  },
+  {
+    "model": "api.reserve",
+    "pk": 1,
+    "fields": {
+      "Student": "student1",
+      "Room": 3,
+      "RoomTime": 2,
+      "TimeIn": "13:05:00",
+      "TimeOut": "14:00:00"
+    }
+  },
+  {
+    "model": "api.reserve",
+    "pk": 2,
+    "fields": {
+      "Student": "student1",
+      "Room": 4,
+      "RoomTime": 1,
+      "TimeIn": "12:05:00",
+      "TimeOut": "13:05:00"
+    }
+  },
+  {
+    "model": "api.reservefriend",
+    "pk": 1,
+    "fields": {
+      "Reserve": 1,
+      "Friend": "student2"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 4,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 4,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 4,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 4,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 5,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 5,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 5,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 5,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 6,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 6,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 6,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 6,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add book",
+      "content_type": 7,
+      "codename": "add_book"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change book",
+      "content_type": 7,
+      "codename": "change_book"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete book",
+      "content_type": 7,
+      "codename": "delete_book"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view book",
+      "content_type": 7,
+      "codename": "view_book"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add book time",
+      "content_type": 8,
+      "codename": "add_booktime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change book time",
+      "content_type": 8,
+      "codename": "change_booktime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete book time",
+      "content_type": 8,
+      "codename": "delete_booktime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view book time",
+      "content_type": 8,
+      "codename": "view_booktime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add isbn",
+      "content_type": 9,
+      "codename": "add_isbn"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change isbn",
+      "content_type": 9,
+      "codename": "change_isbn"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete isbn",
+      "content_type": 9,
+      "codename": "delete_isbn"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view isbn",
+      "content_type": 9,
+      "codename": "view_isbn"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add librarian",
+      "content_type": 10,
+      "codename": "add_librarian"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change librarian",
+      "content_type": 10,
+      "codename": "change_librarian"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete librarian",
+      "content_type": 10,
+      "codename": "delete_librarian"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view librarian",
+      "content_type": 10,
+      "codename": "view_librarian"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add message",
+      "content_type": 11,
+      "codename": "add_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change message",
+      "content_type": 11,
+      "codename": "change_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete message",
+      "content_type": 11,
+      "codename": "delete_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view message",
+      "content_type": 11,
+      "codename": "view_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+      "name": "Can add penalty",
+      "content_type": 12,
+      "codename": "add_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+      "name": "Can change penalty",
+      "content_type": 12,
+      "codename": "change_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+      "name": "Can delete penalty",
+      "content_type": 12,
+      "codename": "delete_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+      "name": "Can view penalty",
+      "content_type": 12,
+      "codename": "view_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+      "name": "Can add penalty time",
+      "content_type": 13,
+      "codename": "add_penaltytime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+      "name": "Can change penalty time",
+      "content_type": 13,
+      "codename": "change_penaltytime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+      "name": "Can delete penalty time",
+      "content_type": 13,
+      "codename": "delete_penaltytime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+      "name": "Can view penalty time",
+      "content_type": 13,
+      "codename": "view_penaltytime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+      "name": "Can add reserve",
+      "content_type": 14,
+      "codename": "add_reserve"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+      "name": "Can change reserve",
+      "content_type": 14,
+      "codename": "change_reserve"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+      "name": "Can delete reserve",
+      "content_type": 14,
+      "codename": "delete_reserve"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+      "name": "Can view reserve",
+      "content_type": 14,
+      "codename": "view_reserve"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+      "name": "Can add room time",
+      "content_type": 15,
+      "codename": "add_roomtime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+      "name": "Can change room time",
+      "content_type": 15,
+      "codename": "change_roomtime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+      "name": "Can delete room time",
+      "content_type": 15,
+      "codename": "delete_roomtime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+      "name": "Can view room time",
+      "content_type": 15,
+      "codename": "view_roomtime"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+      "name": "Can add room type",
+      "content_type": 16,
+      "codename": "add_roomtype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+      "name": "Can change room type",
+      "content_type": 16,
+      "codename": "change_roomtype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+      "name": "Can delete room type",
+      "content_type": 16,
+      "codename": "delete_roomtype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+      "name": "Can view room type",
+      "content_type": 16,
+      "codename": "view_roomtype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+      "name": "Can add student",
+      "content_type": 17,
+      "codename": "add_student"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+      "name": "Can change student",
+      "content_type": 17,
+      "codename": "change_student"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+      "name": "Can delete student",
+      "content_type": 17,
+      "codename": "delete_student"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+      "name": "Can view student",
+      "content_type": 17,
+      "codename": "view_student"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+      "name": "Can add room",
+      "content_type": 18,
+      "codename": "add_room"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+      "name": "Can change room",
+      "content_type": 18,
+      "codename": "change_room"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+      "name": "Can delete room",
+      "content_type": 18,
+      "codename": "delete_room"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+      "name": "Can view room",
+      "content_type": 18,
+      "codename": "view_room"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 73,
+    "fields": {
+      "name": "Can add reserve friend",
+      "content_type": 19,
+      "codename": "add_reservefriend"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 74,
+    "fields": {
+      "name": "Can change reserve friend",
+      "content_type": 19,
+      "codename": "change_reservefriend"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 75,
+    "fields": {
+      "name": "Can delete reserve friend",
+      "content_type": 19,
+      "codename": "delete_reservefriend"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 76,
+    "fields": {
+      "name": "Can view reserve friend",
+      "content_type": 19,
+      "codename": "view_reservefriend"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 77,
+    "fields": {
+      "name": "Can add punish",
+      "content_type": 20,
+      "codename": "add_punish"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 78,
+    "fields": {
+      "name": "Can change punish",
+      "content_type": 20,
+      "codename": "change_punish"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 79,
+    "fields": {
+      "name": "Can delete punish",
+      "content_type": 20,
+      "codename": "delete_punish"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 80,
+    "fields": {
+      "name": "Can view punish",
+      "content_type": 20,
+      "codename": "view_punish"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 81,
+    "fields": {
+      "name": "Can add gadget",
+      "content_type": 21,
+      "codename": "add_gadget"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 82,
+    "fields": {
+      "name": "Can change gadget",
+      "content_type": 21,
+      "codename": "change_gadget"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 83,
+    "fields": {
+      "name": "Can delete gadget",
+      "content_type": 21,
+      "codename": "delete_gadget"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 84,
+    "fields": {
+      "name": "Can view gadget",
+      "content_type": 21,
+      "codename": "view_gadget"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 85,
+    "fields": {
+      "name": "Can add borrow",
+      "content_type": 22,
+      "codename": "add_borrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 86,
+    "fields": {
+      "name": "Can change borrow",
+      "content_type": 22,
+      "codename": "change_borrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 87,
+    "fields": {
+      "name": "Can delete borrow",
+      "content_type": 22,
+      "codename": "delete_borrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 88,
+    "fields": {
+      "name": "Can view borrow",
+      "content_type": 22,
+      "codename": "view_borrow"
+    }
+  }
+]
