@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from "vuex";
+import {mapState} from "vuex";
 
 export default {
   components: {},
@@ -43,12 +43,10 @@ export default {
     this.$store.dispatch('student/fetchRoomTypes')
   },
   computed: {
-    isLoading() {
-      return this.$store.state.student.isLoading
-    },
-    roomTypes() {
-      return this.$store.state.student.roomTypes
-    }
+    ...mapState({
+      isLoading: state => state.student.isLoading,
+      roomTypes: state => state.student.roomTypes,
+    }),
   },
   methods: {
     getRoomTypeIcon(type) {
@@ -60,7 +58,7 @@ export default {
     },
     selectRoomType(type) {
       this.selectedType = type
-      this.$store.dispatch('student/getAvailableTimeSlot', type, null)
+      this.$store.dispatch('student/fetchReservedTimeSlot', type, null)
     }
   }
 

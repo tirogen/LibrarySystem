@@ -10,7 +10,7 @@ export default {
     return api.get('room/roomTypes').then(response => response.data)
   },
 
-  getAvailableTimeSlot(type, date){
+  fetchReservedTimeSlot(type, date){
     return api.get(`room/${type}/0`).then(response => response.data)
   }
 }
