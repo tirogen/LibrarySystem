@@ -16,6 +16,7 @@
         </div>
       </div>
     </div>
+    <div>{{reservedTimeSlot}}</div>
     <div class="row">
       <div class="col-6">
 <!--        <b-form-select v-model="selected" :options="options"></b-form-select>-->
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from "vuex";
+import {mapState} from "vuex";
 
 export default {
   components: {},
@@ -43,12 +44,11 @@ export default {
     this.$store.dispatch('student/fetchRoomTypes')
   },
   computed: {
-    isLoading() {
-      return this.$store.state.student.isLoading
-    },
-    roomTypes() {
-      return this.$store.state.student.roomTypes
-    }
+    ...mapState({
+      isLoading: state => state.student.isLoading,
+      roomTypes: state => state.student.roomTypes,
+      reservedTimeSlot: state => state.student.reservedTimeSlot,
+    }),
   },
   methods: {
     getRoomTypeIcon(type) {
@@ -60,7 +60,7 @@ export default {
     },
     selectRoomType(type) {
       this.selectedType = type
-      this.$store.dispatch('student/getAvailableTimeSlot', type, null)
+      this.$store.dispatch('student/fetchReservedTimeSlot', type, null)
     }
   }
 
