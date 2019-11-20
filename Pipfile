@@ -13,6 +13,7 @@ psycopg2-binary = "*"
 mysqlclient = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.7.5"

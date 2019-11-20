@@ -14,7 +14,7 @@ import logging
 
 def get():
 	cursor = connection.cursor()
-	cursor.execute("SELECT api_gadget.Name, api_gadget.Status, api_gadget.PurchasedDate, api_room.Name \
+	cursor.execute("SELECT api_gadget.Name, api_gadget.Status, api_gadget.PurchasedDate, api_room.id, api_room.RoomType_id,api_room.Name \
 					FROM api_gadget \
 					INNER JOIN api_room ON api_gadget.Room_id=api_room.id \
 					LIMIT 20")
@@ -24,7 +24,9 @@ def get():
 			"GadgetName": row[0],
 			"Status": row[1],
 			"PurchasedDate": row[2],
-			"RoomName": row[3],
+			"RoomID": row[3],
+			"RoomType": row[4],
+			"RoomName": row[5]
 		})
 	return response
 
