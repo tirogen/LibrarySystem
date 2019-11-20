@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'omfXMHUUf6',
-        'USER': 'omfXMHUUf6',
-        'PASSWORD': 'EilJue2jSt',
-        'HOST': 'remotemysql.com',
-        'PORT': '3306',
+        'NAME': 'library',
+        'USER': 'root',
+        'PASSWORD': 'mypass123',
+        'HOST': '207.148.121.139',
+        'PORT': '3308',
     }
 }
 

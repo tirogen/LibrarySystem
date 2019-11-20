@@ -9,8 +9,8 @@ from django.urls import path, include
 from rest_framework import routers
 from .api.views import index_view, MessageViewSet
 from .api.punish import Penalty, CalculatePoint
-from .api.reservedRoom import GetTop20, getRoom
-from .api.Gadget import getGadget
+from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom
+from .api.Gadget import manageGadget
 from .api.book import getBook
 from .api.room import roomTypes, getAvailableTimeSlot
 
@@ -28,8 +28,9 @@ urlpatterns = [
     # http://localhost:8000/api/admin/
     path('api/admin/', admin.site.urls),
     path('api/reservedRoom/getTop20/', GetTop20),
-    path('api/reservedRoom/getRoom/', getRoom),
-    path('api/Gadget/getGadget/', getGadget),
+    path('api/reservedRoom/delete/<str:id>/', deleteReservedRoom),
+    path('api/reservedRoom/manageRoom/', manageRoom),
+    path('api/Gadget/manageGadget/', manageGadget),
     path('api/book/getBook/',getBook),
 
     #room
