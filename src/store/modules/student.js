@@ -4,6 +4,8 @@ import {baseState, baseMutations} from "../state";
 
 const state = {
   ...cloneDeep(baseState),
+  isReservedTimeSlotLoading: false,
+  reservedTimeSlot: [],
   reservedRooms: [],
   roomTypes:[],
   availableTimeSlot: null,
@@ -19,7 +21,13 @@ const mutations = {
   setRoomTypes(state, roomTypes) {
     state.roomTypes = roomTypes
   },
-  setAvailableTimeSlot(state, timeSlots) {
+  reservedTimeSlotLoading(state) {
+    state.isReservedTimeSlotLoading = true
+  },
+  reservedTimeSlotSuccess(state){
+    state.isReservedTimeSlotLoading = false
+  },
+  setReservedTimeSlot(state, timeSlots) {
     state.availableTimeSlot = timeSlots
   }
 }
@@ -48,11 +56,13 @@ const actions = {
         commit('error', err)
       })
   },
-  getAvailableTimeSlot({commit}, type, date) {
-    studentService.getAvailableTimeSlot(type, date)
+  fetchReservedTimeSlot({commit}, type, date) {
+    commit('reservedTimeSlotLoading')
+    studentService.fetchReservedTimeSlot(type, date)
       .then(response => {
         console.log(response)
-        commit('setAvailableTimeSlot', response)
+        commit('setReservedTimeSlot', response)
+        commit('reservedTimeSlotSuccess')
       })
   }
 }
