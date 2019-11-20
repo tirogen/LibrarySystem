@@ -19,15 +19,28 @@ def roomTypes(request):
 
 
 @api_view(['GET'])
-def getAvailableTimeSlot(request, type, date):
+def getRoomNameByType(request, roomType):
+    cursor = connection.cursor()
+    cursor.execute("SELECT api_room.Name FROM api_room WHERE api_room.RoomType_id='{}';".format(roomType))
+    response = []
+    for record in cursor.fetchall():
+        response.append({
+            "name": record[0]
+        })
+    return Response(response, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def getAvailableTimeSlot(request, roomType, date):
     statement = "SELECT api_room.Name, api_roomtime.Date, api_roomtime.StartTime, api_roomtime.EndTime FROM api_reserve \
                 INNER JOIN api_room \
                 INNER JOIN api_roomtime \
                 ON api_reserve.RoomTime_id=api_roomtime.id \
                 AND api_reserve.Room_id=api_room.id \
-                AND api_room.RoomType_id=%s;"
+                AND api_room.RoomType_id='{}' \
+                WHERE api_roomtime.Date='{}';".format(roomType, date)
     cursor = connection.cursor()
-    cursor.execute(statement, [type])
+    cursor.execute(statement)
     response = []
     for record in cursor.fetchall():
         response.append({

@@ -12,7 +12,7 @@ from .api.punish import Penalty, CalculatePoint
 from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom
 from .api.Gadget import manageGadget
 from .api.book import getBook
-from .api.room import roomTypes, getAvailableTimeSlot
+from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -31,12 +31,13 @@ urlpatterns = [
     path('api/reservedRoom/delete/<str:id>/', deleteReservedRoom),
     path('api/reservedRoom/manageRoom/', manageRoom),
     path('api/Gadget/manageGadget/', manageGadget),
-    path('api/book/getBook/',getBook),
+    path('api/book/getBook/', getBook),
 
-    #room
-    path('api/room/roomTypes', roomTypes),
-    path('api/room/<str:type>/<str:date>', getAvailableTimeSlot),
-    #penalty
+    # room
+    path('api/room/types/', roomTypes),
+    path('api/room/names/<str:roomType>/', getRoomNameByType),
+    path('api/room/<str:roomType>/<str:date>/', getAvailableTimeSlot),
+    # penalty
     path('api/punish/penalty/', Penalty),
     path('api/punish/penalty/<str:id>/', Penalty),
     path('api/punish/calculatePoint/(<str:id>/', CalculatePoint),
