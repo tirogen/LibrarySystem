@@ -14,7 +14,9 @@ const state = {
 
 const getters = {
   getRoomNameOptions: (state) => {
-    return state.roomNames.map(name => ({ 'value': name, 'text': name }))
+    const options = state.roomNames.map(name => ({ 'value': name, 'text': name }))
+    const noOptions = [{ 'value': null, 'text': 'No Room Available', 'disabled': true}]
+    return  options.length !== 0 ? options : noOptions
   },
 }
 
