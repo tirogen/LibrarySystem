@@ -1,7 +1,7 @@
 <template>
   <div class="jumbotron bg-overlay">
     <h2>Punishment</h2>
-    <b-table :items="reservedRooms" :fields="fields" striped responsive="sm">
+    <b-table :items="penalties" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
@@ -9,39 +9,42 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
-          <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button size="sm" variant="primary" class="m-2">Edit</b-button>
+          <b-button v-on:click="deletePenalty" size="sm" variant="danger" class="m-2">Delete</b-button>
         </b-card>
       </template>
     </b-table>
     <b-button block variant="primary">See all</b-button>
+    <PunishInfo></PunishInfo>
   </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import PunishInfo from './PunishInfo.vue'
 export default {
   name: 'LibrarianPunish',
   props: {
 
+  },
+  components: {
+    PunishInfo
   },
   data() {
     return {
       fields: ['id', 'Name', 'Point', 'Manage'],
     }
   },
+  methods: {
+    deletePenalty: function(event){
+      // this.$store.dispatch('punish/DeletePenalty/')
+    }
+  },
   computed: mapState({
-<<<<<<< HEAD
     penalties: state => state.punish.penalties
   }),
   mounted(){
-    this.$store.dispatch('punish/GetAllPenalties')
-=======
-    penalty: state => state.punish.penalty
-  }),
-  mounted(){
-    this.$store.dispatch('librarian/getReservedRooms')
->>>>>>> refs/remotes/origin/master
+    this.$store.dispatch('punish/getAllPenalties')
   }
 }
 
