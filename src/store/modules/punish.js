@@ -1,33 +1,48 @@
 import punishService from '../../services/punishService'
-import {cloneDeep} from "lodash";
-import {baseState, baseMutations} from "../state";
 
 const state = {
-  ...cloneDeep(baseState),
-  penalty: []
+  penalties: [],
+  punishInfo: [],
+  firstname: '',
+  lastname: '',
 }
 
 const getters = {
-  penalties: state => {
-    return state.penalties
-  }
 }
 
 const actions = {
-  getAllPenalty ({ commit }) {
-    punishService.fetchAllPenalty()
-    .then(penalty => {
-        console.log(penalty);
-      commit('setPenalty', penalty)
+  getAllPenalties ({ commit }) {
+    punishService.fetchAllPenalties()
+    .then(penalties => {
+      commit('setPenalties', penalties)
     })
   },
+  getPunishInfo ({ commit }, data) {
+    punishService.fetchPunishInfo(data)
+    .then(punishInfo => {
+      commit('setPunishInfo', punishInfo)
+    })
+  },
+  deletePenalty({commit}, id) {
+    punishService.deletePenalty(id)
+    .then(response => {
+      commit('deletePenalty', response)
+    })
+  }
 }
 
 const mutations = {
-  ...cloneDeep(baseMutations),
-  setPenalty (state, penalty) {
-    state.penalty = penalty
+  setPenalties (state, penalties) {
+    state.penalties = penalties
   },
+  setPunishInfo (state, punishInfo) {
+    state.punishInfo = punishInfo
+  },
+  deletePenalty(state, response){
+    if(response.status == 200){
+      state.penalties = state.penalties.filter((penalty) => penalty.id != response.data.id)
+    }
+  }
 }
 
 export default {

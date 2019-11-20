@@ -6,13 +6,13 @@
     --TWO--
     <LibrarianReserved />
     --SIX--
-    <LibrarianPunish></LibrarianPunish>
+    <LibrarianPunish />
   </div>
 </template>
 
 <script>
 import LibrarianReserved from './LibrarianReserved'
-import LibrarianPunish from './LibrarianPunish'
+import LibrarianPunish from './LibrarianPunish/LibrarianPunish'
 import Gadget from './LibrarianGadget'
 import Book from './LibrarianBook'
 

@@ -45,7 +45,7 @@ class Penalty(models.Model):
     Name = models.CharField(max_length=20)
     Point = models.IntegerField()
 
-class PenaltyTime(models.Model):
+class PunishTime(models.Model):
     Date = models.DateField(auto_now_add=True)
     Time = models.TimeField(auto_now_add=True)
 
@@ -97,7 +97,7 @@ class RoomTime(models.Model):
 
 class Punish(models.Model):
     Penalty = models.ForeignKey(Penalty, on_delete=models.CASCADE)
-    PunishTime = models.ForeignKey(PenaltyTime, on_delete=models.CASCADE)
+    PunishTime = models.ForeignKey(PunishTime, on_delete=models.CASCADE)
     Student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
 class Borrow(models.Model):

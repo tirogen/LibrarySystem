@@ -9,4 +9,12 @@ export default {
     return api.delete(`reservedRoom/delete/${id}/`)
               .then(response => response.status)
   },
+  checkInReservedRoom(id) {
+    return api.patch(`reservedRoom/checkIn/${id}/`)
+              .then(response => response)
+  },
+  checkOutReservedRoom(id) {
+    return api.patch(`reservedRoom/checkOut/${id}/`)
+              .then(response => response)
+  },
 }
