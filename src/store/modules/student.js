@@ -28,7 +28,7 @@ const mutations = {
     state.isReservedTimeSlotLoading = false
   },
   setReservedTimeSlot(state, timeSlots) {
-    state.availableTimeSlot = timeSlots
+    state.reservedTimeSlot = timeSlots
   }
 }
 

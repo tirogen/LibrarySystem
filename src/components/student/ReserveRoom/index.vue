@@ -16,6 +16,7 @@
         </div>
       </div>
     </div>
+    <div>{{reservedTimeSlot}}</div>
     <div class="row">
       <div class="col-6">
 <!--        <b-form-select v-model="selected" :options="options"></b-form-select>-->
@@ -46,6 +47,7 @@ export default {
     ...mapState({
       isLoading: state => state.student.isLoading,
       roomTypes: state => state.student.roomTypes,
+      reservedTimeSlot: state => state.student.reservedTimeSlot,
     }),
   },
   methods: {
