@@ -89,15 +89,23 @@ export default {
   components: {},
   data() {
     return {
-      selectedType: '',
+      timeSlot: [],
       selectedRoom: '',
-      selectedTime: '',
+      selectedType: '',
       student1: { id: '', name: '' },
       student2: { id: '', name: '' },
       student3: { id: '', name: '' },
       student4: { id: '', name: '' },
       student5: { id: '', name: '' },
       student6: { id: '', name: '' },
+      form: {
+        startTime: '',
+        endTime: '',
+        date: '',
+        roomId: '',
+        studentId: '',
+        friendIds: [],
+      },
     }
   },
   mounted() {
@@ -131,6 +139,12 @@ export default {
       this.$store.dispatch('student/fetchRoomNames', type)
       this.$store.dispatch('student/fetchReservedTimeSlot', type)
     },
+    bookForRoom() {
+      this.$store.dispatch('student/bookForRoom', this.getSubmissionForm())
+    },
+    getSubmissionForm() {
+      return this.form
+    },
   },
 
 }
@@ -142,11 +156,13 @@ h4, h6 {
 }
 
 .select-room {
-  min-width: 20%  ;
+  min-width: 20%;
 }
+
 .student-id-input {
   min-width: 20%;
 }
+
 .row {
   align-items: center;
   margin: 0.25rem 0;

@@ -59,13 +59,13 @@ def bookForRoom(request):
     #statement 3 need loop if multiple friendId
     statement = statement1 + statement2 + statement3
     cursor = connection.cursor()
-    cursor.execute(statement)
-    response = []
-    for record in cursor.fetchall():
-        response.append({
-            "name": record[0],
-            "date": record[1],
-            "start_time": record[2],
-            "end_time": record[3]
-        })
+    # cursor.execute(statement)
+    response = [request.POST]
+    # for record in cursor.fetchall():
+    #     response.append({
+    #         "name": record[0],
+    #         "date": record[1],
+    #         "start_time": record[2],
+    #         "end_time": record[3]
+    #     })
     return Response(response, status=status.HTTP_200_OK)

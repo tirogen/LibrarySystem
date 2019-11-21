@@ -12,7 +12,7 @@ from .api.punish import Penalty, CalculatePoint, GetPunishInfo
 from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom, checkInReservedRoom, checkOutReservedRoom
 from .api.Gadget import manageGadget
 from .api.book import getBook
-from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType
+from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType, bookForRoom
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -38,6 +38,7 @@ urlpatterns = [
     # room
     path('api/room/types/', roomTypes),
     path('api/room/names/<str:roomType>/', getRoomNameByType),
+    path('api/room/bookForRoom/', bookForRoom),
     path('api/room/<str:roomType>/<str:date>/', getAvailableTimeSlot),
     # penalty
     path('api/punish/penalty/', Penalty),

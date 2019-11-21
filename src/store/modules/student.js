@@ -76,6 +76,11 @@ const actions = {
       commit('reservedTimeSlotSuccess')
     })
   },
+  bookForRoom({commit}, form) {
+    studentService.bookForRoom(form).then(response => {
+      console.log(response.data)
+    })
+  }
 }
 
 export default {
