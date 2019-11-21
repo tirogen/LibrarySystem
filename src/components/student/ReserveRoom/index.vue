@@ -79,6 +79,10 @@
         </div>
       </div>
     </div>
+    <div class="d-flex">
+      <b-button pill variant="outline-secondary" @click="bookForRoom()" :disabled="!validateFormSubmit()">Reserve
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -145,6 +149,12 @@ export default {
     getSubmissionForm() {
       return this.form
     },
+    validateFormSubmit() {
+      if (!this.selectedType || !this.selectedRoom) return false
+      if (this.selectedType !== 'The Box' && !(this.student2.id && this.student3.id && this.student4.id)) return false
+      if (this.selectedType === 'Seminar Room' && !(this.student5.id && this.student6.id)) return false
+      return this.student1.id !== ''
+    },
   },
 
 }
@@ -190,4 +200,5 @@ h4, h6 {
   color: white;
   background: #565656 !important;
 }
+
 </style>

@@ -60,7 +60,7 @@ def bookForRoom(request):
     statement = statement1 + statement2 + statement3
     cursor = connection.cursor()
     # cursor.execute(statement)
-    response = [request.POST]
+    response = [request.body]
     # for record in cursor.fetchall():
     #     response.append({
     #         "name": record[0],
