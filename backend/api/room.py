@@ -50,3 +50,22 @@ def getAvailableTimeSlot(request, roomType, date):
             "end_time": record[3]
         })
     return Response(response, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def bookForRoom(request):
+    statement1 = "INSERT INTO api_roomtime(StartTime, EndTime, Date) VALUES('{}', '{}', '{}');".format('startTime', 'endTime', 'date')
+    statement2 = "INSERT INTO api_reserve(TimeIn, TimeOut, Room_id, RoomTime_id, Student_id) VALUES(NULL, NULL, {}, @@IDENTITY, '{}');".format('roomId', 'studentId')
+    statement3 = "INSERT INTO api_reservefriend(Friend_id, Reserve_id) VALUES('{}', @@IDENTITY);".format('friendId')
+    #statement 3 need loop if multiple friendId
+    statement = statement1 + statement2 + statement3
+    cursor = connection.cursor()
+    cursor.execute(statement)
+    response = []
+    for record in cursor.fetchall():
+        response.append({
+            "name": record[0],
+            "date": record[1],
+            "start_time": record[2],
+            "end_time": record[3]
+        })
+    return Response(response, status=status.HTTP_200_OK)
