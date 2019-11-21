@@ -1,6 +1,8 @@
 <template>
   <div class="jumbotron bg-overlay">
-    <h2>Punishment</h2>
+    <h2>
+      Punishment
+    </h2>
     <b-tabs>
       <b-tab title="Penalty Type">
       <PenaltyInfo></PenaltyInfo>

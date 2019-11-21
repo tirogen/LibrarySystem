@@ -100,7 +100,7 @@
     "pk": 13,
     "fields": {
       "app_label": "api",
-      "model": "penaltytime"
+      "model": "punishtime"
     }
   },
   {
@@ -268,7 +268,7 @@
     }
   },
   {
-    "model": "api.penaltytime",
+    "model": "api.punishtime",
     "pk": 1,
     "fields": {
       "Date": "2019-11-15",
@@ -276,7 +276,7 @@
     }
   },
   {
-    "model": "api.penaltytime",
+    "model": "api.punishtime",
     "pk": 2,
     "fields": {
       "Date": "2019-11-13",
@@ -284,7 +284,7 @@
     }
   },
   {
-    "model": "api.penaltytime",
+    "model": "api.punishtime",
     "pk": 3,
     "fields": {
       "Date": "2019-10-17",
@@ -940,36 +940,36 @@
     "model": "auth.permission",
     "pk": 49,
     "fields": {
-      "name": "Can add penalty time",
+      "name": "Can add punish time",
       "content_type": 13,
-      "codename": "add_penaltytime"
+      "codename": "add_punishtime"
     }
   },
   {
     "model": "auth.permission",
     "pk": 50,
     "fields": {
-      "name": "Can change penalty time",
+      "name": "Can change punish time",
       "content_type": 13,
-      "codename": "change_penaltytime"
+      "codename": "change_punishtime"
     }
   },
   {
     "model": "auth.permission",
     "pk": 51,
     "fields": {
-      "name": "Can delete penalty time",
+      "name": "Can delete punish time",
       "content_type": 13,
-      "codename": "delete_penaltytime"
+      "codename": "delete_punishtime"
     }
   },
   {
     "model": "auth.permission",
     "pk": 52,
     "fields": {
-      "name": "Can view penalty time",
+      "name": "Can view punisht time",
       "content_type": 13,
-      "codename": "view_penaltytime"
+      "codename": "view_punishtime"
     }
   },
   {

@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .api.views import index_view, MessageViewSet
-from .api.punish import Penalty, CalculatePoint, GetPunishInfo
+from .api.punish import penalty, calculatePoint, getPunishInfo, punish
 from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom, checkInReservedRoom, checkOutReservedRoom
 from .api.Gadget import manageGadget
 from .api.book import getBook
@@ -39,8 +39,10 @@ urlpatterns = [
     path('api/room/roomTypes', roomTypes),
     path('api/room/<str:type>/<str:date>', getAvailableTimeSlot),
     #penalty
-    path('api/punish/penalty/', Penalty),
-    path('api/punish/penalty/<str:id>/', Penalty),
-    path('api/punish/calculatePoint/<str:id>/', CalculatePoint),
-    path('api/punish/getPunishInfo/<str:FName>/<str:LName>/', GetPunishInfo),
+    path('api/punish/penalty/', penalty),
+    path('api/punish/penalty/<str:id>/', penalty),
+    path('api/punish/calculatePoint/<str:id>/', calculatePoint),
+    path('api/punish/getPunishInfo/<str:FName>/<str:LName>/', getPunishInfo),
+    path('api/punish/punish/', punish),
+    path('api/punish/punish/<str:id>/', punish),
 ]
