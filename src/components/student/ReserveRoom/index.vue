@@ -120,7 +120,7 @@ export default {
         { 'value': 60, 'text': '60 minutes' },
         { 'value': 90, 'text': '90 minutes' },
         { 'value': 120, 'text': '120 minutes' }],
-      student1: { id: '', name: '' },
+      student1: { id: 'student1', name: '' },
       student2: { id: '', name: '' },
       student3: { id: '', name: '' },
       student4: { id: '', name: '' },
@@ -175,19 +175,28 @@ export default {
       this.$store.dispatch('student/fetchReservedTimeSlot', type)
     },
     bookForRoom() {
-      this.$store.dispatch('student/bookForRoom', this.getSubmissionForm())
+      this.getSubmissionForm()
+      this.$store.dispatch('student/bookForRoom', this.form)
     },
     getSubmissionForm() {
+      this.form.date = moment().format('YYYY-MM-DD')
+      this.form.startTime = this.selectedTimePeriod.split(' - ')[0]
+      this.form.endTime = this.selectedTimePeriod.split(' - ')[1]
+      this.form.roomId = this.roomNames.filter(room => room.name === this.selectedRoom).map(room => room.roomId)[0]
+      this.form.studentId = this.student1.id
+      this.form.friendIds = []
+      if (this.selectedType !== 'The Box') this.form.friendIds.push(this.student2.id, this.student3.id, this.student4.id)
+      if (this.selectedType === 'Seminar Room') this.form.friendIds.push(this.student5.id, this.student6.id)
       return this.form
     },
     validateFormSubmit() {
-      if (!this.selectedType || !this.selectedRoom) return false
+      if (!this.selectedType || !this.selectedRoom || !this.selectedTimePeriod) return false
       if (this.selectedType !== 'The Box' && !(this.student2.id && this.student3.id && this.student4.id)) return false
       if (this.selectedType === 'Seminar Room' && !(this.student5.id && this.student6.id)) return false
       return this.student1.id !== ''
     },
     getAvailableTimePeriods() {
-      const timePeriod = [], timeSlots = this.timeSlots, reservedTimeSlot = this.reservedTimeSlot
+      const timeSlots = this.timeSlots, reservedTimeSlot = this.reservedTimeSlot
       const reservedTime = reservedTimeSlot.filter(slot => slot.name === this.selectedRoom)
 
       timeSlots.forEach(slot => {

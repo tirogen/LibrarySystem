@@ -1,3 +1,4 @@
+/* eslint-disable */
 import studentService from '../../services/studentService'
 import { cloneDeep } from 'lodash'
 import { baseState, baseMutations } from '../state'
@@ -15,7 +16,7 @@ const state = {
 
 const getters = {
   getRoomNameOptions: state => {
-    const options = state.roomNames.map(
+    const options = state.roomNames.map(room => room.name).map(
       name => ({ 'value': name, 'text': name }))
     const noOptions = [
       {
@@ -77,7 +78,7 @@ const actions = {
   },
   fetchRoomNames({ commit }, roomType) {
     studentService.fetchRoomNameByType(roomType).then(response => {
-      commit('setRoomNames', response.data.map(room => room.name))
+      commit('setRoomNames', response.data)
     }).catch(err => {
       commit('error', err)
     })
@@ -91,7 +92,9 @@ const actions = {
   },
   bookForRoom({ commit }, form) {
     studentService.bookForRoom(form).then(response => {
-      commit('booking', response)
+      console.log(response.data)
+    }).catch(err => {
+      console.error(err)
     })
   },
 }
