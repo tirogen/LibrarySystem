@@ -54,10 +54,10 @@ def getAvailableTimeSlot(request, roomType, date):
 
 @api_view(['POST'])
 def bookForRoom(request):
-    form = request.body
+    form = request.data
     statement1 = "INSERT INTO api_roomtime(StartTime, EndTime, Date) VALUES('{}', '{}', '{}');" \
         .format(form['startTime'], form['endTime'], form['date'])
-    statement2 = "INSERT INTO api_reserve(TimeIn, TimeOut, Room_id, RoomTime_id, Student_id) VALUES(NULL, NULL, {}, @@IDENTITY, '{}');" \
+    statement2 = "INSERT INTO api_reserve(TimeIn, TimeOut, Room_id, RoomTime_id, Student_id) VALUES('00:00', '00:00', {}, @@IDENTITY, '{}');" \
         .format(form['roomId'], form['studentId'])
     statement3 = ""
     for friendId in form['friendIds']:
@@ -66,9 +66,8 @@ def bookForRoom(request):
     statement = statement1 + statement2 + statement3
     cursor = connection.cursor()
     response = [statement]
-    return Response(response, status=status.HTTP_201_CREATED)
     try:
-        # cursor.execute(statement)
+        cursor.execute(statement)
         return Response(response, status=status.HTTP_201_CREATED)
     except Error:
         return Response({'error': 'SQL execution failed'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

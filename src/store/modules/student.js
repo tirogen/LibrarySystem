@@ -12,6 +12,9 @@ const state = {
   roomTypes: [],
   roomNames: [],
   timeSlots: [],
+  reservationInProgress: false,
+  reservationSuccess: false,
+  reservationError: false,
 }
 
 const getters = {
@@ -50,6 +53,19 @@ const mutations = {
   },
   setRoomNames(state, roomNames) {
     state.roomNames = roomNames
+  },
+  reservationInProgress(state) {
+    state.reservationInProgress = true
+  },
+  reservationSuccess(state) {
+    state.reservationSuccess = true
+    state.reservationError = false
+    state.reservationInProgress = false
+  },
+  reservationError(state) {
+    state.reservationError = true
+    state.reservationSuccess = false
+    state.reservationInProgress = false
   },
 }
 
@@ -91,10 +107,11 @@ const actions = {
     })
   },
   bookForRoom({ commit }, form) {
+    commit('reservationInProgress')
     studentService.bookForRoom(form).then(response => {
-      console.log(response.data)
+      commit('reservationSuccess')
     }).catch(err => {
-      console.error(err)
+      commit('reservationError')
     })
   },
 }
