@@ -19,6 +19,19 @@ export default {
       console.log("error new state : ", e)
     })
 
-  } 
+  },
+  deleteGadget(index) {
+      return api.delete('Gad/get/manageGadget/', index).then(response => {
+
+        return response
+      })
+  },
+  updateGadget(newUpdatedGadget) {
+    return api.update('Gadget/manageGadget/',JSON.stringify(newUpdatedGadget)).then(response => {
+      // alert(JSON.stringify(response.data))
+      alert("new update coming")
+      return response
+    })
+  }
   
 }

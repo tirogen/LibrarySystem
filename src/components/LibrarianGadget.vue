@@ -2,7 +2,7 @@
   <div class="jumbotron bg-overlay">
     <h2>
       Gadget
-      <b-button v-b-modal.modal-1 @click="fetchRooms()">ADD GADGET</b-button>
+      <b-button v-b-modal.modal-1 @click="showGadgetModal()">ADD GADGET</b-button>
     </h2>
     <!-- Add GadGet Modal -->
     <div>
@@ -28,6 +28,12 @@
               <b-form-input id="name-input" v-model="gadgetName" required></b-form-input>
             </b-col>
           </b-row>
+          <b-row v-if="this.action=='UPDATE'">
+            <b-col cols="1.5" class>Available Status</b-col>
+            <b-col>
+              <b-form-select v-model="available" :options="statuses"></b-form-select>
+            </b-col>
+          </b-row>
           <b-row class="mb-1">
             <b-col cols="4.5" class>Purchase Date</b-col>
             <b-col class="text-center">
@@ -47,7 +53,7 @@
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-            <b-button variant="primary" size="sm" class="float" @click="addGadget()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float" @click="checkAction()">CONFIRM</b-button>
             <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>
@@ -64,8 +70,14 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button size="sm" variant="primary" class="m-2">Check in</b-button>
-          <b-button size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button
+            size="sm"
+            v-b-modal.modal-1
+            variant="primary"
+            class="m-2"
+            @click="fetchUpdatedData(row.item)"
+          >Update</b-button>
+          <b-button size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item)">Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -82,6 +94,8 @@ export default {
   props: {},
   data() {
     return {
+      statuses: ["Available", "NotAvailable"],
+      action: "ADD",
       en: en,
       th: th,
       cal: {
@@ -126,7 +140,9 @@ export default {
       show: false,
       roomName: "",
       roomType: "",
-      nameOption: ""
+      available: null,
+      nameOption: "",
+      deletedid: ""
     };
   },
   computed: {
@@ -142,15 +158,36 @@ export default {
   },
   watch: {
     roomType: function() {
-      this.$store.dispatch("room/fetchRoomNames", this.roomType);
+      if (this.action == "ADD") {
+        this.$store.dispatch("room/fetchRoomNames", this.roomType);
+      } else if (this.action == "UPDATE" && this.roomType != "") {
+        // check roomType in key
+        // this.rooms[]
+        // if (this.roomName == "") {
+        this.$store.dispatch("room/fetchRoomNames", this.roomType);
+        // }
+      }
       //  this.roomNames = Object.keys(dat[this.roomType])
     },
     roomName: function() {
-      this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+      if (this.action == "ADD") {
+        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+      } else if (this.action == "UPDATE") {
+        if (this.roomName == "" && this.roomType != "") {
+          // this.$store.dispatch("room/fetchRoomNames", this.roomType);
+        }
+      }
     }
   },
 
   methods: {
+    checkAction: function() {
+      if (this.action == "ADD") {
+        this.addGadget();
+      } else if (this.action == "UPDATE") {
+        this.updateGadget();
+      }
+    },
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
@@ -184,6 +221,12 @@ export default {
         }
       });
     },
+    showGadgetModal: function() {
+      this.action = "ADD";
+      //show modal true
+      this.show = true;
+      this.fetchRooms();
+    },
     fetchRooms: function() {
       this.$store.dispatch("room/fetchRooms");
     },
@@ -191,7 +234,7 @@ export default {
       this.newGadget.Name = this.gadgetName;
       this.newGadget.Status = "Available";
       // this.newGadget.PurchasedDate = this.date
-      console.log(this.newGadget);
+      // console.log(this.newGadget);
     },
     handleGadgetValue: async function() {
       // check form is valid
@@ -205,6 +248,44 @@ export default {
       }
       //
       return true;
+    },
+    deletedGadget: function() {
+      // get data
+      // this.$store.dispatch("room/deleteGadget", this.deletedid);
+    },
+    fetchUpdatedData: function(item) {
+      this.action = "UPDATE";
+      this.roomType = item.RoomType;
+      this.roomName = item.RoomName
+      this.roomName = item.RoomName;
+      this.available = item.Status;
+      this.gadgetName = item.GadgetName;
+      let stringDate = item.PurchasedDate;
+      let arr = stringDate.split();
+      // this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
+      this.show = true;
+    },
+    updateGadget: function() {},
+    showDeleteConfirm(item) {
+      this.$bvModal
+        .msgBoxConfirm("Please confirm that you want to delete.", {
+          title: "Please Confirm",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          cancelTitle: "NO",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.deletedGadget(item)
+          } else {
+            // asdasda
+          }
+        });
     }
   },
   mounted() {

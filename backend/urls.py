@@ -12,7 +12,7 @@ from .api.punish import penalty, calculatePoint, getPunishInfo, punish
 from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom, checkInReservedRoom, checkOutReservedRoom
 from .api.Gadget import manageGadget
 from .api.book import getBook
-from .api.room import roomTypes, getAvailableTimeSlot
+from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -33,16 +33,17 @@ urlpatterns = [
     path('api/reservedRoom/checkOut/<str:id>/', checkInReservedRoom),
     path('api/reservedRoom/manageRoom/', manageRoom),
     path('api/Gadget/manageGadget/', manageGadget),
-    path('api/book/getBook/',getBook),
+    path('api/book/getBook/', getBook),
 
-    #room
-    path('api/room/roomTypes', roomTypes),
-    path('api/room/<str:type>/<str:date>', getAvailableTimeSlot),
     #penalty
     path('api/punish/penalty/', penalty),
-    path('api/punish/penalty/<str:id>/', penalty),
     path('api/punish/calculatePoint/<str:id>/', calculatePoint),
+    path('api/punish/penalty/<str:id>/', penalty),
     path('api/punish/getPunishInfo/<str:FName>/<str:LName>/', getPunishInfo),
-    path('api/punish/punish/', punish),
     path('api/punish/punish/<str:id>/', punish),
+    path('api/punish/punish/', punish),
+    # room
+    path('api/room/types/', roomTypes),
+    path('api/room/names/<str:roomType>/', getRoomNameByType),
+    path('api/room/<str:roomType>/<str:date>/', getAvailableTimeSlot),
 ]
