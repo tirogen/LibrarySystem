@@ -89,7 +89,6 @@ const mutations = {
     }
   },
   addPenalty(state, response){
-    console.log("add penalty in list");
     if(response.status == 200){
       state.penalties.push(response.data)
     }
