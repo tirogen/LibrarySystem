@@ -4,11 +4,45 @@
     <div><strong style="font-size: 24px"> Loading... </strong></div>
   </div>
   <div v-else>
+    <div>
+      <b-modal id="reserve-room-confirm-modal" title="Confirm Reservation">
+        <div>
+          <div class="row">Type: {{selectedType}}</div>
+          <div class="row">Room: {{selectedRoom}}</div>
+          <div class="row">Duration: {{selectedDuration}}</div>
+          <div class="row">Time: {{selectedTimePeriod}}</div>
+        </div>
+        <template v-slot:modal-footer>
+          <div>
+            <div class="row w-100" v-if="reservationError">
+              <p class="text-danger"><strong>Room reservation failed.</strong></p>
+            </div>
+            <div class="row w-100" v-if="reservationSuccess">
+              <p class="text-primary"><strong>Room reservation successful</strong></p>
+            </div>
+            <div class="row" v-if="!reservationSuccess && !reservationError">
+              <b-button variant="primary" @click="bookForRoom()" style="min-width: 100px">
+                <div v-if="reservationInProgress"><i class="fas fa-circle-notch fa-spin"></i></div>
+                <div v-else>CONFIRM</div>
+              </b-button>
+              <b-button variant="outline-secondary" class="ml-2" @click="$bvModal.hide('reserve-room-confirm-modal')" style="min-width: 100px">
+                CANCEL
+              </b-button>
+            </div>
+            <div class="row" v-else>
+              <b-button variant="outline-secondary" class="ml-2" @click="$router.push({path:'/student'})" style="min-width: 100px">
+                Back to Student Home
+              </b-button>
+            </div>
+          </div>
+        </template>
+      </b-modal>
+    </div>
     <div class="mt-3">
       <h4><strong>Select Room Type</strong></h4>
     </div>
     <div class="row">
-      <div v-for="roomType in roomTypes" class="col-4">
+      <div v-for="roomType in roomTypes" :key="roomType.type" class="col-4">
         <div :class="{'card' : true, 'selected' : selectedType === roomType.type}"
              @click="selectRoomType(roomType.type)">
           <div class="card-children"><i :class="getRoomTypeIcon(roomType.type)"></i></div>
@@ -18,17 +52,32 @@
       </div>
     </div>
     <div>{{reservedTimeSlot}}</div>
+    <div>{{timePeriodOptions}}</div>
     <div>you selected {{selectedRoom}}</div>
+    <div>you selected {{selectedTimePeriod}}</div>
     <div class="mt-5">
-      <h6 class="mb-2"><strong>Select Room</strong></h6>
       <div class="row">
-        <div class="mr-3 select-room">
-          <b-form-select class="" v-model="selectedRoom" :options="roomNameOptions"></b-form-select>
+        <div class="col-sm-4">
+          <h6 class="mb-2"><strong>Select Room</strong></h6>
+          <div class="mr-3 ">
+            <b-form-select class="" v-model="selectedRoom" :options="roomNameOptions"></b-form-select>
+          </div>
         </div>
-        <div>you selected {{selectedRoom}}</div>
+        <div class="col-sm-4">
+          <h6 class="mb-2"><strong>Select Duration</strong></h6>
+          <div class="mr-3 ">
+            <b-form-select class="" v-model="selectedDuration" :options="durationOptions"></b-form-select>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <h6 class="mb-2"><strong>Select Time</strong></h6>
+          <div class="mr-3 ">
+            <b-form-select class="" v-model="selectedTimePeriod" :options="timePeriodOptions"></b-form-select>
+          </div>
+        </div>
       </div>
     </div>
-    <div v-if="selectedRoom" class="mt-5">
+    <div v-if="selectedRoom" class="my-5 col-sm-12">
       <h6 class="mb-2"><strong>Require Student ID</strong></h6>
       <div class="row">
         <div class="mr-3 student-id-input">
@@ -78,29 +127,52 @@
           Name for student6 {{student6.id}}
         </div>
       </div>
+      <b-button pill v-b-modal.reserve-room-confirm-modal variant="outline-secondary" class="my-3" :disabled="!validateFormSubmit()">
+        Reserve
+      </b-button>
+    </div>
+    <div class="d-flex">
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import moment from 'moment'
 
 export default {
   components: {},
   data() {
     return {
-      selectedType: '',
+      timeSlot: [],
       selectedRoom: '',
-      selectedTime: '',
-      student1: { id: '', name: '' },
+      selectedType: '',
+      selectedDuration: 30,
+      selectedTimePeriod: '',
+      durationOptions: [
+        { 'value': 30, 'text': '30 minutes' },
+        { 'value': 60, 'text': '60 minutes' },
+        { 'value': 90, 'text': '90 minutes' },
+        { 'value': 120, 'text': '120 minutes' }],
+      student1: { id: 'student1', name: '' },
       student2: { id: '', name: '' },
       student3: { id: '', name: '' },
       student4: { id: '', name: '' },
       student5: { id: '', name: '' },
       student6: { id: '', name: '' },
+      form: {
+        startTime: '',
+        endTime: '',
+        date: '',
+        roomId: '',
+        studentId: '',
+        friendIds: [],
+      },
+      waitTime: 0,
     }
   },
   mounted() {
+    this.$store.dispatch('student/initializeState')
     this.$store.dispatch('student/fetchRoomTypes')
   },
   computed: {
@@ -109,10 +181,25 @@ export default {
       roomTypes: state => state.student.roomTypes,
       roomNames: state => state.student.roomNames,
       reservedTimeSlot: state => state.student.reservedTimeSlot,
+      timeSlots: state => state.student.timeSlots,
+      reservationInProgress: state => state.student.reservationInProgress,
+      reservationSuccess: state => state.student.reservationSuccess,
+      reservationError: state => state.student.reservationError,
     }),
     ...mapGetters({
-      roomNameOptions: 'student/getRoomNameOptions',
+      getRoomNameOptions: 'student/getRoomNameOptions',
     }),
+    roomNameOptions() {
+      if (!this.selectedType) return [{ 'value': null, 'text': 'Please Select Room Type First', 'disabled': true }]
+      return this.getRoomNameOptions
+    },
+    timePeriodOptions() {
+      if (!this.selectedRoom) return [{ 'value': null, 'text': 'Please Select Room First', 'disabled': true }]
+      return this.getAvailableTimePeriods()
+    },
+    redirectTime() {
+      return this.waitTime
+    },
   },
   methods: {
     getRoomTypeIcon(type) {
@@ -131,6 +218,70 @@ export default {
       this.$store.dispatch('student/fetchRoomNames', type)
       this.$store.dispatch('student/fetchReservedTimeSlot', type)
     },
+    bookForRoom() {
+      this.getSubmissionForm()
+      this.$store.dispatch('student/bookForRoom', this.form)
+    },
+    getSubmissionForm() {
+      this.form.date = moment().format('YYYY-MM-DD')
+      this.form.startTime = this.selectedTimePeriod.split(' - ')[0]
+      this.form.endTime = this.selectedTimePeriod.split(' - ')[1]
+      this.form.roomId = this.roomNames.filter(room => room.name === this.selectedRoom).map(room => room.roomId)[0]
+      this.form.studentId = this.student1.id
+      this.form.friendIds = []
+      if (this.selectedType !== 'The Box') this.form.friendIds.push(this.student2.id, this.student3.id, this.student4.id)
+      if (this.selectedType === 'Seminar Room') this.form.friendIds.push(this.student5.id, this.student6.id)
+      return this.form
+    },
+    validateFormSubmit() {
+      if (!this.selectedType || !this.selectedRoom || !this.selectedTimePeriod) return false
+      if (this.selectedType !== 'The Box' && !(this.student2.id && this.student3.id && this.student4.id)) return false
+      if (this.selectedType === 'Seminar Room' && !(this.student5.id && this.student6.id)) return false
+      return this.student1.id !== ''
+    },
+    getAvailableTimePeriods() {
+      const timeSlots = this.timeSlots, reservedTimeSlot = this.reservedTimeSlot
+      const reservedTime = reservedTimeSlot.filter(slot => slot.name === this.selectedRoom)
+
+      timeSlots.forEach(slot => {
+        const startArr = slot.start.split(':').map(e => parseInt(e))
+        const endArr = slot.end.split(':').map(e => parseInt(e))
+        const slotStart = moment().hours(startArr[0]).minutes(startArr[1])
+        const slotEnd = moment().hours(endArr[0]).minutes(endArr[1])
+        reservedTime.forEach(reserved => {
+          const reservedStartArr = reserved['start_time'].split(':').map(e => parseInt(e))
+          const reservedEndArr = reserved['end_time'].split(':').map(e => parseInt(e))
+          const reservedStart = moment().hours(reservedStartArr[0]).minutes(reservedStartArr[1])
+          const reservedEnd = moment().hours(reservedEndArr[0]).minutes(reservedEndArr[1])
+          if (reservedStart <= slotStart && slotEnd <=
+            reservedEnd) slot.available = false
+        })
+      })
+      const periods = this.generateTimePeriods(this.selectedDuration / 30, timeSlots)
+      return periods
+    },
+    generateTimePeriods(slotNeeds, timeSlots) {
+      const periods = []
+      for (let i = 0; i < timeSlots.length - slotNeeds + 1; i++) {
+        let flag = true
+        for (let j = 0; j < slotNeeds; j++) {
+          if (!timeSlots[i + j].available) flag = false
+        }
+        if (flag) {
+          const option = `${timeSlots[i].start} - ${timeSlots[i + slotNeeds - 1].end}`
+          periods.push({
+            'value': option, 'text': option,
+          })
+        }
+      }
+      return periods
+    },
+    sleep(milliseconds) {
+      let start = new Date().getTime()
+      for (let i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) break
+      }
+    },
   },
 
 }
@@ -141,12 +292,14 @@ h4, h6 {
   text-align: left;
 }
 
-.select-room {
-  min-width: 20%  ;
+.dropdown-options {
+  min-width: 20%;
 }
+
 .student-id-input {
   min-width: 20%;
 }
+
 .row {
   align-items: center;
   margin: 0.25rem 0;
@@ -174,4 +327,5 @@ h4, h6 {
   color: white;
   background: #565656 !important;
 }
+
 </style>

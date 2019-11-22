@@ -18,4 +18,8 @@ export default {
   fetchRoomNameByType(type) {
     return api.get(`room/names/${type}/`)
   },
+
+  bookForRoom(form) {
+    return api.post(`room/bookForRoom/`, JSON.stringify(form))
+  }
 }
