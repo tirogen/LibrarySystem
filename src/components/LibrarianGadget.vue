@@ -77,7 +77,7 @@
             class="m-2"
             @click="fetchUpdatedData(row.item)"
           >Update</b-button>
-          <b-button size="sm" variant="danger" class="m-2" @click="deleteGadget(row.item)">Delete</b-button>
+          <b-button size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item)">Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -158,11 +158,25 @@ export default {
   },
   watch: {
     roomType: function() {
-      this.$store.dispatch("room/fetchRoomNames", this.roomType);
+      if (this.action == "ADD") {
+        this.$store.dispatch("room/fetchRoomNames", this.roomType);
+      } else if (this.action == "UPDATE" && this.roomType != "") {
+        // check roomType in key
+        // this.rooms[]
+        // if (this.roomName == "") {
+        this.$store.dispatch("room/fetchRoomNames", this.roomType);
+        // }
+      }
       //  this.roomNames = Object.keys(dat[this.roomType])
     },
     roomName: function() {
-      this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+      if (this.action == "ADD") {
+        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+      } else if (this.action == "UPDATE") {
+        if (this.roomName == "" && this.roomType != "") {
+          // this.$store.dispatch("room/fetchRoomNames", this.roomType);
+        }
+      }
     }
   },
 
@@ -208,10 +222,10 @@ export default {
       });
     },
     showGadgetModal: function() {
-        this.action = "ADD";
-        //show modal true
-        this.show = true
-        this.fetchRooms()
+      this.action = "ADD";
+      //show modal true
+      this.show = true;
+      this.fetchRooms();
     },
     fetchRooms: function() {
       this.$store.dispatch("room/fetchRooms");
@@ -237,15 +251,19 @@ export default {
     },
     deletedGadget: function() {
       // get data
-      this.$store.dispatch("room/deleteGadget", this.deletedid);
+      // this.$store.dispatch("room/deleteGadget", this.deletedid);
     },
     fetchUpdatedData: function(item) {
-      // this.roomName = item.RoomName;
-      // this.roomType = item.roomType;
-      // this.available = item.available
-      console.log(item)
       this.action = "UPDATE";
-      this.show = true
+      this.roomType = item.RoomType;
+      this.roomName = item.RoomName
+      this.roomName = item.RoomName;
+      this.available = item.Status;
+      this.gadgetName = item.GadgetName;
+      let stringDate = item.PurchasedDate;
+      let arr = stringDate.split();
+      // this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
+      this.show = true;
     },
     updateGadget: function() {},
     showDeleteConfirm(item) {
@@ -263,7 +281,9 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.$store.dispatch("librarian/deleteReservedRooms", id);
+            this.deletedGadget(item)
+          } else {
+            // asdasda
           }
         });
     }
