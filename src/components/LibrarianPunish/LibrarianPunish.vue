@@ -2,6 +2,7 @@
   <div class="jumbotron bg-overlay">
     <h2>
       Punishment
+      <b-button v-b-modal.modal-1 @click="showGadgetModal()">ADD PENALTY</b-button>
     </h2>
     <b-tabs>
       <b-tab title="Penalty Type">

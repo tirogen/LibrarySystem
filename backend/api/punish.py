@@ -31,6 +31,11 @@ def penalty(request, id=None):
         cursor = connection.cursor()
         cursor.execute(statement, [id])
         return Response({'id': id}, status = status.HTTP_200_OK)
+    elif(request.method == 'PUT'):
+        statement = ("UPDATE `api_penalty` SET `Name`=%s,`Point`=%s WHERE id=%s")
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["Name"], request.data["Point"], request.data["id"]])
+        return Response(request.data, status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def calculatePoint(request, id):

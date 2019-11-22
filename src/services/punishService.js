@@ -20,5 +20,9 @@ export default {
   postPunish(data){
     return api.post(`punish/punish/`, data,{timeout: 10000})
               .then(response => response)
+  },
+  updatePenalty(data){
+    return api.put(`punish/penalty/`, data,{timeout: 10000})
+              .then(response => response)
   }
 }
