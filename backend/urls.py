@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/reservedRoom/checkOut/<str:id>/', checkInReservedRoom),
     path('api/reservedRoom/manageRoom/', manageRoom),
     path('api/Gadget/manageGadget/', manageGadget),
+    path('api/Gadget/manageGadget/<str:id>/', manageGadget),
     path('api/book/getBook/', getBook),
 
     #penalty

@@ -77,7 +77,12 @@
             class="m-2"
             @click="fetchUpdatedData(row.item)"
           >Update</b-button>
-          <b-button size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item)">Delete</b-button>
+          <b-button
+            size="sm"
+            variant="danger"
+            class="m-2"
+            @click="showDeleteConfirm(row.item)"
+          >Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -132,6 +137,7 @@ export default {
       gadgetName: "",
       fields: ["GadgetName", "Status", "PurchasedDate", "RoomName", "Manage"],
       newGadget: {
+        id: null,
         Name: null,
         Status: null,
         PurchasedDate: null,
@@ -230,10 +236,12 @@ export default {
     fetchRooms: function() {
       this.$store.dispatch("room/fetchRooms");
     },
+    //setting newGadget
     handleGadget: function() {
       this.newGadget.Name = this.gadgetName;
       this.newGadget.Status = "Available";
-      // this.newGadget.PurchasedDate = this.date
+      // this.newGadget.id = this.
+      // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind
       // console.log(this.newGadget);
     },
     handleGadgetValue: async function() {
@@ -256,18 +264,31 @@ export default {
     fetchUpdatedData: function(item) {
       this.action = "UPDATE";
       this.roomType = item.RoomType;
-      this.roomName = item.RoomName
+      this.roomName = item.RoomName;
       this.roomName = item.RoomName;
       this.available = item.Status;
       this.gadgetName = item.GadgetName;
       let stringDate = item.PurchasedDate;
+      //setting newGadget id
+      this.newGadget.id = item.id
       // alert(stringDate)
       let arr = stringDate.split("-");
       // alert(arr)
       this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
       this.show = true;
     },
-    updateGadget: function() {},
+    updateGadget: function() {
+      this.handleGadget();
+      this.handleGadgetValue().then(success => {
+        if (success) {
+          this.show = false;
+          this.$store.dispatch("room/updateGadget", this.newGadget);
+          //animate View
+        } else {
+          alert("data is not valid to update");
+        }
+      });
+    },
     showDeleteConfirm(item) {
       this.$bvModal
         .msgBoxConfirm("Please confirm that you want to delete.", {
@@ -283,7 +304,9 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.deletedGadget(item)
+            // alert(Object.keys(item))
+            alert(item.GadgetID)
+            // this.deletedGadget(item);
           } else {
             // asdasda
           }

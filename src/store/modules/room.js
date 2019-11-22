@@ -49,8 +49,9 @@ const actions = {
     commit('loading')
     roomService.deleteGadget(id)
     .then(res => {
-      // commit('setGadgets',gadgets)
+      commit('setGadgets',gadgets)
       console.log(res)
+      // check status
       if (res.status == "") {
         commit('success')
       } else {
@@ -63,10 +64,11 @@ const actions = {
   },
   updateGadget ({commit}, updateGadget) {
     commit('loading')
-    roomService.deleteGadget(updateGadget)
+    roomService.updateGadget(updateGadget)
     .then(res => {
-      // commit('setGadgets',gadgets)
+      commit('updateGadget',res.data)
       console.log(res)
+      //check status
       if (res.status == "") {
         commit('success')
       } else {
@@ -89,6 +91,10 @@ const mutations = {
   },
   setRoomNames(state, roomType) {
     state.roomNames = Object.keys(state.rooms[roomType])
+  },
+  updateGadget(state,gadget) {
+    alert(gadget)
+    // state.r
   }
 }
 
