@@ -244,6 +244,62 @@
     }
   },
   {
+    "model": "api.student",
+    "pk": "student3",
+    "fields": {
+      "Password": "student3",
+      "Email": "student3@hotmail.com",
+      "Gender": "Female",
+      "Tel": "09999999",
+      "DateOfBirth": "2019-11-19",
+      "Address": "student3 adress",
+      "FName": "s3 firstname",
+      "LName": "s3 lastname"
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "student4",
+    "fields": {
+      "Password": "student4",
+      "Email": "student4@hotmail.com",
+      "Gender": "Male",
+      "Tel": "09999999",
+      "DateOfBirth": "2019-11-19",
+      "Address": "student4 adress",
+      "FName": "s4 firstname",
+      "LName": "s4 lastname"
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "student5",
+    "fields": {
+      "Password": "student5",
+      "Email": "student5@hotmail.com",
+      "Gender": "Female",
+      "Tel": "09999999",
+      "DateOfBirth": "2019-11-19",
+      "Address": "student5 adress",
+      "FName": "s5 firstname",
+      "LName": "s5 lastname"
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "student6",
+    "fields": {
+      "Password": "student6",
+      "Email": "student6@hotmail.com",
+      "Gender": "Female",
+      "Tel": "09999999",
+      "DateOfBirth": "2019-11-19",
+      "Address": "student6 adress",
+      "FName": "s6 firstname",
+      "LName": "s6 lastname"
+    }
+  },
+  {
     "model": "api.penalty",
     "pk": 1,
     "fields": {
