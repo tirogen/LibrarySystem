@@ -20,6 +20,6 @@ export default {
   },
 
   bookForRoom(form) {
-    return api.post(`room/bookForRoom/`, form)
+    return api.post(`room/bookForRoom/`, JSON.stringify(form))
   }
 }

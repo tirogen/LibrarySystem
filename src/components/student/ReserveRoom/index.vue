@@ -4,6 +4,40 @@
     <div><strong style="font-size: 24px"> Loading... </strong></div>
   </div>
   <div v-else>
+    <div>
+      <b-modal id="reserve-room-confirm-modal" title="Confirm Reservation">
+        <div>
+          <div class="row">Type: {{selectedType}}</div>
+          <div class="row">Room: {{selectedRoom}}</div>
+          <div class="row">Duration: {{selectedDuration}}</div>
+          <div class="row">Time: {{selectedTimePeriod}}</div>
+        </div>
+        <template v-slot:modal-footer>
+          <div>
+            <div class="row w-100" v-if="reservationError">
+              <p class="text-danger"><strong>Room reservation failed.</strong></p>
+            </div>
+            <div class="row w-100" v-if="reservationSuccess">
+              <p class="text-primary"><strong>Room reservation successful</strong></p>
+            </div>
+            <div class="row" v-if="!reservationSuccess && !reservationError">
+              <b-button variant="primary" @click="bookForRoom()" style="min-width: 100px">
+                <div v-if="reservationInProgress"><i class="fas fa-circle-notch fa-spin"></i></div>
+                <div v-else>CONFIRM</div>
+              </b-button>
+              <b-button variant="outline-secondary" class="ml-2" @click="$bvModal.hide('reserve-room-confirm-modal')" style="min-width: 100px">
+                CANCEL
+              </b-button>
+            </div>
+            <div class="row" v-else>
+              <b-button variant="outline-secondary" class="ml-2" @click="$router.push({path:'/student'})" style="min-width: 100px">
+                Back to Student Home
+              </b-button>
+            </div>
+          </div>
+        </template>
+      </b-modal>
+    </div>
     <div class="mt-3">
       <h4><strong>Select Room Type</strong></h4>
     </div>
@@ -93,8 +127,8 @@
           Name for student6 {{student6.id}}
         </div>
       </div>
-      <b-button pill variant="outline-secondary" class="my-3" @click="bookForRoom()" :disabled="!validateFormSubmit()">
-        Confirm and Reserve
+      <b-button pill v-b-modal.reserve-room-confirm-modal variant="outline-secondary" class="my-3" :disabled="!validateFormSubmit()">
+        Reserve
       </b-button>
     </div>
     <div class="d-flex">
@@ -120,7 +154,7 @@ export default {
         { 'value': 60, 'text': '60 minutes' },
         { 'value': 90, 'text': '90 minutes' },
         { 'value': 120, 'text': '120 minutes' }],
-      student1: { id: '', name: '' },
+      student1: { id: 'student1', name: '' },
       student2: { id: '', name: '' },
       student3: { id: '', name: '' },
       student4: { id: '', name: '' },
@@ -134,6 +168,7 @@ export default {
         studentId: '',
         friendIds: [],
       },
+      waitTime: 0,
     }
   },
   mounted() {
@@ -147,14 +182,23 @@ export default {
       roomNames: state => state.student.roomNames,
       reservedTimeSlot: state => state.student.reservedTimeSlot,
       timeSlots: state => state.student.timeSlots,
+      reservationInProgress: state => state.student.reservationInProgress,
+      reservationSuccess: state => state.student.reservationSuccess,
+      reservationError: state => state.student.reservationError,
     }),
     ...mapGetters({
-      roomNameOptions: 'student/getRoomNameOptions',
+      getRoomNameOptions: 'student/getRoomNameOptions',
     }),
+    roomNameOptions() {
+      if (!this.selectedType) return [{ 'value': null, 'text': 'Please Select Room Type First', 'disabled': true }]
+      return this.getRoomNameOptions
+    },
     timePeriodOptions() {
       if (!this.selectedRoom) return [{ 'value': null, 'text': 'Please Select Room First', 'disabled': true }]
-      if (!this.selectedRoom) return [{ 'value': null, 'text': 'Please Select Room First', 'disabled': true }]
       return this.getAvailableTimePeriods()
+    },
+    redirectTime() {
+      return this.waitTime
     },
   },
   methods: {
@@ -175,19 +219,28 @@ export default {
       this.$store.dispatch('student/fetchReservedTimeSlot', type)
     },
     bookForRoom() {
-      this.$store.dispatch('student/bookForRoom', this.getSubmissionForm())
+      this.getSubmissionForm()
+      this.$store.dispatch('student/bookForRoom', this.form)
     },
     getSubmissionForm() {
+      this.form.date = moment().format('YYYY-MM-DD')
+      this.form.startTime = this.selectedTimePeriod.split(' - ')[0]
+      this.form.endTime = this.selectedTimePeriod.split(' - ')[1]
+      this.form.roomId = this.roomNames.filter(room => room.name === this.selectedRoom).map(room => room.roomId)[0]
+      this.form.studentId = this.student1.id
+      this.form.friendIds = []
+      if (this.selectedType !== 'The Box') this.form.friendIds.push(this.student2.id, this.student3.id, this.student4.id)
+      if (this.selectedType === 'Seminar Room') this.form.friendIds.push(this.student5.id, this.student6.id)
       return this.form
     },
     validateFormSubmit() {
-      if (!this.selectedType || !this.selectedRoom) return false
+      if (!this.selectedType || !this.selectedRoom || !this.selectedTimePeriod) return false
       if (this.selectedType !== 'The Box' && !(this.student2.id && this.student3.id && this.student4.id)) return false
       if (this.selectedType === 'Seminar Room' && !(this.student5.id && this.student6.id)) return false
       return this.student1.id !== ''
     },
     getAvailableTimePeriods() {
-      const timePeriod = [], timeSlots = this.timeSlots, reservedTimeSlot = this.reservedTimeSlot
+      const timeSlots = this.timeSlots, reservedTimeSlot = this.reservedTimeSlot
       const reservedTime = reservedTimeSlot.filter(slot => slot.name === this.selectedRoom)
 
       timeSlots.forEach(slot => {
@@ -222,6 +275,12 @@ export default {
         }
       }
       return periods
+    },
+    sleep(milliseconds) {
+      let start = new Date().getTime()
+      for (let i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) break
+      }
     },
   },
 

@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.db import connection
+from django.db import connection, Error
 from backend.api.models import Penalty, Punish
 
 
@@ -21,11 +21,12 @@ def roomTypes(request):
 @api_view(['GET'])
 def getRoomNameByType(request, roomType):
     cursor = connection.cursor()
-    cursor.execute("SELECT api_room.Name FROM api_room WHERE api_room.RoomType_id='{}';".format(roomType))
+    cursor.execute("SELECT api_room.id, api_room.Name FROM api_room WHERE api_room.RoomType_id='{}';".format(roomType))
     response = []
     for record in cursor.fetchall():
         response.append({
-            "name": record[0]
+            "roomId": record[0],
+            "name": record[1]
         })
     return Response(response, status=status.HTTP_200_OK)
 
@@ -53,14 +54,23 @@ def getAvailableTimeSlot(request, roomType, date):
 
 @api_view(['POST'])
 def bookForRoom(request):
-    statement1 = "INSERT INTO api_roomtime(StartTime, EndTime, Date) VALUES('{}', '{}', '{}');".format('startTime', 'endTime', 'date')
-    statement2 = "INSERT INTO api_reserve(TimeIn, TimeOut, Room_id, RoomTime_id, Student_id) VALUES(NULL, NULL, {}, @@IDENTITY, '{}');".format('roomId', 'studentId')
-    statement3 = "INSERT INTO api_reservefriend(Friend_id, Reserve_id) VALUES('{}', @@IDENTITY);".format('friendId')
+    form = request.data
+    statement1 = "INSERT INTO api_roomtime(StartTime, EndTime, Date) VALUES('{}', '{}', '{}');" \
+        .format(form['startTime'], form['endTime'], form['date'])
+    statement2 = "INSERT INTO api_reserve(TimeIn, TimeOut, Room_id, RoomTime_id, Student_id) VALUES('00:00', '00:00', {}, @@IDENTITY, '{}');" \
+        .format(form['roomId'], form['studentId'])
+    statement3 = ""
+    for friendId in form['friendIds']:
+        statement3 += "INSERT INTO api_reservefriend(Friend_id, Reserve_id) VALUES('{}', @@IDENTITY);".format(friendId)
     #statement 3 need loop if multiple friendId
     statement = statement1 + statement2 + statement3
     cursor = connection.cursor()
-    # cursor.execute(statement)
-    response = [request.body]
+    response = [statement]
+    try:
+        cursor.execute(statement)
+        return Response(response, status=status.HTTP_201_CREATED)
+    except Error:
+        return Response({'error': 'SQL execution failed'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
     # for record in cursor.fetchall():
     #     response.append({
     #         "name": record[0],
@@ -68,4 +78,3 @@ def bookForRoom(request):
     #         "start_time": record[2],
     #         "end_time": record[3]
     #     })
-    return Response(response, status=status.HTTP_200_OK)

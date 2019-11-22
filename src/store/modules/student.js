@@ -1,3 +1,4 @@
+/* eslint-disable */
 import studentService from '../../services/studentService'
 import { cloneDeep } from 'lodash'
 import { baseState, baseMutations } from '../state'
@@ -11,11 +12,14 @@ const state = {
   roomTypes: [],
   roomNames: [],
   timeSlots: [],
+  reservationInProgress: false,
+  reservationSuccess: false,
+  reservationError: false,
 }
 
 const getters = {
   getRoomNameOptions: state => {
-    const options = state.roomNames.map(
+    const options = state.roomNames.map(room => room.name).map(
       name => ({ 'value': name, 'text': name }))
     const noOptions = [
       {
@@ -50,6 +54,19 @@ const mutations = {
   setRoomNames(state, roomNames) {
     state.roomNames = roomNames
   },
+  reservationInProgress(state) {
+    state.reservationInProgress = true
+  },
+  reservationSuccess(state) {
+    state.reservationSuccess = true
+    state.reservationError = false
+    state.reservationInProgress = false
+  },
+  reservationError(state) {
+    state.reservationError = true
+    state.reservationSuccess = false
+    state.reservationInProgress = false
+  },
 }
 
 const actions = {
@@ -77,7 +94,7 @@ const actions = {
   },
   fetchRoomNames({ commit }, roomType) {
     studentService.fetchRoomNameByType(roomType).then(response => {
-      commit('setRoomNames', response.data.map(room => room.name))
+      commit('setRoomNames', response.data)
     }).catch(err => {
       commit('error', err)
     })
@@ -90,8 +107,11 @@ const actions = {
     })
   },
   bookForRoom({ commit }, form) {
+    commit('reservationInProgress')
     studentService.bookForRoom(form).then(response => {
-      commit('booking', response)
+      commit('reservationSuccess')
+    }).catch(err => {
+      commit('reservationError')
     })
   },
 }
