@@ -72,6 +72,8 @@ export default {
           this.$store.dispatch("punish/getPunishInfo", data);
       },
       punishStudent: function() {
+        if(this.selectedPenalty.id == null) return alert("Please select penalty type!");
+        if(this.punishInfo.username == null) return alert("Please select student!");
         let data = {
           'Penalty_id': this.selectedPenalty.id,
           'Date': '2019-11-19',
