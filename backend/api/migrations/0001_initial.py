@@ -81,8 +81,8 @@ class Migration(migrations.Migration):
             name='Reserve',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('TimeIn', models.TimeField()),
-                ('TimeOut', models.TimeField()),
+                ('TimeIn', models.TimeField(null=True, default=None)),
+                ('TimeOut', models.TimeField(null=True, default=None)),
             ],
         ),
         migrations.CreateModel(

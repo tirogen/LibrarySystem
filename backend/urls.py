@@ -8,11 +8,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .api.views import index_view, MessageViewSet
-from .api.punish import Penalty, CalculatePoint
-from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom
+from .api.punish import Penalty, CalculatePoint, GetPunishInfo
+from .api.reservedRoom import GetTop20, manageRoom, deleteReservedRoom, checkInReservedRoom, checkOutReservedRoom
 from .api.Gadget import manageGadget
 from .api.book import getBook
-from .api.room import roomTypes, getAvailableTimeSlot
+from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -29,15 +29,19 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/reservedRoom/getTop20/', GetTop20),
     path('api/reservedRoom/delete/<str:id>/', deleteReservedRoom),
+    path('api/reservedRoom/checkIn/<str:id>/', checkInReservedRoom),
+    path('api/reservedRoom/checkOut/<str:id>/', checkInReservedRoom),
     path('api/reservedRoom/manageRoom/', manageRoom),
     path('api/Gadget/manageGadget/', manageGadget),
-    path('api/book/getBook/',getBook),
+    path('api/book/getBook/', getBook),
 
-    #room
-    path('api/room/roomTypes', roomTypes),
-    path('api/room/<str:type>/<str:date>', getAvailableTimeSlot),
-    #penalty
+    # room
+    path('api/room/types/', roomTypes),
+    path('api/room/names/<str:roomType>/', getRoomNameByType),
+    path('api/room/<str:roomType>/<str:date>/', getAvailableTimeSlot),
+    # penalty
     path('api/punish/penalty/', Penalty),
     path('api/punish/penalty/<str:id>/', Penalty),
-    path('api/punish/calculatePoint/(<str:id>/', CalculatePoint),
+    path('api/punish/calculatePoint/<str:id>/', CalculatePoint),
+    path('api/punish/getPunishInfo/<str:FName>/<str:LName>/', GetPunishInfo),
 ]

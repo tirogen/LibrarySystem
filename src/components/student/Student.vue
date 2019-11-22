@@ -1,17 +1,19 @@
 <template>
   <div>
-    <h1>HELL YEAH <i class="fas fa-check fa-3x"></i></h1>
+    <h1><i class="fas fa-check"></i></h1>
     <b-button variant="outline-primary">
       <router-link to="/student/reserve-room/">
         Reserve Room >
       </router-link>
     </b-button>
-    {{reservedRooms}}
+    <div>
+      {{reservedRooms}}
+    </div>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   mounted() {
@@ -19,11 +21,10 @@ export default {
   },
   computed: {
     ...mapState({
-      reservedRooms: state => state.student.reservedRooms
+      reservedRooms: state => state.student.reservedRooms,
     }),
   },
-  methods: {
-  }
+  methods: {},
 }
 </script>
 
