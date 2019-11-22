@@ -261,8 +261,10 @@ export default {
       this.available = item.Status;
       this.gadgetName = item.GadgetName;
       let stringDate = item.PurchasedDate;
-      let arr = stringDate.split();
-      // this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
+      // alert(stringDate)
+      let arr = stringDate.split("-");
+      // alert(arr)
+      this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
       this.show = true;
     },
     updateGadget: function() {},
