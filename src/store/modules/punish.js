@@ -42,10 +42,15 @@ const actions = {
     })
   },
   updatePenalty({ commit }, data) {
-    console.log("action")
     punishService.updatePenalty(data)
     .then(response => {
       commit('updatePenalty', response)
+    })
+  },
+  addPenalty({ commit }, data) {
+    punishService.postPenalty(data)
+    .then(response => {
+      commit('addPenalty', response)
     })
   }
 }
@@ -81,6 +86,12 @@ const mutations = {
       let index = state.penalties.findIndex(penalty => penalty.id == response.data.id);
       state.penalties[index].Name = response.data.Name;
       state.penalties[index].Point = response.data.Point;
+    }
+  },
+  addPenalty(state, response){
+    console.log("add penalty in list");
+    if(response.status == 200){
+      state.penalties.push(response.data)
     }
   }
 }

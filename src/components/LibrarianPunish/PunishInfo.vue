@@ -30,7 +30,7 @@
                   {{penalty.Name}}
                 </b-dropdown-item>
               </b-dropdown>
-              <b-button @click="punishStudent" size="sm" variant="danger" class="m-2">Punish</b-button>  
+              <b-button @click="showPunishConfirm" size="sm" variant="danger" class="m-2">Punish</b-button>  
               <b-button @click="historyIsShow=!historyIsShow" size="sm" variant="primary" class="m-2">
                 {{historyIsShow?"Hide History":"Show History"}}
               </b-button>   
@@ -39,7 +39,7 @@
         </b-row>
         <b-table :items="punishInfo.histories" :fields="fields" striped responsive="sm" v-if="historyIsShow">
           <template v-slot:cell(Manage)="row">
-            <b-button @click="deletePunish(row.item.id)" size="sm" variant="primary" class="m-2">Pardon</b-button>
+            <b-button @click="showDeleteConfirm(row.item.id)" size="sm" variant="primary" class="m-2">Pardon</b-button>
           </template>
         </b-table>
     </b-container>
@@ -72,12 +72,13 @@ export default {
           this.$store.dispatch("punish/getPunishInfo", data);
       },
       punishStudent: function() {
-        if(this.selectedPenalty.id == null) return alert("Please select penalty type!");
-        if(this.punishInfo.username == null) return alert("Please select student!");
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         let data = {
           'Penalty_id': this.selectedPenalty.id,
-          'Date': '2019-11-19',
-          'Time': '22:20:10',
+          'Date': date,
+          'Time': time,
           'Student_id': this.punishInfo.username,
           'Penalty': this.selectedPenalty.Name,
           'Point': this.selectedPenalty.Point
@@ -86,7 +87,51 @@ export default {
       },
       deletePunish: function(id) {
         this.$store.dispatch("punish/deletePunish", id)
-      }
+      },
+
+    //deletePunish confirm
+    showDeleteConfirm(id) {
+        this.$bvModal.msgBoxConfirm('Please confirm that you want to pardon.', {
+          title: 'Please Confirm',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'YES',
+          cancelTitle: 'NO',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+            if(value){
+                this.deletePunish(id);
+            }
+        })
+    },
+    //end of deletePunish Confirm modal
+
+    //Punish confirm
+    showPunishConfirm(id) {
+        if(this.selectedPenalty.id == null) return alert("Please select penalty type!");
+        if(this.punishInfo.username == null) return alert("Please select student!");
+        this.$bvModal.msgBoxConfirm('Please confirm that you want to punish.', {
+          title: 'Please Confirm',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'YES',
+          cancelTitle: 'NO',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+            if(value){
+                this.punishStudent(id);
+            }
+        })
+    },
+    //end of deletePunish Confirm modal
   },
   computed: mapState({
     punishInfo: state => state.punish.punishInfo,

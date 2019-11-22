@@ -25,7 +25,10 @@ def penalty(request, id=None):
         statement = ("INSERT INTO `api_penalty`(`Name`, `Point`) VALUES (%s, %s)")
         cursor = connection.cursor()
         cursor.execute(statement, [request.data["Name"], request.data["Point"]])
-        return Response(request.data, status = status.HTTP_200_OK)
+        insert_id = cursor.lastrowid
+        response = request.data
+        response["id"] = insert_id
+        return Response(response, status = status.HTTP_200_OK)
     elif(request.method == 'DELETE'):
         statement = ("DELETE FROM `api_penalty` WHERE id=%s")
         cursor = connection.cursor()
@@ -66,7 +69,15 @@ def punish(request, id=None):
                         VALUES (%s, LAST_INSERT_ID(), %s)")
         cursor = connection.cursor()
         cursor.execute(statement, [date, time, pid, sid])
-        return Response(request.data, status = status.HTTP_200_OK)
+        insert_id = cursor.lastrowid
+        response = {
+            "Date": request.data["Date"],
+            "Penalty": request.data["Penalty"],
+            "Point": request.data["Point"],
+            "Time": request.data["Time"],
+            "id": insert_id
+        }
+        return Response(response, status = status.HTTP_200_OK)
     elif(request.method == 'DELETE'):
         statement = ("DELETE FROM `api_punish` WHERE id=%s")
         cursor = connection.cursor()
