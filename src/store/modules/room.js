@@ -90,12 +90,15 @@ const mutations = {
   setRoomNames(state, roomType) {
     state.roomNames = Object.keys(state.rooms[roomType])
   },
-  updateGadget(state,gadget) {
-    let index = state.gadgets.findIndex(gadget => gadget.id == gadget.id);
-    // console.log(gadget)
-    state.gadgets[index] = gadget
-    // state.rooms[index].Name = response.data.Name;
-    // state.rooms[index].Point = response.data.Point;
+  updateGadget(state,gd) {
+    let index = state.gadgets.findIndex(gadget =>  { 
+      console.log(gadget)
+      console.log(gd)
+     return gadget.GadgetID == gd.GadgetID
+    })
+
+    alert(index)
+    state.gadgets[index] = gd
   },
 }
 

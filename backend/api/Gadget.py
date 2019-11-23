@@ -58,7 +58,26 @@ def manageGadget(request, id=None):
 		cursor = connection.cursor()
 		cursor.execute(statement, [request.data["Name"], request.data["Status"], request.data["PurchasedDate"], request.data["Room_id"], request.data["id"]])
         # not detect status how to know it was successful
-		return Response(request.data, status = status.HTTP_200_OK)
+		print("asdasd")
+		cursor2 = connection.cursor()
+		cursor2.execute("SELECT api_gadget.Name, api_gadget.Status, api_gadget.PurchasedDate, api_room.id, api_room.RoomType_id,api_room.Name, api_gadget.id \
+				FROM api_gadget \
+				INNER JOIN api_room ON api_gadget.Room_id=api_room.id \
+				WHERE api_gadget.id=%d",list(request.data["id"])
+				)
+			
+		print("asdasd")
+		row = cursor2.fetchone()
+		response = {
+			"GadgetName": row[0],
+			"Status": row[1],
+			"PurchasedDate": row[2],
+			"RoomID": row[3],
+			"RoomType": row[4],
+			"RoomName": row[5],
+			"GadgetID": row[6]
+		}
+		return Response(response, status = status.HTTP_200_OK)
 	elif request.method == 'DELETE' :
 		# print("this is id from DELETE request")
 		# print(id)
