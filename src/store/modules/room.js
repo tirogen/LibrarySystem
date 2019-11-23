@@ -1,6 +1,6 @@
 import roomService from '../../services/roomService'
 import { cloneDeep } from 'lodash'
-import { baseState, baseMutations } from "../state";
+import { baseState, baseMutations } from '../state'
 
 const state = {
   ...cloneDeep(baseState),
@@ -12,7 +12,7 @@ const state = {
 const getters = {
   rooms: state => {
     return state.rooms
-  }
+  },
 }
 
 const actions = {
@@ -31,10 +31,9 @@ const actions = {
       })
   },
   fetchGadgets({ commit }) {
-    roomService.fetchGadgets()
-      .then(gadgets => {
-        commit('setGadgets', gadgets)
-      })
+    roomService.fetchGadgets().then(gadgets => {
+      commit('setGadgets', gadgets)
+    })
   },
   postGadget({ commit }, newGadget) {
     roomService.postGadget(newGadget)
@@ -102,7 +101,7 @@ const mutations = {
     // }
   },
   deleteGad(state, dat) {
-    alert("deletesucc")
+    alert('deletesucc')
     state.gadgets = state.gadgets.filter((gad) => {
       if (gad.GadgetID == dat["id"]) {
         return false
@@ -118,5 +117,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

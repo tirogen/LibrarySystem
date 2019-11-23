@@ -1,5 +1,5 @@
 import StudentLayout from './index.vue'
-import Student from './Student.vue'
+import Dashboard from './Dashboard/Dashboard.vue'
 import ReserveRoom from './ReserveRoom/index.vue'
 
 export const studentRoutes = {
@@ -9,7 +9,7 @@ export const studentRoutes = {
     {
       path: '',
       name: 'student',
-      component: Student
+      component: Dashboard
     },
     {
       path: 'reserve-room',

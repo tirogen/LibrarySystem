@@ -1,11 +1,8 @@
 <template>
   <div class="container">
-    --THREE--
     <Book />
     <Gadget />
-    --TWO--
     <LibrarianReserved />
-    --SIX--
     <LibrarianPunish />
   </div>
 </template>
