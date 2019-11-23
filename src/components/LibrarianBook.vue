@@ -1,39 +1,39 @@
 <template>
   <div class="jumbotron bg-overlay">
-    <h2>Book
-    <b-button v-b-modal.modal-1>ADD BOOK</b-button>
+    <h2>
+      Book
+      <b-button v-b-modal.modal-1>ADD BOOK</b-button>
     </h2>
     <!-- Add Book Modal -->
     <b-modal id="modal-2" title="BootstrapVue">
-        <div class="modal-content">
-            <div class="modal-body">
-                  <label for="newBook">Book THING</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="BookName"
-                    placeholder="Enter Book Name"
-                    v-model="newBook.id"
-                    required="required">
-            </div>
+      <div class="modal-content">
+        <div class="modal-body">
+          <label for="newBook">Book THING</label>
+          <input
+            type="text"
+            class="form-control"
+            id="BookName"
+            placeholder="Enter Book Name"
+            v-model="newBook.id"
+            required="required"
+          />
         </div>
+      </div>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b>Custom Footer</b>
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="success" v-on:click="addBook()">
-          OK
-        </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
-          Cancel
-        </b-button>
+        <b-button size="sm" variant="success" v-on:click="addBook()">OK</b-button>
+        <b-button size="sm" variant="danger" @click="cancel()">Cancel</b-button>
       </template>
     </b-modal>
     <!-- End of add Book modal -->
     <b-table :items="books" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Manage)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
-        </b-button>
+        <b-button
+          size="sm"
+          @click="row.toggleDetails"
+          class="mr-2"
+        >{{ row.detailsShowing ? 'Hide' : 'Show'}} Manage</b-button>
       </template>
       <template v-slot:row-details="row">
         <b-card>
@@ -47,40 +47,51 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 export default {
-  name: 'Book',
-  props: {
-
-  },
+  name: "Book",
+  props: {},
   data() {
     return {
-      fields: ['id', 'ISBN', 'Status', 'Manage'],
+      fields: [
+        { key: "isbn", label: "ISBN" },
+        { key: "name", label: "BookName" },
+        { key: "category", label: "Category" },
+        { key: "author", label: "Author" },
+        { key: "number", label: "Number" },
+        "Manage"
+      ],
       // need to add book name
-      newBook: { 'id': null, 'ISBN': null, 'status': null}
-    }
+      newBook: { isbn: null, name: "", category: "", author: "" }
+    };
   },
   mounted() {
-   this.fetchBooks();
+    this.fetchBooks();
   },
-  computed: mapState({
-    isLoading: state => state.book.isLoading,
-    isSuccess: state => state.book.isSuccess,
-    isError: state => state.book.isError,
-    books: state => {
-      return state.book.books
-    }
-  }),
+  computed: {
+    ...mapState({
+      isLoading: state => state.book.isLoading,
+      isSuccess: state => state.book.isSuccess,
+      isError: state => state.book.isError,
+      books: state => state.book.books,
+      bookdict: state => state.book.bookdict,
+      isbns: state => state.book.isbns
+    })
+  },
 
   methods: {
-    fetchBooks: function(){
-        this.$store.dispatch('book/getBooks')
+    fetchBooks: function() {
+      // alert("start fetch");
+      this.$store.dispatch("book/fetchBooks");
     },
-    addBook: function(){
-      this.$store.dispatch('book/add', this.newBook)
+    addBook: function() {
+      this.$store.dispatch("book/postBooks", this.newBook);
+    },
+    deleteBook: function() {
+      this.$store.dispatch("book/deleteBooks", id);
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
