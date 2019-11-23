@@ -92,7 +92,7 @@ def getPunishInfo(request, FName, LName):
                     INNER JOIN `api_punishtime` AS pt ON pn.PunishTime_id=pt.id\
                     WHERE s.FName=%s and s.LName=%s")
     cursor = connection.cursor()
-    # result = cursor.execute(statement, [FName, LName])
+    cursor.execute(statement, [FName, LName])
     histories = []
     remainingPoint = MAX_POINT
     fullName = ""
