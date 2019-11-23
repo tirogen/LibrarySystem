@@ -70,11 +70,39 @@ def bookForRoom(request):
         cursor.execute(statement)
         return Response(response, status=status.HTTP_201_CREATED)
     except Error:
-        return Response({'error': 'SQL execution failed'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-    # for record in cursor.fetchall():
-    #     response.append({
-    #         "name": record[0],
-    #         "date": record[1],
-    #         "start_time": record[2],
-    #         "end_time": record[3]
-    #     })
+        return Response({'error': 'SQL execution failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def getActiveReservation(request, studentId, date):
+    statement = "SELECT api_room.Name, api_roomtime.StartTime, api_roomtime.EndTime, api_roomtime.id " \
+                "FROM api_reserve INNER JOIN api_roomtime INNER JOIN api_room " \
+                "ON api_reserve.RoomTime_id=api_roomtime.id " \
+                "AND api_reserve.Room_id=api_room.id " \
+                "WHERE api_reserve.Student_id='{}' " \
+                "AND api_roomtime.Date='{}' " \
+                "ORDER BY api_roomtime.StartTime;".format(studentId, date)
+    cursor = connection.cursor()
+    response = []
+    try:
+        cursor.execute(statement)
+        for record in cursor.fetchall():
+            response.append({
+                'roomName' : record[0],
+                'startTime' : record[1],
+                'endTime' : record[2],
+                'reservationId': record[3]
+            })
+        return Response(response, status=status.HTTP_200_OK)
+    except Error:
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+def cancelReservation(request, reservationId):
+    statement = "DELETE FROM api_roomtime WHERE api_roomtime.id='{}'".format(reservationId)
+    cursor = connection.cursor()
+    response = []
+    try:
+        cursor.execute(statement)
+        return Response(response, status=status.HTTP_202_ACCEPTED)
+    except Error:
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
