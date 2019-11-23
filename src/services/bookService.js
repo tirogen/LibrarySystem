@@ -14,7 +14,7 @@ export default {
       .then(response => response.data)
   },
   postBook(data) {
-    console.log(data)
+    // console.log(data)
     return api.post(`book/book/`, data, { timeout: 10000 })
       .then(response => response.data)
   },

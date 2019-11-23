@@ -12,6 +12,7 @@ def getBook():
 	for row in cursor.fetchall():
 		if row[0] in response.keys():
 			response[row[0]]["number"].append(row[4])
+			response[row[0]]["num"] = len(response[row[0]]["number"])
 			response[row[0]]["status"].append(row[5])
 		else:
 			response[row[0]] = {
@@ -19,7 +20,8 @@ def getBook():
 				"author": row[2],
 				"name": row[3],
 				"number": [row[4]],
-				"status": [row[5]]
+				"status": [row[5]],
+				"num" : 1
 			}
 	return Response(response, status = status.HTTP_200_OK)
 

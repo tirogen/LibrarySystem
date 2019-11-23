@@ -2,10 +2,10 @@
   <div class="jumbotron bg-overlay">
     <h2>
       Book
-      <b-button v-b-modal.modal-add-book>ADD BOOK</b-button>
+      <b-button v-b-modal.modal-add-book @click="fillData()">ADD BOOK</b-button>
     </h2>
     <!-- Add Book Modal -->
-    <b-modal id="modal-add-book" title="ADD BOOK">
+    <b-modal v-model="showAddModal" id="modal-add-book" title="ADD BOOK">
       <div class="modal-content">
         <div class="modal-body">
           <b-card bg-variant="light">
@@ -79,7 +79,7 @@
       </template>
     </b-modal>
     <!-- End of add Book modal -->
-    <b-modal id="modal-delete-book" title="DELETE BOOK" v-model="show" hide-footer>
+    <b-modal id="modal-delete-book" title="DELETE BOOK" v-model="showDeleteModal" hide-footer>
       <b-jumbotron>
         <template v-slot:header>Condition</template>
 
@@ -94,7 +94,12 @@
       </b-jumbotron>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" @click="show=false">CLOSE</button>
-        <button type="button" class="btn btn-danger" @click="showDeleteConfirm(deletedID)" data-dismiss="modal">OK</button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="showDeleteConfirm(deletedID)"
+          data-dismiss="modal"
+        >OK</button>
       </div>
     </b-modal>
 
@@ -109,7 +114,20 @@
       <template v-slot:row-details="row">
         <b-card>
           <!-- <b-button size="sm" variant="primary" class="m-2">Check in</b-button> -->
-          <b-button size="lg" variant="danger" class="m-2" v-b-modal.modal-delete-book @click="loadRowData(row.item.number)">Delete</b-button>
+          <b-button
+            size="lg"
+            variant="primary"
+            class="m-2"
+            v-b-modal.modal-delete-book
+            @click="loadRowData(row.item, 'ADD MORE')"
+          >ADD MORE</b-button>
+          <b-button
+            size="lg"
+            variant="danger"
+            class="m-2"
+            v-b-modal.modal-delete-book
+            @click="loadRowData(row.item,'DELETE')"
+          >Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -150,7 +168,8 @@ export default {
       },
       deletedID: null,
       deletedIDOption: [],
-      show :false,
+      showDeleteModal: false,
+      showAddModal: false
     };
   },
   mounted() {
@@ -206,27 +225,47 @@ export default {
             // alert(Object.keys(item))
             // alert(item.GadgetID)
             this.deleteBook(id);
-            this.show = false
+            this.showDeleteModal = false;
           } else {
             // asdasda
-            this.show = true
+            this.showDeleteModal = true;
           }
         });
     },
-    loadRowData(options) {
-      this.deletedIDOption = options
-      this.show =true
+    fillData(item=null, option=null) {
+      if (option != "ADD MORE") {
+        this.bookFillInfo.dat.isbn = ""
+        this.bookFillInfo.dat.name = ""
+        this.bookFillInfo.dat.category = ""
+        this.bookFillInfo.dat.author = ""
+        this.showAddModal = true
+      } else {
+        // OPTION IS ADD
+        this.bookFillInfo.dat.isbn = item.isbn
+        this.bookFillInfo.dat.name = item.name
+        this.bookFillInfo.dat.category = item.category
+        this.bookFillInfo.dat.author = item.author    
+      }
+    },
+    loadRowData(item, option) {
+      if (option == "ADD MORE") {
+        this.fillData(item,option)
+        this.showAddModal = true
+      } else {
+        this.deletedIDOption = item.number;
+        this.showDeleteModal = true;
+      }
     },
     restrictBookInfo() {
       this.bookFillInfo.dat.name = this.bookdict[this.bookFillInfo.dat.isbn][
         "name"
-      ]
+      ];
       this.bookFillInfo.dat.category = this.bookdict[
         this.bookFillInfo.dat.isbn
-      ]["category"]
+      ]["category"];
       this.bookFillInfo.dat.author = this.bookdict[this.bookFillInfo.dat.isbn][
         "author"
-      ]
+      ];
     },
     fetchBooks: function() {
       // alert("start fetch");
@@ -234,23 +273,24 @@ export default {
     },
     addBook: function(restrict) {
       // console.log(this.bookFillInfo.dat);
-      let res
-      if(restrict) {
-         res = {
-          "isbn": this.bookFillInfo.dat.isbn,
-          "name": "",
-          "category": "",
-          "author": ""
-        }
+      let res;
+      if (restrict) {
+        res = {
+          isbn: this.bookFillInfo.dat.isbn,
+          name: "",
+          category: "",
+          author: ""
+        };
       } else {
         res = {
-          "isbn": this.bookFillInfo.dat.isbn,
-          "name": this.bookFillInfo.dat.name,
-          "category": this.bookFillInfo.dat.category,
-          "author": this.bookFillInfo.dat.author
-        }
+          isbn: this.bookFillInfo.dat.isbn,
+          name: this.bookFillInfo.dat.name,
+          category: this.bookFillInfo.dat.category,
+          author: this.bookFillInfo.dat.author
+        };
       }
       this.$store.dispatch("book/postBooks", res);
+      this.showAddModal = false;
     },
     deleteBook: function(id) {
       this.$store.dispatch("book/deleteBooks", id);

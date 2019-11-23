@@ -33,7 +33,7 @@ const actions = {
     commit('loading')
     bookService.deleteBook(id).then(data => {
       //delte from local table
-      commit('deleteBook', data["id"])
+      commit('deleteBook', data)
       commit('success')
     }).catch(err => {
       commit('error')
@@ -71,9 +71,18 @@ const mutations = {
     }
     )
   },
-  deleteBook(state, id) {
+  deleteBook(state, data) {
     state.books = state.books.filter((book) => {
-      return book.id != id
+      if(book.isbn == data["isbn"]) {
+        book.number = book.number.filter((id)=> id!=data["id"])
+        book.num = book.num-1
+        if(book.number.length == 0) {
+          return false
+        } else {
+          return true
+        }
+      }
+      return true
     })
   }
 }
