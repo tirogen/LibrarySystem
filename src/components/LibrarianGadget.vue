@@ -69,8 +69,7 @@
           label-size="sm"
           label-for="sortBySelect"
           class="mb-0"
-        >
-        </b-form-group>
+        ></b-form-group>
       </b-col>
 
       <b-col lg="6" class="my-1">
@@ -80,8 +79,7 @@
           label-size="sm"
           label-for="initialSortSelect"
           class="mb-0"
-        >
-        </b-form-group>
+        ></b-form-group>
       </b-col>
 
       <b-col lg="6" class="my-1">
@@ -103,6 +101,9 @@
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
             </b-input-group-append>
+          </b-input-group>
+          <b-input-group size="sm" v-if="false">
+            <b-form-select v-model="filter" size="sm" :options="filterOption"></b-form-select>
           </b-input-group>
         </b-form-group>
       </b-col>
@@ -283,7 +284,10 @@ export default {
       transProps: {
         // Transition name
         name: "flip-list"
-      }
+      },
+      filterOption: [],
+      allRoomNames: [],
+      IsTypeToSearch: true
     };
   },
   computed: {
@@ -298,7 +302,7 @@ export default {
       rooms: state => state.room.rooms,
       roomTypes: state => Object.keys(state.room.rooms),
       roomNames: state => state.room.roomNames,
-      totalRows: state => state.room.rooms.length
+      totalRows: state => state.room.gadgets.length
     }),
     sortOptions() {
       // Create an options list from our fields
@@ -335,6 +339,26 @@ export default {
         }
       }
     }
+    // filterOn: function() {
+    //   if (this.filterOn.includes("Status") && this.filterOn.length === 1) {
+    //     this.IsTypeToSearch = false;
+    //     this.filterOption.push("Available", "NotAvailable");
+    //   } else {
+    //     this.IsTypeTosearch = true;
+    //     this.filterOption = this.filterOption.filter(mem => {
+    //       return mem != "Available" && mem != "NotAvailable";
+    //     });
+    //   }
+    //   if (this.filterOn.includes("RoomName") && this.filterOn.length === 1) {
+    //     this.IsTypeToSearch = false;
+    //     this.filterOption.concat(this.allRoomNames);
+    //   } else {
+    //     this.IsTypeTosearch = true;
+    //     this.filterOption = this.filterOption.filter(mem => {
+    //       return !this.allRoomNames.includes(mem);
+    //     });
+    //   }
+    // }
   },
 
   methods: {
@@ -480,6 +504,9 @@ export default {
   mounted() {
     this.fetchGadgets();
     this.fetchRooms();
+    for (roomType in this.roomTypes) {
+      this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
+    }
   },
   components: {
     Datepicker
