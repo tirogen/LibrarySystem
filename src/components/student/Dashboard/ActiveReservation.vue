@@ -18,8 +18,9 @@
         </div>
       </template>
     </b-modal>
-    <div><strong>Your Active Reservation</strong></div>
-    <div v-for="reservation in mappedActiveReservation" class="row  my-2">
+    <div style="font-size: 24px"><strong>Your Active Reservation</strong></div>
+    <div v-if="!activeReservation">You have no active reservation</div>
+    <div v-for="reservation in mappedActiveReservation" class="row  my-2" v-else>
       <div class="col-sm-4"><strong>Room: </strong>{{reservation.Room}}</div>
       <div class="col-sm-4"><strong>Time: </strong>{{reservation.Time}}</div>
       <div class="col-sm-4">
@@ -28,12 +29,12 @@
         </b-button>
       </div>
     </div>
-    <b-button variant="outline-primary" class="scaleup-btn">
-      <i class="fas fa-check"></i>
-      <router-link to="/student/reserve-room/" class="router-linker">
-        Reserve Room >
-      </router-link>
-    </b-button>
+    <div class="row align-items-center">
+      <b-button variant="outline-primary" class="scaleup-btn" :disabled="activeReservation" style="margin-left: 15px" @click="goToReserveRoom()">
+        <i class="fas fa-check"></i> Reserve Room >
+      </b-button>
+      <p class="text-danger" v-if="activeReservation" style="margin: auto 0.5rem">You can have only one active reservation</p>
+    </div>
   </div>
 </template>
 
@@ -79,6 +80,9 @@ export default {
       this.currentPromptForCancel = {}
       this.$bvModal.hide('prompt-cancel-modal')
     },
+    goToReserveRoom() {
+      this.$router.push({path:'student/reserve-room'})
+    }
   },
 }
 </script>
@@ -95,9 +99,9 @@ export default {
 }
 
 .scaleup-btn:hover {
-  background-color: white;
-  color: #007bff;
-  transform: scale(1.2);
+  color: white;
+  background-color: #007bff;
+  /*transform: scale(1.2);*/
   transition: 0.2s;
 }
 
