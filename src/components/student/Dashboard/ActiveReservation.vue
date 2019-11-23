@@ -10,23 +10,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  mounted() {
-    this.$store.dispatch('student/fetchReservedRooms')
-  },
-  computed: {
-    ...mapState({
-      reservedRooms: state => state.student.reservedRooms,
-    }),
-  },
-  methods: {},
 }
 </script>
 
 <style scoped>
-
 .scaleup-btn {
   transition: 0.2s;
 }
