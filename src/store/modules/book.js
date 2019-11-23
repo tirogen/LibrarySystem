@@ -65,7 +65,8 @@ const mutations = {
         "name": books[id]["name"],
         "category" : books[id]["category"],
         "author": books[id]["author"],
-        "number": books[id]["number"]
+        "number": books[id]["number"],
+        "num" : books[id]["number"].length
       }
     }
     )

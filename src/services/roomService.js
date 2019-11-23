@@ -22,7 +22,7 @@ export default {
   },
   deleteGadget(id) {
       return api.delete(`Gadget/manageGadget/${id}`).then(response => {
-        return response
+        return response.data
       })
   },
   updateGadget(newUpdatedGadget) {
@@ -30,7 +30,7 @@ export default {
       // alert(JSON.stringify(response.data))
       // console(response.status)
       alert("new update coming")
-      return response
+      return response.data
     })
   }
   

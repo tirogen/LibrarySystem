@@ -65,7 +65,6 @@ const actions = {
     roomService.updateGadget(updateGadget)
       .then(res => {
         commit('updateGadgetInfo', res)
-        
       })
       .catch(err => {
         commit('error')
