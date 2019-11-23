@@ -181,6 +181,7 @@ export default {
       } else if (this.action == "UPDATE") {
         if (this.roomName == "" && this.roomType != "") {
           // this.$store.dispatch("room/fetchRoomNames", this.roomType);
+          this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
         }
       }
     }
@@ -239,7 +240,14 @@ export default {
     //setting newGadget
     handleGadget: function() {
       this.newGadget.Name = this.gadgetName;
-      this.newGadget.Status = "Available";
+      if(this.action == "ADD") {
+        this.newGadget.Status = "Available";
+      } else {
+        //UPDATE
+        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+        this.newGadget.Status = this.available;
+        this.newGadget
+      }
       // this.newGadget.id = this.
       // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind
       // console.log(this.newGadget);
@@ -262,6 +270,7 @@ export default {
       // this.$store.dispatch("room/deleteGadget", this.deletedid);
     },
     fetchUpdatedData: function(item) {
+      // console.log(item)
       this.action = "UPDATE";
       this.roomType = item.RoomType;
       this.roomName = item.RoomName;
@@ -270,7 +279,7 @@ export default {
       this.gadgetName = item.GadgetName;
       let stringDate = item.PurchasedDate;
       //setting newGadget id
-      this.newGadget.id = item.id
+      this.newGadget.id = item.GadgetID
       // alert(stringDate)
       let arr = stringDate.split("-");
       // alert(arr)

@@ -50,7 +50,7 @@ const actions = {
     roomService.deleteGadget(id)
     .then(res => {
       commit('setGadgets',gadgets)
-      console.log(res)
+      // console.log(res)
       // check status
       if (res.status == "") {
         commit('success')
@@ -66,11 +66,9 @@ const actions = {
     commit('loading')
     roomService.updateGadget(updateGadget)
     .then(res => {
-      commit('updateGadget',res.data)
-      console.log(res)
-      //check status
-      if (res.status == "") {
+      if (res.status == 200) {
         commit('success')
+        commit('updateGadget',res.data)
       } else {
         commit('errors')
       }
@@ -93,9 +91,12 @@ const mutations = {
     state.roomNames = Object.keys(state.rooms[roomType])
   },
   updateGadget(state,gadget) {
-    alert(gadget)
-    // state.r
-  }
+    let index = state.gadgets.findIndex(gadget => gadget.id == gadget.id);
+    // console.log(gadget)
+    state.gadgets[index] = gadget
+    // state.rooms[index].Name = response.data.Name;
+    // state.rooms[index].Point = response.data.Point;
+  },
 }
 
 export default {

@@ -26,10 +26,9 @@ export default {
       })
   },
   updateGadget(newUpdatedGadget) {
-    console.log(newUpdatedGadget)
-    return api.put(`Gadget/manageGadget/`,JSON.stringify(newUpdatedGadget)).then(response => {
+    return api.put('Gadget/manageGadget/',JSON.stringify(newUpdatedGadget)).then(response => {
       // alert(JSON.stringify(response.data))
-      console(response.status)
+      // console(response.status)
       alert("new update coming")
       return response
     })

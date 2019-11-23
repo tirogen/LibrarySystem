@@ -33,7 +33,7 @@ def get():
 	return response
 
 
-@api_view(['GET', 'POST', 'UPDATE', 'DELETE'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def manageGadget(request, id=None):
 	if request.method == 'GET':
 	    res = get()
@@ -52,11 +52,11 @@ def manageGadget(request, id=None):
 		cursor.execute(insert_stmt,ls)
 		res=get()
 		return Response(res)
-	elif request.method == 'UPDATE' : 
+	elif request.method == 'PUT' : 
 		print("DETECTED")
-		statement = ("UPDATE `api_gadget` SET `Name`=%s,`Status`=%s, `PurchasedDate`=%s, `Room_id` WHERE id=%s")
+		statement = ("UPDATE `api_gadget` SET `Name`=%s,`Status`=%s, `PurchasedDate`=%s, `Room_id`=%s WHERE id=%s")
 		cursor = connection.cursor()
-		cursor.execute(statement, [request.data["Name"], request.data["Status"], request.data["PurchasedDate"], request.data["Gadget"], request.data["id"]])
+		cursor.execute(statement, [request.data["Name"], request.data["Status"], request.data["PurchasedDate"], request.data["Room_id"], request.data["id"]])
         # not detect status how to know it was successful
 		return Response(request.data, status = status.HTTP_200_OK)
 	elif request.method == 'DELETE' :
