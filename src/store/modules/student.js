@@ -71,6 +71,9 @@ const mutations = {
     state.reservationSuccess = false
     state.reservationInProgress = false
   },
+  removeReservation(state, reservationId) {
+    state.activeReservation = state.activeReservation.filter(reservation => reservation.reservationId !== reservationId)
+  }
 }
 
 const actions = {
@@ -130,6 +133,7 @@ const actions = {
   cancelReservation({commit}, reservationId) {
     commit('loading')
     studentService.cancelReservation(reservationId).then(response => {
+      commit('removeReservation', reservationId)
       commit('success')
     }).catch(err => {
       commit('error', err)
