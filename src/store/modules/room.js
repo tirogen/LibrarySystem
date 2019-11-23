@@ -27,7 +27,7 @@ const actions = {
         commit('success')
       })
       .catch(err => {
-        commit('errors')
+        commit('error')
       })
   },
   fetchGadgets({ commit }) {
@@ -42,7 +42,7 @@ const actions = {
         commit('setGadgets', gadgets)
       })
       .catch(err => {
-        commit('errors')
+        commit('error')
       })
   },
   deleteGadget({ commit }, id) {
@@ -50,7 +50,6 @@ const actions = {
     roomService.deleteGadget(id)
       .then(res => {
         commit('deleteGad', res.data)
-
         // if (res.status == 200) {
         //   commit('success')
         //   commit('deleteGadget',res.data)
@@ -59,17 +58,18 @@ const actions = {
         // }
       })
       .catch(err => {
-        commit('errors')
+        commit('error')
       })
   },
   updateGadget({ commit }, updateGadget) {
     commit('loading')
     roomService.updateGadget(updateGadget)
       .then(res => {
-        commit('updateGadgetInfo', res.data)
+        commit('updateGadgetInfo', res)
+        
       })
       .catch(err => {
-        commit('errors')
+        commit('error')
       })
   }
 }
@@ -86,28 +86,30 @@ const mutations = {
     state.roomNames = Object.keys(state.rooms[roomType])
   },
   updateGadgetInfo(state, res) {
-    if (res.status == 200) {
-      commit('success')
-      let index = state.gadgets.findIndex(gadget => {
-        return gadget.GadgetID == res.data.GadgetID
-      })
-      state.gadgets[index] = res.data
-    } else {
-      commit('errors')
-    }
-    alert(index)
+    // if (res.status == 200) {
+    // commit('success')
+    let index = state.gadgets.findIndex(gadget => {
+      return gadget.GadgetID == res.data.GadgetID
+    })
+    // alert(index)
+    // Vue.$set(state.gadgets, index, res.data)
+    state.gadgets[index] = res.data
+    const obj = {}
+    state.gadgets.push(obj)
+    state.gadgets.pop()
+    // } else {
+    // commit('error')
+    // }
   },
   deleteGad(state, dat) {
     alert("deletesucc")
     state.gadgets = state.gadgets.filter((gad) => {
       if (gad.GadgetID == dat["id"]) {
-        console.log(dat)
         return false
       } else {
         return true
       }
     })
-    // state.gadgets[index] = gd
   },
 }
 
