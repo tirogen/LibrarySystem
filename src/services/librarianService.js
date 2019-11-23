@@ -2,7 +2,7 @@ import api from '@/services/api'
 
 export default {
   fetchReservedRooms() {
-    return api.get(`reservedRoom/getTop20/`)
+    return api.get(`reservedRoom/getReservedRooms/`)
               .then(response => response.data)
   },
   deleteReservedRoom(id) {

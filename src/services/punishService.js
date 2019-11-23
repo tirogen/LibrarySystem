@@ -12,5 +12,21 @@ export default {
   deletePenalty(id){
     return api.delete(`punish/penalty/${id}/`, {timeout: 10000})
               .then(response => response)
+  },
+  deletePunish(id){
+    return api.delete(`punish/punish/${id}/`, {timeout: 10000})
+              .then(response => response)
+  },
+  postPunish(data){
+    return api.post(`punish/punish/`, data,{timeout: 10000})
+              .then(response => response)
+  },
+  updatePenalty(data){
+    return api.put(`punish/penalty/`, data,{timeout: 10000})
+              .then(response => response)
+  },
+  postPenalty(data){
+    return api.post(`punish/penalty/`, data,{timeout: 10000})
+              .then(response => response)
   }
 }

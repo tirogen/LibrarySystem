@@ -5,7 +5,7 @@ from rest_framework import status
 import datetime
 
 @api_view(['GET'])
-def GetTop20(request):
+def getReservedRooms(request):
     cursor = connection.cursor()
     cursor.execute("SELECT api_room.Name, api_roomtime.id, \
                             api_reserve.TimeIn, api_reserve.TimeOut, \
@@ -16,9 +16,7 @@ def GetTop20(request):
                     INNER JOIN api_room ON api_reserve.Room_id=api_room.id \
                     INNER JOIN api_student ON api_reserve.Student_id=api_student.Username \
                     INNER JOIN api_roomtime ON api_reserve.RoomTime_id=api_roomtime.id \
-                    WHERE api_roomtime.Date = CURDATE() \
-                    ORDER BY api_roomtime.StartTime \
-                    LIMIT 20")
+                    ORDER BY api_roomtime.Date")
     response = []
     for row in cursor.fetchall():
         response.append({
