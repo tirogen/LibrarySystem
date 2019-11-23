@@ -59,7 +59,8 @@
         </template>
       </b-modal>
     </div>
-    <!--  -->
+    <!-- End of add Gadget modal -->
+    <!-- FILTER FEATURE -->
 
     <b-row>
       <b-col lg="6" class="my-1">
@@ -162,7 +163,7 @@
       </div>
     </div>
 
-    <!-- End of add Gadget modal -->
+    <!-- End of Filter form -->
     <b-table
       :items="gadgets"
       :fields="fields"

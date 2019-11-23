@@ -79,6 +79,7 @@
       </template>
     </b-modal>
     <!-- End of add Book modal -->
+    <!-- Start delete Modal -->
     <b-modal id="modal-delete-book" title="DELETE BOOK" v-model="showDeleteModal" hide-footer>
       <b-jumbotron>
         <template v-slot:header>Condition</template>
@@ -102,8 +103,127 @@
         >OK</button>
       </div>
     </b-modal>
+    <!-- End of delete Modal  -->
 
-    <b-table :items="books" :fields="fields" striped responsive="sm">
+    <!-- FILTER FEATURE -->
+
+    <b-row>
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="sortBySelect"
+          class="mb-0"
+        ></b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="initialSortSelect"
+          class="mb-0"
+        ></b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label="Filter"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="filterInput"
+          class="mb-0"
+        >
+          <b-input-group size="sm">
+            <b-form-input
+              v-model="filter"
+              type="search"
+              id="filterInput"
+              placeholder="Type to Search"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <b-input-group size="sm" v-if="false">
+            <b-form-select v-model="filter" size="sm" :options="filterOption"></b-form-select>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label="Filter On"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          description="Leave all unchecked to filter on all data"
+          class="mb-0"
+        >
+          <b-form-checkbox-group v-model="filterOn" class="mt-1">
+            <b-form-checkbox value="isbn">ISBN</b-form-checkbox>
+            <b-form-checkbox value="name">BookName</b-form-checkbox>
+            <b-form-checkbox value="category">Category</b-form-checkbox>
+            <b-form-checkbox value="author">Author</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="5" md="6" class="my-1">
+        <b-form-group
+          label="Per page"
+          label-cols-sm="6"
+          label-cols-md="4"
+          label-cols-lg="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="perPageSelect"
+          class="mb-0"
+        >
+          <b-form-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="7" md="6" class="my-1">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+
+    <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
+      <div class="pr-3">
+        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+      </div>
+      <div>
+        <strong style="font-size: 24px">Loading...</strong>
+      </div>
+    </div>
+
+    <!-- End of Filter form -->
+
+    <b-table
+      :items="books"
+      :fields="fields"
+      striped
+      responsive="sm"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter"
+      :filterIncludedFields="filterOn"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
+      :sort-direction="sortDirection"
+      @filtered="onFiltered"
+    >
       <template v-slot:cell(Manage)="row">
         <b-button
           size="sm"
@@ -143,11 +263,11 @@ export default {
   data() {
     return {
       fields: [
-        { key: "isbn", label: "ISBN" },
-        { key: "name", label: "BookName" },
-        { key: "category", label: "Category" },
-        { key: "author", label: "Author" },
-        { key: "num", label: "Count" },
+        { key: "isbn", label: "ISBN", sortable: true },
+        { key: "name", label: "BookName", sortable: true},
+        { key: "category", label: "Category", sortable:true },
+        { key: "author", label: "Author",sortable:true },
+        { key: "num", label: "Count",sortable:true },
         "Manage"
       ],
       isInStock: false,
@@ -169,7 +289,16 @@ export default {
       deletedID: null,
       deletedIDOption: [],
       showDeleteModal: false,
-      showAddModal: false
+      showAddModal: false,
+      // filterFeature
+      currentPage: 1,
+      perPage: 5,
+      pageOptions: [1, 5, 10, 15],
+      sortBy: "",
+      sortDesc: false,
+      sortDirection: "asc",
+      filter: null,
+      filterOn: []
     };
   },
   mounted() {
@@ -181,6 +310,7 @@ export default {
       isSuccess: state => state.book.isSuccess,
       isError: state => state.book.isError,
       books: state => state.book.books,
+      totalRows: state => state.book.books.length,
       bookdict: state => state.book.bookdict,
       isbns: state => state.book.isbns
     }),
@@ -207,6 +337,11 @@ export default {
   },
 
   methods: {
+    onFiltered(filteredItems) {
+      this.store.dispatch()
+      totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
     showDeleteConfirm(id) {
       this.$bvModal
         .msgBoxConfirm("Please confirm that you want to delete.", {
@@ -232,25 +367,25 @@ export default {
           }
         });
     },
-    fillData(item=null, option=null) {
+    fillData(item = null, option = null) {
       if (option != "ADD MORE") {
-        this.bookFillInfo.dat.isbn = ""
-        this.bookFillInfo.dat.name = ""
-        this.bookFillInfo.dat.category = ""
-        this.bookFillInfo.dat.author = ""
-        this.showAddModal = true
+        this.bookFillInfo.dat.isbn = "";
+        this.bookFillInfo.dat.name = "";
+        this.bookFillInfo.dat.category = "";
+        this.bookFillInfo.dat.author = "";
+        this.showAddModal = true;
       } else {
         // OPTION IS ADD
-        this.bookFillInfo.dat.isbn = item.isbn
-        this.bookFillInfo.dat.name = item.name
-        this.bookFillInfo.dat.category = item.category
-        this.bookFillInfo.dat.author = item.author    
+        this.bookFillInfo.dat.isbn = item.isbn;
+        this.bookFillInfo.dat.name = item.name;
+        this.bookFillInfo.dat.category = item.category;
+        this.bookFillInfo.dat.author = item.author;
       }
     },
     loadRowData(item, option) {
       if (option == "ADD MORE") {
-        this.fillData(item,option)
-        this.showAddModal = true
+        this.fillData(item, option);
+        this.showAddModal = true;
       } else {
         this.deletedIDOption = item.number;
         this.showDeleteModal = true;
