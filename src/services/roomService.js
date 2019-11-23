@@ -20,15 +20,15 @@ export default {
     })
 
   },
-  deleteGadget(index) {
-      return api.delete('Gad/get/manageGadget/', index).then(response => {
-
+  deleteGadget(id) {
+      return api.delete(`Gadget/manageGadget/${id}`).then(response => {
         return response
       })
   },
   updateGadget(newUpdatedGadget) {
-    return api.update('Gadget/manageGadget/',JSON.stringify(newUpdatedGadget)).then(response => {
+    return api.put('Gadget/manageGadget/',JSON.stringify(newUpdatedGadget)).then(response => {
       // alert(JSON.stringify(response.data))
+      // console(response.status)
       alert("new update coming")
       return response
     })

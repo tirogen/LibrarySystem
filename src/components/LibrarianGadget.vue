@@ -59,8 +59,125 @@
         </template>
       </b-modal>
     </div>
+    <!--  -->
+
+    <b-row>
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="sortBySelect"
+          class="mb-0"
+        >
+        </b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="initialSortSelect"
+          class="mb-0"
+        >
+        </b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label="Filter"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="filterInput"
+          class="mb-0"
+        >
+          <b-input-group size="sm">
+            <b-form-input
+              v-model="filter"
+              type="search"
+              id="filterInput"
+              placeholder="Type to Search"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col lg="6" class="my-1">
+        <b-form-group
+          label="Filter On"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          description="Leave all unchecked to filter on all data"
+          class="mb-0"
+        >
+          <b-form-checkbox-group v-model="filterOn" class="mt-1">
+            <b-form-checkbox value="GadgetName">GadgetName</b-form-checkbox>
+            <b-form-checkbox value="Status">Status</b-form-checkbox>
+            <b-form-checkbox value="PurchasedDate">Purchased Date</b-form-checkbox>
+            <b-form-checkbox value="RoomName">Room Name</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="5" md="6" class="my-1">
+        <b-form-group
+          label="Per page"
+          label-cols-sm="6"
+          label-cols-md="4"
+          label-cols-lg="3"
+          label-align-sm="right"
+          label-size="sm"
+          label-for="perPageSelect"
+          class="mb-0"
+        >
+          <b-form-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="7" md="6" class="my-1">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+
+    <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
+      <div class="pr-3">
+        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+      </div>
+      <div>
+        <strong style="font-size: 24px">Loading...</strong>
+      </div>
+    </div>
+
     <!-- End of add Gadget modal -->
-    <b-table :items="gadgets" :fields="fields" striped responsive="sm">
+    <b-table
+      :items="gadgets"
+      :fields="fields"
+      striped
+      responsive="sm"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter"
+      :filterIncludedFields="filterOn"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
+      :sort-direction="sortDirection"
+      @filtered="onFiltered"
+      id="table-transition-example"
+      :tbody-transition-props="transProps"
+    >
       <template v-slot:cell(Manage)="row">
         <b-button
           size="sm"
@@ -77,13 +194,19 @@
             class="m-2"
             @click="fetchUpdatedData(row.item)"
           >Update</b-button>
-          <b-button size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item)">Delete</b-button>
+          <b-button
+            size="sm"
+            variant="danger"
+            class="m-2"
+            @click="showDeleteConfirm(row.item)"
+          >Delete</b-button>
         </b-card>
       </template>
     </b-table>
     <b-button block variant="primary">See all</b-button>
   </div>
 </template>
+
 <script>
 import { mapState } from "vuex";
 import Datepicker from "vuejs-datepicker";
@@ -130,8 +253,15 @@ export default {
         }
       },
       gadgetName: "",
-      fields: ["GadgetName", "Status", "PurchasedDate", "RoomName", "Manage"],
+      fields: [
+        { key: "GadgetName", sortable: true },
+        { key: "Status", sortable: false },
+        { key: "PurchasedDate", sortable: true },
+        { key: "RoomName", sortable: false },
+        "Manage"
+      ],
       newGadget: {
+        id: null,
         Name: null,
         Status: null,
         PurchasedDate: null,
@@ -142,7 +272,18 @@ export default {
       roomType: "",
       available: null,
       nameOption: "",
-      deletedid: ""
+      currentPage: 1,
+      perPage: 5,
+      pageOptions: [1, 5, 10, 15],
+      sortBy: "",
+      sortDesc: false,
+      sortDirection: "asc",
+      filter: null,
+      filterOn: [],
+      transProps: {
+        // Transition name
+        name: "flip-list"
+      }
     };
   },
   computed: {
@@ -150,11 +291,26 @@ export default {
       isLoading: state => state.room.isLoading,
       isSuccess: state => state.room.isSuccess,
       isError: state => state.room.isError,
-      gadgets: state => state.room.gadgets,
+      gadgets: state => {
+        // alert("vuex gadget update")
+        return state.room.gadgets;
+      },
       rooms: state => state.room.rooms,
       roomTypes: state => Object.keys(state.room.rooms),
-      roomNames: state => state.room.roomNames
-    })
+      roomNames: state => state.room.roomNames,
+      totalRows: state => state.room.rooms.length
+    }),
+    sortOptions() {
+      // Create an options list from our fields
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => {
+          return {
+            text: f.label,
+            value: f.key
+          };
+        });
+    }
   },
   watch: {
     roomType: function() {
@@ -175,12 +331,17 @@ export default {
       } else if (this.action == "UPDATE") {
         if (this.roomName == "" && this.roomType != "") {
           // this.$store.dispatch("room/fetchRoomNames", this.roomType);
+          this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
         }
       }
     }
   },
 
   methods: {
+    onFiltered(filteredItems) {
+      totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
     checkAction: function() {
       if (this.action == "ADD") {
         this.addGadget();
@@ -230,10 +391,19 @@ export default {
     fetchRooms: function() {
       this.$store.dispatch("room/fetchRooms");
     },
+    //setting newGadget
     handleGadget: function() {
       this.newGadget.Name = this.gadgetName;
-      this.newGadget.Status = "Available";
-      // this.newGadget.PurchasedDate = this.date
+      if (this.action == "ADD") {
+        this.newGadget.Status = "Available";
+      } else {
+        //UPDATE
+        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
+        this.newGadget.Status = this.available;
+        this.newGadget;
+      }
+      // this.newGadget.id = this.
+      // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind
       // console.log(this.newGadget);
     },
     handleGadgetValue: async function() {
@@ -249,23 +419,39 @@ export default {
       //
       return true;
     },
-    deletedGadget: function() {
+    deletedGadget: function(id) {
       // get data
-      // this.$store.dispatch("room/deleteGadget", this.deletedid);
+      this.$store.dispatch("room/deleteGadget", id);
     },
     fetchUpdatedData: function(item) {
+      // console.log(item)
       this.action = "UPDATE";
       this.roomType = item.RoomType;
-      this.roomName = item.RoomName
+      this.roomName = item.RoomName;
       this.roomName = item.RoomName;
       this.available = item.Status;
       this.gadgetName = item.GadgetName;
       let stringDate = item.PurchasedDate;
-      let arr = stringDate.split();
-      // this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
+      //setting newGadget id
+      this.newGadget.id = item.GadgetID;
+      // alert(stringDate)
+      let arr = stringDate.split("-");
+      // alert(arr)
+      this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
       this.show = true;
     },
-    updateGadget: function() {},
+    updateGadget: function() {
+      this.handleGadget();
+      this.handleGadgetValue().then(success => {
+        if (success) {
+          this.show = false;
+          this.$store.dispatch("room/updateGadget", this.newGadget);
+          //animate View
+        } else {
+          alert("data is not valid to update");
+        }
+      });
+    },
     showDeleteConfirm(item) {
       this.$bvModal
         .msgBoxConfirm("Please confirm that you want to delete.", {
@@ -281,7 +467,10 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.deletedGadget(item)
+            // alert(Object.keys(item))
+            // alert(item.GadgetID)
+
+            this.deletedGadget(item.GadgetID);
           } else {
             // asdasda
           }
@@ -324,4 +513,8 @@ img {
 /* .colBackground{
     background-color: lightseagreen;
 } */
+
+table#table-transition-example .flip-list-move {
+  transition: transform 1s;
+}
 </style>

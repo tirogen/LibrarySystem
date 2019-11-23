@@ -12,6 +12,7 @@ const state = {
   roomTypes: [],
   roomNames: [],
   timeSlots: [],
+  activeReservation: [],
   reservationInProgress: false,
   reservationSuccess: false,
   reservationError: false,
@@ -54,6 +55,9 @@ const mutations = {
   setRoomNames(state, roomNames) {
     state.roomNames = roomNames
   },
+  setActiveReservation(state, activeReservation) {
+    state.activeReservation = activeReservation
+  },
   reservationInProgress(state) {
     state.reservationInProgress = true
   },
@@ -67,6 +71,9 @@ const mutations = {
     state.reservationSuccess = false
     state.reservationInProgress = false
   },
+  removeReservation(state, reservationId) {
+    state.activeReservation = state.activeReservation.filter(reservation => reservation.reservationId !== reservationId)
+  }
 }
 
 const actions = {
@@ -114,6 +121,24 @@ const actions = {
       commit('reservationError')
     })
   },
+  fetchActiveReservation({ commit }, studentId) {
+    commit('loading')
+    studentService.fetchActiveReservation(studentId).then(response => {
+      commit('success')
+      commit('setActiveReservation', response.data)
+    }).catch(err => {
+      commit('error', err)
+    })
+  },
+  cancelReservation({commit}, reservationId) {
+    commit('loading')
+    studentService.cancelReservation(reservationId).then(response => {
+      commit('removeReservation', reservationId)
+      commit('success')
+    }).catch(err => {
+      commit('error', err)
+    })
+  }
 }
 
 function generateTimeSlots() {
