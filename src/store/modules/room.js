@@ -1,6 +1,6 @@
 import roomService from '../../services/roomService'
 import { cloneDeep } from 'lodash'
-import {baseState, baseMutations} from "../state";
+import { baseState, baseMutations } from "../state";
 
 const state = {
   ...cloneDeep(baseState),
@@ -16,89 +16,98 @@ const getters = {
 }
 
 const actions = {
-  fetchRoomNames ({commit}, roomType) {
-    commit('setRoomNames',roomType)
+  fetchRoomNames({ commit }, roomType) {
+    commit('setRoomNames', roomType)
   },
-  fetchRooms ({ commit }) {
+  fetchRooms({ commit }) {
     commit('loading')
     roomService.fetchRooms()
-    .then(rooms => {
-      commit('setRooms', rooms)
-      commit('success')
-    })
-    .catch(err => {
-      commit('errors')
-    })
+      .then(rooms => {
+        commit('setRooms', rooms)
+        commit('success')
+      })
+      .catch(err => {
+        commit('errors')
+      })
   },
-  fetchGadgets ({ commit }) {
+  fetchGadgets({ commit }) {
     roomService.fetchGadgets()
-    .then(gadgets => {
-      commit('setGadgets', gadgets)
-    })
+      .then(gadgets => {
+        commit('setGadgets', gadgets)
+      })
   },
-  postGadget ({commit}, newGadget) {
+  postGadget({ commit }, newGadget) {
     roomService.postGadget(newGadget)
-    .then(gadgets => {
-      commit('setGadgets',gadgets)
-    })
-    .catch(err => {
-      commit('errors')
-    })
+      .then(gadgets => {
+        commit('setGadgets', gadgets)
+      })
+      .catch(err => {
+        commit('errors')
+      })
   },
-  deleteGadget ({commit}, id) {
+  deleteGadget({ commit }, id) {
     commit('loading')
     roomService.deleteGadget(id)
-    .then(res => {
-      commit('setGadgets',gadgets)
-      // console.log(res)
-      // check status
-      if (res.status == "") {
-        commit('success')
-      } else {
+      .then(res => {
+        commit('deleteGad', res.data)
+
+        // if (res.status == 200) {
+        //   commit('success')
+        //   commit('deleteGadget',res.data)
+        // } else {
+        //   commit('errors')
+        // }
+      })
+      .catch(err => {
         commit('errors')
-      }
-    })
-    .catch(err => {
-      commit('errors')
-    })
+      })
   },
-  updateGadget ({commit}, updateGadget) {
+  updateGadget({ commit }, updateGadget) {
     commit('loading')
     roomService.updateGadget(updateGadget)
-    .then(res => {
-      if (res.status == 200) {
-        commit('success')
-        commit('updateGadget',res.data)
-      } else {
+      .then(res => {
+        commit('updateGadgetInfo', res.data)
+      })
+      .catch(err => {
         commit('errors')
-      }
-    })
-    .catch(err => {
-      commit('errors')
-    })
+      })
   }
 }
 
 const mutations = {
   ...cloneDeep(baseMutations),
-  setGadgets (state, gadgets) {
+  setGadgets(state, gadgets) {
     state.gadgets = gadgets
   },
-  setRooms (state, rooms) {
+  setRooms(state, rooms) {
     state.rooms = rooms
   },
   setRoomNames(state, roomType) {
     state.roomNames = Object.keys(state.rooms[roomType])
   },
-  updateGadget(state,gd) {
-    let index = state.gadgets.findIndex(gadget =>  { 
-      console.log(gadget)
-      console.log(gd)
-     return gadget.GadgetID == gd.GadgetID
-    })
-
+  updateGadgetInfo(state, res) {
+    if (res.status == 200) {
+      commit('success')
+      let index = state.gadgets.findIndex(gadget => {
+        return gadget.GadgetID == res.data.GadgetID
+      })
+      state.gadgets[index] = res.data
+    } else {
+      commit('errors')
+    }
     alert(index)
-    state.gadgets[index] = gd
+  },
+  deleteGad(state, dat) {
+    alert("deletesucc")
+    state.gadgets = state.gadgets.filter((gad) => {
+      if (gad.GadgetID == dat["id"]) {
+        console.log(dat)
+        return false
+      } else {
+        return true
+      }
+    })
+    // state.gadgets[index] = gd
   },
 }
 

@@ -63,9 +63,7 @@ def manageGadget(request, id=None):
 		cursor2.execute("SELECT api_gadget.Name, api_gadget.Status, api_gadget.PurchasedDate, api_room.id, api_room.RoomType_id,api_room.Name, api_gadget.id \
 				FROM api_gadget \
 				INNER JOIN api_room ON api_gadget.Room_id=api_room.id \
-				WHERE api_gadget.id=%d",list(request.data["id"])
-				)
-			
+				WHERE api_gadget.id="+ str(request.data["id"]))
 		print("asdasd")
 		row = cursor2.fetchone()
 		response = {

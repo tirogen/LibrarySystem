@@ -156,7 +156,10 @@ export default {
       isLoading: state => state.room.isLoading,
       isSuccess: state => state.room.isSuccess,
       isError: state => state.room.isError,
-      gadgets: state => state.room.gadgets,
+      gadgets: state => {
+        // alert("vuex gadget update")
+        return state.room.gadgets
+      },
       rooms: state => state.room.rooms,
       roomTypes: state => Object.keys(state.room.rooms),
       roomNames: state => state.room.roomNames
@@ -265,9 +268,9 @@ export default {
       //
       return true;
     },
-    deletedGadget: function() {
+    deletedGadget: function(id) {
       // get data
-      // this.$store.dispatch("room/deleteGadget", this.deletedid);
+      this.$store.dispatch("room/deleteGadget", id);
     },
     fetchUpdatedData: function(item) {
       // console.log(item)
@@ -314,8 +317,9 @@ export default {
         .then(value => {
           if (value) {
             // alert(Object.keys(item))
-            alert(item.GadgetID)
-            // this.deletedGadget(item);
+            // alert(item.GadgetID)
+            
+            this.deletedGadget(item.GadgetID);
           } else {
             // asdasda
           }
