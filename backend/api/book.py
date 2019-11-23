@@ -39,7 +39,7 @@ def book(request, id=None):
 		return Response({'id': id, 'isbn': isbn}, status = status.HTTP_200_OK)
 		
 	elif request.method == 'POST':
-		if request.data["name"] == None:
+		if request.data["name"] == "":
 			statement = ("INSERT INTO `api_book`(`Status`,`Isbn_id`)\
 							VALUES ('Available', %s);")
 			cursor = connection.cursor()
