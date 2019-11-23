@@ -21,8 +21,7 @@ export default {
 
   fetchActiveReservation(id){
     const date = moment().format('YYYY-MM-DD')
-    // return api.get(`student/reservation/active/${id}/${date}/`)
-    return api.get(`student/reservation/active/${id}/2019-11-22/`)
+    return api.get(`student/reservation/active/${id}/${date}/`)
   },
 
   cancelReservation(reservationId){
