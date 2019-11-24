@@ -21,7 +21,7 @@ export default new Vuex.Store({
     book,
     student,
     borrow,
-    roomType
+    roomType,
     borrowing
   }
 })
