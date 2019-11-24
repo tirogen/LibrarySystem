@@ -80,9 +80,7 @@ const actions = {
 const mutations = {
   ...cloneDeep(baseMutations),
   setRooms(state, rooms) {
-    console.log('set room')
     state.rooms = rooms
-    console.log(state.rooms)
   },
   setLibrarians(state, librarians) {
     state.librarians = librarians
