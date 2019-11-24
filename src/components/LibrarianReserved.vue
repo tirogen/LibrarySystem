@@ -4,34 +4,6 @@
   <b-container fluid>
     <b-row>
       <b-col lg="6" class="my-1">
-        <b-form-group label="Sort" label-cols-sm="3" label-align-sm="right" label-size="sm" label-for="sortBySelect" class="mb-0">
-          <b-input-group size="sm">
-            <b-form-select v-model="sortBy" id="sortBySelect" :options="sortOptions" class="w-75">
-              <template v-slot:first>
-                <option value="Date">Date</option>
-                <option value="Room">Room</option>
-                <option value="Name">Name</option>
-                <option value="StartTime">StartTime</option>
-                <option value="EndTime">EndTime</option>
-                <option value="TimeIn">Time In</option>
-                <option value="TimeOut">Time Out</option>
-              </template>
-            </b-form-select>
-            <b-form-select v-model="sortDesc" size="sm" :disabled="!sortBy" class="w-25">
-              <option :value="false">Asc</option>
-              <option :value="true">Desc</option>
-            </b-form-select>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1">
-        <b-form-group label="Initial sort" label-cols-sm="3" label-align-sm="right" label-size="sm" label-for="initialSortSelect" class="mb-0">
-          <b-form-select v-model="sortDirection" id="initialSortSelect" size="sm" :options="['asc', 'desc', 'last']"></b-form-select>
-        </b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1">
         <b-form-group label="Filter" label-cols-sm="3" label-align-sm="right" label-size="sm" label-for="filterInput" class="mb-0">
           <b-input-group size="sm">
             <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Type to Search"></b-form-input>
@@ -94,11 +66,11 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="sm" variant="primary" class="m-2" @click="CheckIn(row.item.id)">Check in</b-button>
-          <b-button v-else-if="row.item.TimeOut == '00:00:00'" size="sm" variant="success" class="m-2" @click="CheckOut(row.item.id)">Check out</b-button>
-          <b-button v-else disabled size="sm" class="m-2">Disabled</b-button>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.RoomTime_id)">Delete</b-button>
-          <b-button v-else disabled size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="primary" class="m-2" @click="CheckIn(row.item.id)">Check in</b-button>
+          <b-button v-else-if="row.item.TimeOut == '00:00:00'" size="lg" variant="success" class="m-2" @click="CheckOut(row.item.id)">Check out</b-button>
+          <b-button v-else disabled size="lg" class="m-2">Disabled</b-button>
+          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.RoomTime_id)">Delete</b-button>
+          <b-button v-else disabled size="lg" variant="danger" class="m-2">Delete</b-button>
         </b-card>
       </template>
     </b-table>
@@ -118,19 +90,32 @@ export default {
   },
   data() {
     return {
-      fields: ['Room', 'Name', {
+      fields: [{
+        key: 'Room',
+        sortable: true
+      }, {
+        key: 'Name',
+        sortable: true
+      }, {
         key: 'StartTime',
-        label: 'Start Time'
+        label: 'Start Time',
+        sortable: true
       }, {
         key: 'EndTime',
-        label: 'End Time'
+        label: 'End Time',
+        sortable: true
       }, {
         key: 'TimeIn',
-        label: 'Time In'
+        label: 'Time In',
+        sortable: true
       }, {
         key: 'TimeOut',
-        label: 'Time Out'
-      }, 'Date', 'Manage'],
+        label: 'Time Out',
+        sortable: true
+      }, {
+        key: 'Date',
+        sortable: true
+      }, 'Manage'],
       currentPage: 1,
       perPage: 5,
       pageOptions: [1, 5, 10, 15],
