@@ -58,5 +58,4 @@ urlpatterns = [
     path('api/student/borrowing/<str:id>/', getBorrowingBook),
 
     #borrow
-    path('api/borrow/borrow/',manageBorrowBook)
-]
+    path('api/borrow/borrow/',manageBorrowBook)]
