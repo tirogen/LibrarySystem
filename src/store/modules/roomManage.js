@@ -9,10 +9,28 @@ import {
 
 const state = {
   ...cloneDeep(baseState),
+  rooms: [],
+  librarians: [],
   roomTypes: []
 }
 
 const actions = {
+  fetchRooms({commit}) {
+    commit('loading')
+    librarianService.fetchRooms()
+      .then(rooms => {
+        commit('setRooms', rooms)
+        commit('success')
+      })
+  },
+  fetchLibrarians({commit}) {
+    commit('loading')
+    librarianService.fetchLibrarians()
+      .then(librarians => {
+        commit('setLibrarians', librarians)
+        commit('success')
+      })
+  },
   fetchRoomTypes({commit}) {
     commit('loading')
     librarianService.fetchRoomTypes()
@@ -21,11 +39,11 @@ const actions = {
         commit('success')
       })
   },
-  deleteRoomType({commit}, type) {
+  deleteRoomType({commit}, id) {
     commit('loading')
-    librarianService.deleteRoomType(type)
+    librarianService.deleteRoom(id)
       .then(response => {
-        commit('deleteRoomType', {response,type})
+        commit('deleteRoom', {response,id})
         commit('success')
       })
   },
@@ -49,12 +67,18 @@ const actions = {
 
 const mutations = {
   ...cloneDeep(baseMutations),
+  setRooms(state, rooms) {
+    state.rooms = rooms
+  },
+  setLibrarians(state, librarians) {
+    state.librarians = librarians
+  },
   setRoomTypes(state, roomTypes) {
     state.roomTypes = roomTypes
   },
-  deleteRoomType(state, {response, type}) {
+  deleteRoom(state, {response, id}) {
     if (response == 200) {
-      state.roomTypes = state.roomTypes.filter(roomType => roomType.Type != type)
+      state.rooms = state.rooms.filter(room => room.id != id)
     }
   },
   updateRoomType(state, response) {

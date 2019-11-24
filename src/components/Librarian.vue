@@ -3,8 +3,9 @@
     <b-nav-item href="#borrow">Book Borrow</b-nav-item>|
     <b-nav-item href="#book">Book Manage</b-nav-item>|
     <b-nav-item href="#gadget">Gadget Manage</b-nav-item>|
+    <b-nav-item href="#roomType">Room Type</b-nav-item>|
     <b-nav-item href="#room">Room Manage</b-nav-item>|
-    <b-nav-item href="#reserve">Reserve room</b-nav-item>|
+    <b-nav-item href="#reserve">Reserve Room</b-nav-item>|
     <b-nav-item href="#punish">Punish Manage</b-nav-item>
     <section
       id="borrow"
@@ -46,7 +47,7 @@
       <Gadget />
     </section>
     <section
-      id="room"
+      id="roomType"
       data-aos="fade-up"
       data-aos-offset="200"
       data-aos-delay="50"
@@ -56,6 +57,18 @@
       data-aos-anchor-placement="top-center"
     >
       <LibrarianRoomType />
+    </section>
+    <section
+      id="room"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
+      <LibrarianRoom />
     </section>
     <section
       id="reserve"
@@ -91,6 +104,7 @@ import Gadget from "./LibrarianGadget";
 import Book from "./LibrarianBook";
 import Borrow from "./LibrarianManageBorrow";
 import LibrarianRoomType from "./LibrarianRoomType";
+import LibrarianRoom from "./LibrarianRoom";
 
 export default {
   name: "Librarian",
@@ -101,7 +115,8 @@ export default {
     Gadget,
     LibrarianPunish,
     Book,
-    LibrarianRoomType
+    LibrarianRoomType,
+    LibrarianRoom
   }
 };
 </script>
