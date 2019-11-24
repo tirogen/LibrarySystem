@@ -27,7 +27,8 @@ export default {
     LibrarianReserved,
     Gadget,
     LibrarianPunish,
-    Book
+    Book,
+    LibrarianRoomType
   }
 }
 </script>
