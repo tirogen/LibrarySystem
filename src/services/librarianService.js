@@ -26,4 +26,10 @@ export default {
     return api.delete(`manageRoom/roomTypes/${type}/`)
               .then(response => response.status)
   },
+  updateRoomType(roomType) {
+    return api.put('manageRoom/roomTypes/',JSON.stringify(roomType)).then(response => response)
+  },
+  addRoomType(roomType) {
+    return api.post('manageRoom/roomTypes/',JSON.stringify(roomType)).then(response => response)
+  }
 }

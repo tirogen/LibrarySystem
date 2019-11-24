@@ -1,6 +1,6 @@
 <template>
 <div class="jumbotron bg-overlay">
-  <h2>Room Types</h2>
+  <h2>Room Types <b-button v-b-modal.modal-1 @click="addShow=true">ADD ROOM TYPES</b-button></h2>
   <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
     <div class="pr-3"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>
     <div><strong style="font-size: 24px"> Loading... </strong></div>
@@ -20,31 +20,46 @@
     </template>
     <template v-slot:row-details="row">
       <b-card>
-        <b-button size="lg" variant="primary" class="m-2" @click="Update(row.item.Type)">Update</b-button>
-        <b-button size="lg" variant="danger" class="m-2">Delete</b-button>
+        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.Type)">Update</b-button>
+        <b-button size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.Type)">Delete</b-button>
       </b-card>
     </template>
   </b-table>
 
-  <b-button v-b-modal.modal-prevent-closing>Open Modal</b-button>
-  <b-modal
-    id="modal-prevent-closing"
-    ref="modal"
-    title="Update Room Type"
-    @show="resetModal"
-    @hidden="resetModal"
-    @ok="handleOk"
-  >
-  <b-container fluid class="bv-example-row bv-example-row-flex-cols">
-    <b-row class="mb-1">
-      <b-col cols="1.5" class>Current type</b-col>
-      <b-col>
-        <b-form-input id="current-input" v-model="OldType" disabled></b-form-input>
-      </b-col>
-    </b-row>
-  </b-container>
-
+  <b-modal v-model="show" title="Update Room Type">
+    <b-container fluid class="bv-example-row bv-example-row-flex-cols">
+      <b-row class="mb-1">
+        <b-col sm="3">New Type</b-col>
+        <b-col sm="9">
+          <b-form-input id="current-input" v-model="Type"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
+      <div class="mt-2">Capacity: {{Capacity}}</div>
+    </b-container>
+    <template v-slot:modal-footer>
+      <b-button @click="show=false">Cancel</b-button>
+      <b-button variant="primary" @click="update()">Update</b-button>
+    </template>
   </b-modal>
+
+  <b-modal v-model="addShow" title="ADD ROOM TYPES">
+    <b-container fluid class="bv-example-row bv-example-row-flex-cols">
+      <b-row class="mb-1">
+        <b-col sm="3">Type</b-col>
+        <b-col sm="9">
+          <b-form-input id="current-input" v-model="Type"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
+      <div class="mt-2">Capacity: {{Capacity}}</div>
+    </b-container>
+    <template v-slot:modal-footer>
+      <b-button @click="addShow=false">Cancel</b-button>
+      <b-button variant="primary" @click="addNew()">Add New</b-button>
+    </template>
+  </b-modal>
+
 </div>
 </template>
 
@@ -60,7 +75,9 @@ export default {
       fields: ["Type", "Capacity", "Manage"],
       OldType: null,
       Type: null,
-      Capacity: null
+      Capacity: null,
+      show: false,
+      addShow: false,
     }
   },
   methods: {
@@ -68,7 +85,7 @@ export default {
       this.infoModal.title = ''
       this.infoModal.content = ''
     },
-    showDeleteConfirm(type) {
+    showDeleteConfirm(type){
       this.$bvModal.msgBoxConfirm('Please confirm that you want to delete.', {
           title: 'Please Confirm',
           size: 'sm',
@@ -85,6 +102,20 @@ export default {
             this.$store.dispatch('roomType/deleteRoomTypes', type)
           }
         })
+    },
+    showModal(type){
+      this.Type = type
+      this.OldType = type
+      this.Capacity = 0
+      this.show = true
+    },
+    update(){
+      this.$store.dispatch('roomType/updateRoomType', {OldType: this.OldType, Type: this.Type, Capacity: this.Capacity})
+      this.show = false
+    },
+    addNew(){
+      this.$store.dispatch('roomType/addRoomType', {Type: this.Type, Capacity: this.Capacity})
+      this.addShow = false
     }
   },
   computed: {
