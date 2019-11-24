@@ -63,14 +63,14 @@ def manageBorrowBook(request, id=None):
     elif request.method == 'POST':
 		
 		# if request.data["name"] == "":
-		statement = ("INSERT INTO `api_booktime`(`Startdate`,`EndDate`,'RenewTimes')\
-						VALUES (%s, %s, 2);")
-		cursor = connection.cursor()
-		cursor.execute(statement, (request.data["startDate"],request.data["endDate"]))
-		bookTimeID = cursor.lastrowid
-		statement = ("INSERT INTO `api_borrow` (`Book_id`,`BookTime_id`,`Student_id`)\
+        statement = ("INSERT INTO `api_booktime`(`Startdate`,`EndDate`,'RenewTimes')\
+						VALUES (%s, %s, 2)")
+        cursor = connection.cursor()
+        cursor.execute(statement, (request.data["startDate"],request.data["endDate"]))
+        bookTimeID = cursor.lastrowid
+        statement = ("INSERT INTO `api_borrow` (`Book_id`,`BookTime_id`,`Student_id`)\
 						VALUES (%s,%s,%s)")
-		cursor.execute(statement,(request.data["bookID"],int(bookTimeID),request["studentID"]))
+        cursor.execute(statement,(request.data["bookID"],int(bookTimeID),request["studentID"]))
 
 		# need to get id from this api_booktime id
 
@@ -80,4 +80,4 @@ def manageBorrowBook(request, id=None):
 		# 	cursor.execute(statement, [request.data["isbn"], request.data["category"], request.data["author"], request.data["name"]])
 		# 	statement = ("INSERT INTO `api_book`(`Status`,`Isbn_id`) VALUES ('Available', %s);")
 		# 	cursor.execute(statement, [request.data["isbn"]])
-		return getBorrow()
+        return getBorrow()
