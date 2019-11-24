@@ -112,6 +112,14 @@ def getPunishInfo(request, FName, LName):
             "Date": row[3],
             "Time": row[4],
         })
+    if len(histories) == 0:
+        statement = "SELECT s.FName, s.LName, s.Email, s.Tel, s.Username FROM `api_student` as s WHERE s.FName=%s AND s.LName=%s"
+        cursor.execute(statement, [FName, LName])
+        row = cursor.fetchall()[0]
+        fullName = row[0] + " " + row[1]
+        email = row[2]
+        phoneNumber = row[3]
+        username = row[4]
     response = {
         "histories": histories,
         "remainingPoint": remainingPoint,
