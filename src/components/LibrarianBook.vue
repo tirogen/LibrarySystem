@@ -222,7 +222,6 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
-      @filtered="onFiltered"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -338,7 +337,7 @@ export default {
 
   methods: {
     onFiltered(filteredItems) {
-      this.store.dispatch()
+      this.$store.dispatch('book/setTotalRow',)
       totalRows = filteredItems.length;
       this.currentPage = 1;
     },
