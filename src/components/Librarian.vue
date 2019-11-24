@@ -1,9 +1,11 @@
 <template>
   <div class="container">
+    <Borrow />
     <Book />
     <Gadget />
     <LibrarianReserved />
     <LibrarianPunish />
+
   </div>
 </template>
 
@@ -12,7 +14,7 @@ import LibrarianReserved from './LibrarianReserved'
 import LibrarianPunish from './LibrarianPunish/LibrarianPunish'
 import Gadget from './LibrarianGadget'
 import Book from './LibrarianBook'
-
+import Borrow from './LibrarianManageBorrow'
 
 
 export default {
@@ -21,6 +23,7 @@ export default {
 
   },
   components: {
+    Borrow,
     LibrarianReserved,
     Gadget,
     LibrarianPunish,
