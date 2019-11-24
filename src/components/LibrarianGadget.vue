@@ -176,7 +176,6 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
-      @filtered="onFiltered"
       id="table-transition-example"
       :tbody-transition-props="transProps"
     >
@@ -379,7 +378,7 @@ export default {
       if (mo <= 9) {
         var m = "0" + mo;
       } else {
-        m = mo;
+        m = mo;q
       }
       let dd = date.getDate();
       if (dd <= 9) {
