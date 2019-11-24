@@ -5,7 +5,7 @@
     <Gadget />
     <LibrarianReserved />
     <LibrarianPunish />
-
+    <LibrarianRoomType />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import LibrarianPunish from './LibrarianPunish/LibrarianPunish'
 import Gadget from './LibrarianGadget'
 import Book from './LibrarianBook'
 import Borrow from './LibrarianManageBorrow'
-
+import LibrarianRoomType from './LibrarianRoomType'
 
 export default {
   name: 'Librarian',
