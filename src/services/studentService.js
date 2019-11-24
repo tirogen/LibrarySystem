@@ -30,6 +30,10 @@ export default {
 
   bookForRoom(form) {
     return api.post(`room/bookForRoom/`, JSON.stringify(form))
+  },
+
+  fetchBorrowingBook(id){
+    return api.get(`student/borrowing/${id}/`)
   }
 
 }

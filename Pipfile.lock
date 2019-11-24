@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5faf1ff129a007bddbef159d267ceb8a129728f8dc2aa233261882e54f7f62f5"
+            "sha256": "7f33cfc99de90d2862c4136cb47e8b023d2fb1c5a38be4446031cba08c3a1a84"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -48,8 +48,6 @@
             "index": "pypi",
             "version": "==20.0.0"
         },
-        "mysqlclient": {
-            "hashes": [
                 "sha256:5c008e74b1c4a42271172c35f28a698cf79a7cba5d2bc811125e963f28001c34",
                 "sha256:6ad22de8ea3aba03ce1b202ed175e0c7a8b82fcdab8f57b1649c596550ed785a",
                 "sha256:e80109b0ae8d952b900b31b623181532e5e89376d707dcbeb63f99e69cefe559"
@@ -57,6 +55,7 @@
             "index": "pypi",
             "version": "==1.4.5"
         },
+        "mysqlclient": {
         "psycopg2-binary": {
             "hashes": [
                 "sha256:040234f8a4a8dfd692662a8308d78f63f31a97e1c42d2480e5e6810c48966a29",
@@ -210,7 +209,7 @@
         "wrapt": {
             "hashes": [
                 "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1",
-                "sha256:57ebcd215f7c4b1f2348689a21faf6ce7290c15292ace60ffa27876a42e78317"
+                "sha256:9945b458fb3763fb5b6925c26207e83eeace858fe7ba1019a99889e8c8160d0e"
             ],
             "version": "==1.11.2"
         }
