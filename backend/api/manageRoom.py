@@ -7,19 +7,22 @@ from backend.api.models import Penalty, Punish
 MAX_POINT = 100
 
 
+def getRoomType():
+    statement = ("SELECT Type, Capacity FROM `api_roomtype`")
+    cursor = connection.cursor()
+    cursor.execute(statement)
+    response = []
+    for row in cursor.fetchall():
+        response.append({
+        "Type": row[0],
+        "Capacity": row[1]
+    })
+    return Response(response, status = status.HTTP_200_OK)
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def roomType(request, id=None):
     if request.method == "GET":
-        statement = ("SELECT Type, Capacity FROM `api_roomtype`")
-        cursor = connection.cursor()
-        cursor.execute(statement)
-        response = []
-        for row in cursor.fetchall():
-            response.append({
-            "Type": row[0],
-            "Capacity": row[1]
-        })
-        return Response(response)
+        return getRoomType()
 
     elif request.method == "POST":
         Type = request.data["Type"]
@@ -32,7 +35,7 @@ def roomType(request, id=None):
             "Type": request.data["Type"],
             "Capacity": request.data["Capacity"],
         }
-        return Response(response, status = status.HTTP_200_OK)
+        return getRoomType()
 
     elif request.method == "DELETE":
         statement = ("DELETE FROM `api_roomtype` WHERE Type=%s")
@@ -48,17 +51,53 @@ def roomType(request, id=None):
         cursor = connection.cursor()
         cursor.execute(statement, [Type, Capacity, OldType])
         return Response(request.data, status = status.HTTP_200_OK)
+
+def getRoom():
+    statement = ("SELECT r.id, r.Name, l.FName, l.LName, t.Type FROM `api_room` AS r\
+                        INNER JOIN `api_librarian` AS l ON r.Librarian_id=l.Username\
+                        INNER JOIN `api_roomtype` AS t ON t.Type=r.RoomType_id")
+    cursor = connection.cursor()
+    cursor.execute(statement)
+    response = []
+    for row in cursor.fetchall():
+        response.append({
+            "id": row[0],
+            "Name": row[1],
+            "LibrarianFName": row[2],
+            "LibrarianLName": row[3],
+            "Type": row[4]
+        })
+    return Response(response, status = status.HTTP_200_OK)
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])   
+def room(request, id=None):
+    if request.method == "GET":
+        return getRoom()
+
+    elif request.method == 'DELETE':
+        statement = ("DELETE FROM `api_room` WHERE id=%s")
+        cursor = connection.cursor()
+        cursor.execute(statement, [id])
+        return Response({"id": id}, status = status.HTTP_200_OK)
     
-# def room(request, id=None):
-#      if request.method == "GET":
-#         statement = ("SELECT Type, Capacity FROM `api_roomtype`")
-#         cursor = connection.cursor()
-#         cursor.execute(statement)
-#         response = []
-#         for row in cursor.fetchall():
-#             response.append({
-#             "Type": row[0],
-#             "Capacity": row[1]
-#         })
-#         return Response(response)
+    elif request.method == 'POST':
+        statement = ("SELECT Username FROM `api_librarian` WHERE FName=%s AND LName=%s")
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["LibrarianFName"], request.data["LibrarianLName"]])
+        Librarian_id = cursor.fetchall()[0]
+        statement = ("INSERT INTO `api_room`(`Name`, `Status`, `Librarian_id`, `RoomType_id`)\
+                        VALUES (%s,'Available',%s,%s)")
+        cursor.execute(statement, [request.data["Name"], Librarian_id, request.data["Type"]])
+        return getRoom()
+    
+    elif request.method == 'PUT':
+        statement = ("SELECT Username FROM `api_librarian` WHERE FName=%s AND LName=%s")
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["LibrarianFName"], request.data["LibrarianLName"]])
+        Librarian_id = cursor.fetchall()[0]
+        statement = ("UPDATE `api_room`\
+                        SET `Name`=%s,`Librarian_id`=%s,`RoomType_id`=%s\
+                        WHERE id=%s")
+        cursor.execute(statement, [request.data["Name"], Librarian_id, request.data["Type"], request.data["id"]])
+        return Response(request.data, status = status.HTTP_200_OK)
 
