@@ -64,9 +64,7 @@
 </template>
 
 <script>
-import {
-  mapState
-} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: 'LibrarianRoomType',
@@ -82,8 +80,8 @@ export default {
   },
   methods: {
     resetInfoModal() {
-      this.infoModal.title = ''
-      this.infoModal.content = ''
+      this.infoModal.title = "";
+      this.infoModal.content = "";
     },
     showDeleteConfirm(type){
       this.$bvModal.msgBoxConfirm('Please confirm that you want to delete.', {
@@ -127,7 +125,7 @@ export default {
   mounted() {
     this.$store.dispatch('roomType/fetchRoomTypes')
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

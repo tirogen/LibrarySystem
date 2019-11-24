@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from django.db import connection
 from rest_framework import status
 
-
 def getBorrow():
     statement = ("SELECT api_borrow.Student_id, api_student.FName, api_student.Lname, \
 				    api_book.Isbn_id,api_book.id,\
