@@ -35,25 +35,32 @@ export default {
         "ReturnDate",
         "RenewTime",
         "Renew"
-      ]
+      ],
+      renew: {
+        'EndDate': '',
+        'RenewTimes': '',
+        'id': '',
+      }
     };
   },
   methods: {
-    setModal() {
+    setModal(item) {
+      this.renew.EndDate = item.EndDate+7;
+      this.renew.RenewTimes = item.RenewTimes-1;
+      this.renew.id = item.id;
       this.$refs.modal.show();
     },
+    resetModal() {
+      this.renew.EndDate = '';
+      this.renew.RenewTimes = '';
+      this.renew.id = '';
+    },
     handleOk() {
-      if (this.selectedPenalty.Name == "" || this.selectedPenalty.Point == "") {
-        alert("Require name and point for penalty");
+      if (this.renew.RenewTimes >= 0) {
+        alert("Can not renew time");
         return;
       }
-      if (
-        this.selectedPenalty.Point != parseInt(this.selectedPenalty.Point, 10)
-      ) {
-        alert("Point have to be integer");
-        return;
-      }
-      this.$store.dispatch("punish/updatePenalty", this.selectedPenalty);
+      this.$store.dispatch("borrowing/updateRenewTime", this.renew);
       this.$nextTick(() => this.$refs.modal.hide());
     }
     //end of update modal
@@ -63,7 +70,6 @@ export default {
   }),
   mounted() {
     this.$store.dispatch("borrowing/getBorrow", "student1");
-    console.log(state.borrowing.borrows);
   }
 };
 </script>

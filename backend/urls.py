@@ -13,7 +13,7 @@ from .api.reservedRoom import getReservedRooms, manageRoom, deleteReservedRoom, 
 from .api.Gadget import manageGadget
 from .api.book import book
 from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType, bookForRoom, getActiveReservation, cancelReservation
-from .api.borrow import getBorrowingBook
+from .api.borrow import getBorrowingBook, renewTime
 from .api.borrowBook import manageBorrowBook
 from .api.manageRoom import roomType, room
 
@@ -57,6 +57,7 @@ urlpatterns = [
     path('api/student/reservation/active/<str:studentId>/<str:date>/', getActiveReservation),
     path('api/student/reservation/<str:reservationId>/', cancelReservation),
     path('api/student/borrowing/<str:id>/', getBorrowingBook),
+    path('api/student/borrowing/renew/', renewTime),
 
     #borrow
     path('api/borrow/borrow/',manageBorrowBook),
