@@ -96,6 +96,9 @@ def room(request, id=None):
         cursor.execute(statement, [request.data["LibrarianUsername"]])
         row = cursor.fetchall()[0]
         response = {
+            "Name": request.data["Name"],
+            "id": request.data["id"],
+            "Type": request.data["Type"],
             "LibrarianName": row[0] + " " + row[1]
         }
         return Response(response, status = status.HTTP_200_OK)
