@@ -37,6 +37,17 @@ const actions = {
     }).catch(err => {
       commit('error')
     })
+  },
+  addBorrow({commit}, borrow) 
+  {
+    commit('loading')
+    borrowService.deleteBorow(id).then(data => {
+      //delte from local table
+      commit('deleteBorrow', data)
+      commit('success')
+    }).catch(err => {
+      commit('error')
+    })
   }
 
 }
@@ -46,7 +57,6 @@ const mutations = {
   setBorrow(state, borrows) {
     // transform books obj to books array 
       state.borrows = borrows
-    )
   },
   deleteBorrow(state, data) {
     state.borrows = state.borrows.filter((borrow) => {
