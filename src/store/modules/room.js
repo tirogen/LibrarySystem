@@ -6,16 +6,19 @@ const state = {
   ...cloneDeep(baseState),
   gadgets: [],
   rooms: {},
-  roomNames: [],
+  roomNames: []
 }
 
 const getters = {
   rooms: state => {
     return state.rooms
-  },
+  }
 }
 
 const actions = {
+  setFilter({commit}) {
+    commit('setFilter')
+  },
   fetchRoomNames({ commit }, roomType) {
     commit('setRoomNames', roomType)
   },
@@ -39,6 +42,7 @@ const actions = {
     roomService.postGadget(newGadget)
       .then(gadgets => {
         commit('setGadgets', gadgets)
+        commit('success')
       })
       .catch(err => {
         commit('error')
@@ -48,9 +52,9 @@ const actions = {
     commit('loading')
     roomService.deleteGadget(id)
       .then(res => {
-        commit('deleteGad', res.data)
+        commit('deleteGad', res)
         // if (res.status == 200) {
-        //   commit('success')
+          commit('success')
         //   commit('deleteGadget',res.data)
         // } else {
         //   commit('errors')
@@ -65,6 +69,7 @@ const actions = {
     roomService.updateGadget(updateGadget)
       .then(res => {
         commit('updateGadgetInfo', res)
+        commit('success')
       })
       .catch(err => {
         commit('error')
@@ -74,6 +79,10 @@ const actions = {
 
 const mutations = {
   ...cloneDeep(baseMutations),
+  setFilter(state, row) {
+    state.filtered = true
+    state.numRow = row
+  },
   setGadgets(state, gadgets) {
     state.gadgets = gadgets
   },
@@ -84,30 +93,18 @@ const mutations = {
     state.roomNames = Object.keys(state.rooms[roomType])
   },
   updateGadgetInfo(state, res) {
-    // if (res.status == 200) {
-    // commit('success')
     let index = state.gadgets.findIndex(gadget => {
-      return gadget.GadgetID == res.data.GadgetID
+      return gadget.GadgetID == res["GadgetID"]
     })
-    // alert(index)
+    alert(index)
     // Vue.$set(state.gadgets, index, res.data)
-    state.gadgets[index] = res.data
+    state.gadgets[index] = res
     const obj = {}
     state.gadgets.push(obj)
     state.gadgets.pop()
-    // } else {
-    // commit('error')
-    // }
   },
   deleteGad(state, dat) {
-    alert('deletesucc')
-    state.gadgets = state.gadgets.filter((gad) => {
-      if (gad.GadgetID == dat["id"]) {
-        return false
-      } else {
-        return true
-      }
-    })
+    state.gadgets = state.gadgets.filter((gad) => gad.GadgetID != dat["id"])
   },
 }
 

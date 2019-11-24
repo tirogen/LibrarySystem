@@ -165,6 +165,7 @@
 
     <!-- End of Filter form -->
     <b-table
+      v-else show-empty
       :items="gadgets"
       :fields="fields"
       striped
@@ -178,6 +179,7 @@
       :sort-direction="sortDirection"
       id="table-transition-example"
       :tbody-transition-props="transProps"
+      @filtered="onFiltered"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -363,7 +365,8 @@ export default {
 
   methods: {
     onFiltered(filteredItems) {
-      totalRows = filteredItems.length;
+      // totalRows = filteredItems.length;
+      // this.$store.dispatch('room/setFilter',filteredItems.length)
       this.currentPage = 1;
     },
     checkAction: function() {
@@ -376,13 +379,13 @@ export default {
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
-        var m = "0" + mo;
+        var m = "0" + mo
       } else {
-        m = mo;q
+        m = mo
       }
       let dd = date.getDate();
       if (dd <= 9) {
-        var d = "0" + dd;
+        var d = "0" + dd
       } else {
         d = dd;
       }
@@ -424,7 +427,6 @@ export default {
         //UPDATE
         this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
         this.newGadget.Status = this.available;
-        this.newGadget;
       }
       // this.newGadget.id = this.
       // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind

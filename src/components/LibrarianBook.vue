@@ -209,7 +209,6 @@
     </div>
 
     <!-- End of Filter form -->
-
     <b-table
       :items="books"
       :fields="fields"
@@ -222,6 +221,7 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
+      @filtered="onFiltered"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -337,8 +337,11 @@ export default {
 
   methods: {
     onFiltered(filteredItems) {
-      this.$store.dispatch('book/setTotalRow',)
-      totalRows = filteredItems.length;
+      // this.$store.dispatch('book/setTotalRow',)
+      // totalRows = filteredItems.length;
+      // if(filterItems.length < this.perPage) {
+
+      // }
       this.currentPage = 1;
     },
     showDeleteConfirm(id) {
