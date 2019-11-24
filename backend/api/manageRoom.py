@@ -92,7 +92,13 @@ def room(request, id=None):
                         WHERE id=%s")
         cursor = connection.cursor()
         cursor.execute(statement, [request.data["Name"], request.data["LibrarianUsername"], request.data["Type"], request.data["id"]])
-        return Response(request.data, status = status.HTTP_200_OK)
+        statement = ("SELECT FName, LName FROM `api_librarian` WHERE Username=%s")
+        cursor.execute(statement, [request.data["LibrarianUsername"]])
+        row = cursor.fetchall()[0]
+        response = {
+            "LibrarianName": row[0] + " " + row[1]
+        }
+        return Response(response, status = status.HTTP_200_OK)
 
 
 @api_view(['GET'])
