@@ -14,6 +14,18 @@ const state = {
   roomTypes: []
 }
 
+const getters = {
+  rooms: state => {
+    return state.rooms
+  },
+  librarians: state => {
+    return state.librarians
+  },
+  roomTypes: state => {
+    return state.roomTypes
+  }
+}
+
 const actions = {
   fetchRooms({commit}) {
     commit('loading')
@@ -68,7 +80,9 @@ const actions = {
 const mutations = {
   ...cloneDeep(baseMutations),
   setRooms(state, rooms) {
+    console.log('set room')
     state.rooms = rooms
+    console.log(state.rooms)
   },
   setLibrarians(state, librarians) {
     state.librarians = librarians

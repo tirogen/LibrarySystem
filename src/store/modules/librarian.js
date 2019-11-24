@@ -12,6 +12,12 @@ const state = {
   reservedRooms: []
 }
 
+const getters = {
+  reservedRooms: state => {
+    return state.reservedRooms
+  }
+}
+
 const actions = {
   getReservedRooms({
     commit

@@ -12,6 +12,12 @@ const state = {
   roomTypes: []
 }
 
+const getters = {
+  roomTypes: state => {
+    return state.roomTypes
+  }
+}
+
 const actions = {
   fetchRoomTypes({commit}) {
     commit('loading')

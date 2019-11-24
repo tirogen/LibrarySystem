@@ -37,7 +37,7 @@
       <b-row class="mb-1">
         <b-col sm="3">Librarian</b-col>
         <b-col sm="9">
-          <b-form-select v-model="Librarian" :options="librarians" required></b-form-select>
+          <b-form-select v-model="Librarian" :options="newLibrarians" required></b-form-select>
         </b-col>
       </b-row>
       <b-row class="mb-1">
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: 'LibrarianRoom',
@@ -84,9 +84,9 @@ export default {
       OldName: null,
       Name: null,
       Type: null,
-      Librarian: null,
       show: false,
       addShow: false,
+      Librarian: null
     }
   },
   methods: {
@@ -130,15 +130,17 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.roomManage.isLoading,
-      roomTypes: state => state.roomManage.rooms,
+      rooms: state => state.roomManage.rooms,
       librarians: state => state.roomManage.librarians,
-      roomTypes: state => state.roomManage.roomTypes
+      roomTypes: state => state.roomType.roomTypes
     }),
+    newLibrarians() {
+      return librarians.map((librarian)=>{value:librarian.Username , text:librarian.LibrarianName})
+    }
   },
   mounted() {
     this.$store.dispatch('roomManage/fetchRooms')
     this.$store.dispatch('roomManage/fetchLibrarians')
-    this.$store.dispatch('roomManage/fetchRoomTypes')
   }
 };
 </script>
