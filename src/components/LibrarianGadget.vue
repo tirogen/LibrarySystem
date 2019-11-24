@@ -57,7 +57,7 @@
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-            <b-button variant="primary" size="sm" class="float" @click="checkAction()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float" @click="checkAction()">OK</b-button>
             <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>

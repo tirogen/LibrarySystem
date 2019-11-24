@@ -29,7 +29,7 @@ export default {
     return api.put('Gadget/manageGadget/',JSON.stringify(newUpdatedGadget)).then(response => {
       // alert(JSON.stringify(response.data))
       // console(response.status)
-      alert("new update coming")
+      // alert("new update coming")
       return response.data
     })
   }

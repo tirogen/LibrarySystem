@@ -96,7 +96,7 @@ const mutations = {
     let index = state.gadgets.findIndex(gadget => {
       return gadget.GadgetID == res["GadgetID"]
     })
-    alert(index)
+    // alert(index)
     // Vue.$set(state.gadgets, index, res.data)
     state.gadgets[index] = res
     const obj = {}

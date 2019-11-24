@@ -6,22 +6,79 @@
     <b-nav-item href="#room">Room Manage</b-nav-item>|
     <b-nav-item href="#reserve">Reserve room</b-nav-item>|
     <b-nav-item href="#punish">Punish Manage</b-nav-item>
-    <section id="borrow">
+    <section
+      id="borrow"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-mirror="true"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <Borrow />
     </section>
-    <section id="book">
+    <section
+      id="book"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-mirror="true"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <Book />
     </section>
-    <section id="gadget">
+    <section
+      id="gadget"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-mirror="true"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <Gadget />
     </section>
-    <section id="room">
+    <section
+      id="room"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <LibrarianRoomType />
     </section>
-    <section id="reserve">
+    <section
+      id="reserve"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <LibrarianReserved />
     </section>
-    <section id="punish">
+    <section
+      id="punish"
+      data-aos="fade-up"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="600"
+      data-aos-easing="ease-in-out"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center"
+    >
       <LibrarianPunish />
     </section>
   </div>
