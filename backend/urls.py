@@ -15,6 +15,7 @@ from .api.book import book
 from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType, bookForRoom, getActiveReservation, cancelReservation
 from .api.borrow import getBorrowingBook
 from .api.borrowBook import manageBorrowBook
+from .api.manageRoom import roomType, room
 
 router = routers.DefaultRouter()
 router.register('messages', MessageViewSet)
@@ -58,4 +59,11 @@ urlpatterns = [
     path('api/student/borrowing/<str:id>/', getBorrowingBook),
 
     #borrow
-    path('api/borrow/borrow/',manageBorrowBook)]
+    path('api/borrow/borrow/',manageBorrowBook),
+
+    #manageroom
+    path('api/manageRoom/roomTypes/', roomType),
+    path('api/manageRoom/roomTypes/<str:id>/', roomType),
+    path('api/manageRoom/rooms/', room),
+    path('api/manageRoom/rooms/<str:id>/', room),
+]

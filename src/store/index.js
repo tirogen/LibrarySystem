@@ -7,6 +7,7 @@ import punish from './modules/punish'
 import book from './modules/book'
 import student from './modules/student'
 import borrow from './modules/borrow'
+import roomType from './modules/roomType'
 import borrowing from './modules/borrowing'
 
 Vue.use(Vuex)
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     book,
     student,
     borrow,
+    roomType
     borrowing
   }
 })

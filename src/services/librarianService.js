@@ -17,4 +17,19 @@ export default {
     return api.patch(`reservedRoom/checkOut/${id}/`)
               .then(response => response)
   },
+
+  fetchRoomTypes() {
+    return api.get(`manageRoom/roomTypes/`)
+              .then(response => response.data)
+  },
+  deleteRoomType(type) {
+    return api.delete(`manageRoom/roomTypes/${type}/`)
+              .then(response => response.status)
+  },
+  updateRoomType(roomType) {
+    return api.put('manageRoom/roomTypes/',JSON.stringify(roomType)).then(response => response)
+  },
+  addRoomType(roomType) {
+    return api.post('manageRoom/roomTypes/',JSON.stringify(roomType)).then(response => response)
+  }
 }
