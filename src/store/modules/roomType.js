@@ -13,8 +13,8 @@ const state = {
 }
 
 const getters = {
-  reservedRooms: state => {
-    return state.reservedRooms
+  roomTypes: state => {
+    return state.roomTypes
   }
 }
 
@@ -27,7 +27,7 @@ const actions = {
         commit('success')
       })
   },
-  deleteRoomTypes({commit}, type) {
+  deleteRoomType({commit}, type) {
     commit('loading')
     librarianService.deleteRoomType(type)
       .then(response => {

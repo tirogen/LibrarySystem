@@ -97,7 +97,7 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.$store.dispatch('roomType/deleteRoomTypes', type)
+            this.$store.dispatch('roomType/deleteRoomType', type)
           }
         })
     },
@@ -110,10 +110,16 @@ export default {
     update(){
       this.$store.dispatch('roomType/updateRoomType', {OldType: this.OldType, Type: this.Type, Capacity: this.Capacity})
       this.show = false
+      this.Type = null
+      this.OldType = null
+      this.Capacity = 0
     },
     addNew(){
       this.$store.dispatch('roomType/addRoomType', {Type: this.Type, Capacity: this.Capacity})
       this.addShow = false
+      this.Type = null
+      this.OldType = null
+      this.Capacity = 0
     }
   },
   computed: {
