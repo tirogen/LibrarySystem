@@ -1,111 +1,89 @@
 <template>
 <div class="jumbotron bg-overlay">
-  <h2>Room Types</h2>
+  <h2>Room Types <b-button v-b-modal.modal-1 @click="addShow=true">ADD ROOM TYPES</b-button></h2>
+  <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
+    <div class="pr-3"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>
+    <div><strong style="font-size: 24px"> Loading... </strong></div>
+  </div>
+  <b-table v-else :items="roomTypes" :fields="fields" striped responsive="sm">
+    <template v-slot:cell(Manage)="row">
+      <b-button size="sm" @click="row.toggleDetails" class="mr-2">
+        {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
+      </b-button>
+    </template>
+    <template v-slot:row-details="row">
+      <b-card>
+        <ul>
+          <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+        </ul>
+      </b-card>
+    </template>
+    <template v-slot:row-details="row">
+      <b-card>
+        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.Type)">Update</b-button>
+        <b-button size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.Type)">Delete</b-button>
+      </b-card>
+    </template>
+  </b-table>
 
-    <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
-      <div class="pr-3"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>
-      <div><strong style="font-size: 24px"> Loading... </strong></div>
-    </div>
-    <b-table v-else show-empty small stacked="md" :items="reservedRooms" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter" :filterIncludedFields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-      :sort-direction="sortDirection" @filtered="onFiltered">
-      <template v-slot:cell(TimeIn)="row">
-        {{row.item.TimeIn == '00:00:00' ? '' : row.item.TimeIn}}
-      </template>
-      <template v-slot:cell(TimeOut)="row">
-        {{row.item.TimeOut == '00:00:00' ? '' : row.item.TimeOut}}
-      </template>
+  <b-modal v-model="show" title="Update Room Type">
+    <b-container fluid class="bv-example-row bv-example-row-flex-cols">
+      <b-row class="mb-1">
+        <b-col sm="3">New Type</b-col>
+        <b-col sm="9">
+          <b-form-input id="current-input" v-model="Type"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
+      <div class="mt-2">Capacity: {{Capacity}}</div>
+    </b-container>
+    <template v-slot:modal-footer>
+      <b-button @click="show=false">Cancel</b-button>
+      <b-button variant="primary" @click="update()">Update</b-button>
+    </template>
+  </b-modal>
 
-      <template v-slot:cell(Manage)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
-        </b-button>
-      </template>
-
-      <template v-slot:row-details="row">
-        <b-card>
-          <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-          </ul>
-        </b-card>
-      </template>
-      <template v-slot:row-details="row">
-        <b-card>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="primary" class="m-2" @click="CheckIn(row.item.id)">Check in</b-button>
-          <b-button v-else-if="row.item.TimeOut == '00:00:00'" size="lg" variant="success" class="m-2" @click="CheckOut(row.item.id)">Check out</b-button>
-          <b-button v-else disabled size="lg" class="m-2">Disabled</b-button>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.RoomTime_id)">Delete</b-button>
-          <b-button v-else disabled size="lg" variant="danger" class="m-2">Delete</b-button>
-        </b-card>
-      </template>
-    </b-table>
+  <b-modal v-model="addShow" title="ADD ROOM TYPES">
+    <b-container fluid class="bv-example-row bv-example-row-flex-cols">
+      <b-row class="mb-1">
+        <b-col sm="3">Type</b-col>
+        <b-col sm="9">
+          <b-form-input id="current-input" v-model="Type"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
+      <div class="mt-2">Capacity: {{Capacity}}</div>
+    </b-container>
+    <template v-slot:modal-footer>
+      <b-button @click="addShow=false">Cancel</b-button>
+      <b-button variant="primary" @click="addNew()">Add New</b-button>
+    </template>
+  </b-modal>
 
 </div>
 </template>
 
 <script>
-import {
-  mapState
-} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: 'LibrarianRoomType',
-  props: {
-
-  },
   data() {
     return {
-      fields: [{
-        key: 'Room',
-        sortable: true
-      }, {
-        key: 'Name',
-        sortable: true
-      }, {
-        key: 'StartTime',
-        label: 'Start Time',
-        sortable: true
-      }, {
-        key: 'EndTime',
-        label: 'End Time',
-        sortable: true
-      }, {
-        key: 'TimeIn',
-        label: 'Time In',
-        sortable: true
-      }, {
-        key: 'TimeOut',
-        label: 'Time Out',
-        sortable: true
-      }, {
-        key: 'Date',
-        sortable: true
-      }, 'Manage'],
-      currentPage: 1,
-      perPage: 5,
-      pageOptions: [1, 5, 10, 15],
-      sortBy: '',
-      sortDesc: false,
-      sortDirection: 'asc',
-      filter: null,
-      filterOn: [],
+      fields: ["Type", "Capacity", "Manage"],
+      OldType: null,
+      Type: null,
+      Capacity: null,
+      show: false,
+      addShow: false,
     }
   },
   methods: {
     resetInfoModal() {
-      this.infoModal.title = ''
-      this.infoModal.content = ''
+      this.infoModal.title = "";
+      this.infoModal.content = "";
     },
-    onFiltered(filteredItems) {
-      totalRows = filteredItems.length
-      this.currentPage = 1
-    },
-    CheckIn(id) {
-      this.$store.dispatch('librarian/checkInReservedRoom', id)
-    },
-    CheckOut(id) {
-      this.$store.dispatch('librarian/checkOutReservedRoom', id)
-    },
-    showDeleteConfirm(id) {
+    showDeleteConfirm(type){
       this.$bvModal.msgBoxConfirm('Please confirm that you want to delete.', {
           title: 'Please Confirm',
           size: 'sm',
@@ -119,21 +97,35 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.$store.dispatch('librarian/deleteReservedRoom', id)
+            this.$store.dispatch('roomType/deleteRoomTypes', type)
           }
         })
+    },
+    showModal(type){
+      this.Type = type
+      this.OldType = type
+      this.Capacity = 0
+      this.show = true
+    },
+    update(){
+      this.$store.dispatch('roomType/updateRoomType', {OldType: this.OldType, Type: this.Type, Capacity: this.Capacity})
+      this.show = false
+    },
+    addNew(){
+      this.$store.dispatch('roomType/addRoomType', {Type: this.Type, Capacity: this.Capacity})
+      this.addShow = false
     }
   },
   computed: {
     ...mapState({
-      isLoading: state => state.librarian.isLoading,
-      reservedRooms: state => state.librarian.reservedRooms
+      isLoading: state => state.roomType.isLoading,
+      roomTypes: state => state.roomType.roomTypes
     }),
   },
   mounted() {
-    //this.$store.dispatch('librarian/getReservedRooms')
+    this.$store.dispatch('roomType/fetchRoomTypes')
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
