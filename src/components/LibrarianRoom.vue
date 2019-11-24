@@ -1,11 +1,11 @@
 <template>
 <div class="jumbotron bg-overlay">
-  <h2>Room Types <b-button v-b-modal.modal-1 @click="addShow=true">ADD ROOM TYPES</b-button></h2>
+  <h2>Room <b-button v-b-modal.modal-1 @click="addShow=true">ADD ROOM</b-button></h2>
   <div v-if="isLoading" class="w-100 my-5 d-flex align-items-center justify-content-center">
     <div class="pr-3"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>
     <div><strong style="font-size: 24px"> Loading... </strong></div>
   </div>
-  <b-table v-else :items="roomTypes" :fields="fields" striped responsive="sm">
+  <b-table v-else :items="rooms" :fields="fields" striped responsive="sm">
     <template v-slot:cell(Manage)="row">
       <b-button size="sm" @click="row.toggleDetails" class="mr-2">
         {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage
@@ -20,22 +20,32 @@
     </template>
     <template v-slot:row-details="row">
       <b-card>
-        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.Type)">Update</b-button>
-        <b-button size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.Type)">Delete</b-button>
+        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.id)">Update</b-button>
+        <b-button size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.id)">Delete</b-button>
       </b-card>
     </template>
   </b-table>
 
-  <b-modal v-model="show" title="Update Room Type">
+  <b-modal v-model="show" title="Update Room">
     <b-container fluid class="bv-example-row bv-example-row-flex-cols">
       <b-row class="mb-1">
-        <b-col sm="3">New Type</b-col>
+        <b-col sm="3">New Name</b-col>
         <b-col sm="9">
-          <b-form-input id="current-input" v-model="Type"></b-form-input>
+          <b-form-input id="current-input" v-model="Name"></b-form-input>
         </b-col>
       </b-row>
-      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
-      <div class="mt-2">Capacity: {{Capacity}}</div>
+      <b-row class="mb-1">
+        <b-col sm="3">Librarian</b-col>
+        <b-col sm="9">
+          <b-form-select v-model="Librarian" :options="newLibrarians" required></b-form-select>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1">
+        <b-col sm="3">Librarian</b-col>
+        <b-col sm="9">
+          <b-form-select v-model="Type" :options="roomTypes" required></b-form-select>
+        </b-col>
+      </b-row>
     </b-container>
     <template v-slot:modal-footer>
       <b-button @click="show=false">Cancel</b-button>
@@ -64,18 +74,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
-  name: 'LibrarianRoomType',
+  name: 'LibrarianRoom',
   data() {
     return {
-      fields: ["Type", "Capacity", "Manage"],
-      OldType: null,
+      fields: ["Name", {key:'LibrarianName',label:'Librarian Name'}, "Type", "Manage"],
+      OldName: null,
+      Name: null,
       Type: null,
-      Capacity: null,
       show: false,
       addShow: false,
+      Librarian: null
     }
   },
   methods: {
@@ -83,7 +94,7 @@ export default {
       this.infoModal.title = "";
       this.infoModal.content = "";
     },
-    showDeleteConfirm(type){
+    showDeleteConfirm(id){
       this.$bvModal.msgBoxConfirm('Please confirm that you want to delete.', {
           title: 'Please Confirm',
           size: 'sm',
@@ -97,7 +108,7 @@ export default {
         })
         .then(value => {
           if (value) {
-            this.$store.dispatch('roomType/deleteRoomType', type)
+            this.$store.dispatch('roomManage/deleteRoom', id)
           }
         })
     },
@@ -118,12 +129,18 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.roomType.isLoading,
+      isLoading: state => state.roomManage.isLoading,
+      rooms: state => state.roomManage.rooms,
+      librarians: state => state.roomManage.librarians,
       roomTypes: state => state.roomType.roomTypes
     }),
+    newLibrarians() {
+      return librarians.map((librarian)=>{value:librarian.Username , text:librarian.LibrarianName})
+    }
   },
   mounted() {
-    this.$store.dispatch('roomType/fetchRoomTypes')
+    this.$store.dispatch('roomManage/fetchRooms')
+    this.$store.dispatch('roomManage/fetchLibrarians')
   }
 };
 </script>

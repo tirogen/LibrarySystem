@@ -31,5 +31,15 @@ export default {
   },
   addRoomType(roomType) {
     return api.post('manageRoom/roomTypes/',JSON.stringify(roomType)).then(response => response)
-  }
+  },
+
+  fetchRooms() {
+    return api.get(`manageRoom/rooms/`).then(response => response.data)
+  },
+  fetchLibrarians() {
+    return api.get(`manageRoom/librarians/`).then(response => response.data)
+  },
+  deleteRoom(id) {
+    return api.delete(`manageRoom/rooms/${id}/`).then(response => response.status)
+  },
 }
