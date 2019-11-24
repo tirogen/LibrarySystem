@@ -2,12 +2,11 @@ import bookService from '../../services/bookService'
 import { cloneDeep } from "lodash";
 import { baseState, baseMutations } from "../state";
 import { strictEqual } from 'assert';
+import borrowService from '../../services/borrowService';
 
 const state = {
   ...cloneDeep(baseState),
-  books: [],
-  bookdict: {},
-  isbns: []
+  borrows: []
 }
 
 const getters = {
@@ -17,33 +16,23 @@ const getters = {
 }
 
 const actions = {
-  fetchBooks({ commit }) {
+  fetchBorrow({ commit }) {
     commit('loading')
-    bookService.fetchbooks()
+    borrowService.fetchBorrow()
       .then(books => {
         // alert("got book back")
-        commit('setBooks', books)
+        commit('setBorrow', books)
         commit('success')
       })
       .catch(err => {
         commit('error', err)
       })
   },
-  deleteBooks({ commit }, id) {
+  deleteBorrow({ commit }, id) {
     commit('loading')
-    bookService.deleteBook(id).then(data => {
+    borrowService.deleteBorow(id).then(data => {
       //delte from local table
-      commit('deleteBook', data)
-      commit('success')
-    }).catch(err => {
-      commit('error')
-    })
-  },
-  postBooks({ commit }, book) {
-    commit('loading')
-    bookService.postBook(book).then(books => {
-      // post get all book 
-      commit('setBooks', books)
+      commit('deleteBorrow', data)
       commit('success')
     }).catch(err => {
       commit('error')
@@ -54,26 +43,14 @@ const actions = {
 
 const mutations = {
   ...cloneDeep(baseMutations),
-  fetchBorrow(state, books) {
+  setBorrow(state, borrows) {
     // transform books obj to books array 
-    state.bookdict = books
-    state.isbns = Object.keys(books)
-    // console.log(state.isbns)
-    state.books = Object.keys(books).map(id => {
-      return {
-        "isbn" : id,
-        "name": books[id]["name"],
-        "category" : books[id]["category"],
-        "author": books[id]["author"],
-        "number": books[id]["number"],
-        "num" : books[id]["number"].length
-      }
-    }
+      state.borrows = borrows
     )
   },
   deleteBorrow(state, data) {
-    state.books = state.books.filter((book) => {
-      if(book.isbn == data["isbn"]) {
+    state.borrows = state.borrows.filter((borrow) => {
+      if(borrow.isbn == data["isbn"]) {
         book.number = book.number.filter((id)=> id!=data["id"])
         book.num = book.num-1
         if(book.number.length == 0) {

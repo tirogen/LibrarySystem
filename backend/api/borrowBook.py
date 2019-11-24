@@ -11,6 +11,7 @@ def getBorrow():
 				    api_book.Isbn_id,api_book.id,\
 					api_isbn.Name,api_isbn.Category,api_isbn.Author\
 					api_booktime.StartDate, api_booktime.EndDate\
+					api_borrow.id\
                     FROM api_borrow\
                     INNER JOIN api_book ON api_borrow.Book_id=api_book.id\
                     INNER JOIN api_isbn ON api_book.Isbn_id=api_isbn.Isbn\
@@ -22,15 +23,16 @@ def getBorrow():
     for row in cursor.fetchall():
         obj = {
 			"studentID": row[0],
-"studentName": row[1],
-"studnetSurname": row[2],
-"startDate": row[8],
-"endDate": row[9],
-"bookISBN": row[3],
-"bookID": row[4],
-"bookName": row[5],
-"bookCategory": row[6],
-"bookAuthor": row[7],
+			"studentName": row[1],
+			"studnetSurname": row[2],
+			"startDate": row[8],
+			"endDate": row[9],
+			"bookISBN": row[3],
+			"bookID": row[4],
+			"bookName": row[5],
+			"bookCategory": row[6],
+			"bookAuthor": row[7],
+			"borrowID" : row[10]
         }
         # if row[0] in response.keys():
 #     response[row[0]]["number"].append(row[4])
