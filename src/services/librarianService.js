@@ -42,4 +42,10 @@ export default {
   deleteRoom(id) {
     return api.delete(`manageRoom/rooms/${id}/`).then(response => response.status)
   },
+  updateRoom(room) {
+    return api.put('manageRoom/rooms/',JSON.stringify(room)).then(response => response)
+  },
+  addRoom(room) {
+    return api.post('manageRoom/rooms/',JSON.stringify(room)).then(response => response)
+  },
 }

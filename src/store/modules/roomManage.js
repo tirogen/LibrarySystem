@@ -51,7 +51,7 @@ const actions = {
         commit('success')
       })
   },
-  deleteRoomType({commit}, id) {
+  deleteRoom({commit}, id) {
     commit('loading')
     librarianService.deleteRoom(id)
       .then(response => {
@@ -59,19 +59,19 @@ const actions = {
         commit('success')
       })
   },
-  updateRoomType({commit}, {OldType, Type, Capacity}) {
+  updateRoom({commit}, room) {
     commit('loading')
-    librarianService.updateRoomType({OldType, Type, Capacity})
+    librarianService.updateRoom(room)
       .then(response => {
-        commit('updateRoomType', response)
+        commit('updateRoom', response)
         commit('success')
       })
   },
-  addRoomType({commit}, {Type, Capacity}) {
+  addRoom({commit}, room) {
     commit('loading')
-    librarianService.addRoomType({Type, Capacity})
+    librarianService.addRoom(room)
       .then(response => {
-        commit('addRoomType', response)
+        commit('addRoom', response)
         commit('success')
       })
   },
@@ -80,9 +80,7 @@ const actions = {
 const mutations = {
   ...cloneDeep(baseMutations),
   setRooms(state, rooms) {
-    console.log('set room')
     state.rooms = rooms
-    console.log(state.rooms)
   },
   setLibrarians(state, librarians) {
     state.librarians = librarians
@@ -95,17 +93,17 @@ const mutations = {
       state.rooms = state.rooms.filter(room => room.id != id)
     }
   },
-  updateRoomType(state, response) {
+  updateRoom(state, response) {
     if (response.status == 200) {
-      let index = state.roomTypes.findIndex(roomType => {
-        return roomType.Type == response.data.OldType
+      let index = state.rooms.findIndex(room => {
+        return room.id == response.data.id
       })
-      state.roomTypes[index] = response.data
+      state.rooms[index] = response.data
     }
   },
-  addRoomType(state, response) {
+  addRoom(state, response) {
     if (response.status == 200) {
-      state.roomTypes = response.data
+      state.rooms = response.data
     }
   }
 }

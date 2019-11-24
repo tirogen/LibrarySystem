@@ -20,7 +20,7 @@
     </template>
     <template v-slot:row-details="row">
       <b-card>
-        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.id)">Update</b-button>
+        <b-button size="lg" variant="primary" class="m-2" @click="showModal(row.item.id, row.item.Name)">Update</b-button>
         <b-button size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.id)">Delete</b-button>
       </b-card>
     </template>
@@ -41,9 +41,9 @@
         </b-col>
       </b-row>
       <b-row class="mb-1">
-        <b-col sm="3">Librarian</b-col>
+        <b-col sm="3">Room Type</b-col>
         <b-col sm="9">
-          <b-form-select v-model="Type" :options="roomTypes" required></b-form-select>
+          <b-form-select v-model="Type" :options="newRoomTypes" required></b-form-select>
         </b-col>
       </b-row>
     </b-container>
@@ -53,16 +53,26 @@
     </template>
   </b-modal>
 
-  <b-modal v-model="addShow" title="ADD ROOM TYPES">
+  <b-modal v-model="addShow" title="ADD ROOM">
     <b-container fluid class="bv-example-row bv-example-row-flex-cols">
       <b-row class="mb-1">
-        <b-col sm="3">Type</b-col>
+        <b-col sm="3">Name</b-col>
         <b-col sm="9">
-          <b-form-input id="current-input" v-model="Type"></b-form-input>
+          <b-form-input id="current-input" v-model="Name"></b-form-input>
         </b-col>
       </b-row>
-      <b-form-input id="range-2" v-model="Capacity" type="range" min="0" max="15" step="1"></b-form-input>
-      <div class="mt-2">Capacity: {{Capacity}}</div>
+      <b-row class="mb-1">
+        <b-col sm="3">Librarian</b-col>
+        <b-col sm="9">
+          <b-form-select v-model="Librarian" :options="newLibrarians" required></b-form-select>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1">
+        <b-col sm="3">Room Type</b-col>
+        <b-col sm="9">
+          <b-form-select v-model="Type" :options="newRoomTypes" required></b-form-select>
+        </b-col>
+      </b-row>
     </b-container>
     <template v-slot:modal-footer>
       <b-button @click="addShow=false">Cancel</b-button>
@@ -81,9 +91,10 @@ export default {
   data() {
     return {
       fields: ["Name", {key:'LibrarianName',label:'Librarian Name'}, "Type", "Manage"],
-      OldName: null,
+      id: null,
       Name: null,
       Type: null,
+
       show: false,
       addShow: false,
       Librarian: null
@@ -112,19 +123,26 @@ export default {
           }
         })
     },
-    showModal(type){
-      this.Type = type
-      this.OldType = type
-      this.Capacity = 0
+    showModal(id, Name){
+      this.id = id
+      this.Name = Name
       this.show = true
     },
     update(){
-      this.$store.dispatch('roomType/updateRoomType', {OldType: this.OldType, Type: this.Type, Capacity: this.Capacity})
+      this.$store.dispatch('roomManage/updateRoom', {id: this.id, LibrarianUsername:this.Librarian, Name: this.Name, Type: this.Type})
       this.show = false
+      this.id = null
+      this.Name = null
+      this.Librarian = null
+      this.Type = null
     },
     addNew(){
-      this.$store.dispatch('roomType/addRoomType', {Type: this.Type, Capacity: this.Capacity})
+      this.$store.dispatch('roomManage/addRoom', {LibrarianUsername: this.Librarian, Name: this.Name, Type: this.Type})
       this.addShow = false
+      this.id = null
+      this.Name = null
+      this.Librarian = null
+      this.Type = null
     }
   },
   computed: {
@@ -135,8 +153,15 @@ export default {
       roomTypes: state => state.roomType.roomTypes
     }),
     newLibrarians() {
-      return librarians.map((librarian)=>{value:librarian.Username , text:librarian.LibrarianName})
-    }
+      return this.librarians.map((librarian)=>{
+        return {value:librarian.Username , text:librarian.LibrarianName}
+      })
+    },
+    newRoomTypes() {
+      return this.roomTypes.map((roomType)=>{
+        return {value:roomType.Type , text:roomType.Type}
+      })
+    },
   },
   mounted() {
     this.$store.dispatch('roomManage/fetchRooms')
