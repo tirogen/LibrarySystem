@@ -1,14 +1,18 @@
 import api from '@/services/api'
 
 export default {
-  fetchbooks() {
+  fetchBorrow() {
     return api.get('/borrow/borrow/')
       .then(response => {
         // console.log(response)
         return response.data})
   },
-  deleteBook(id) {
+  deleteBorrow(id) {
     return api.delete(`borrow/borrow/${id}/`, { timeout: 10000 })
       .then(response => response.data)
   },
+  postBorrow(obj) {
+    return api.post('borrow/borrow/',obj)
+      .then(response => response.data)
+  }
 }
