@@ -1,26 +1,17 @@
 <template>
   <div class="jumbotron bg-overlay">
     <h2>
-      Gadget
-      <b-button v-b-modal.modal-1 @click="showGadgetModal()">ADD GADGET</b-button>
+      Borrow Book
+      <b-button v-b-modal.modal-borrow @click="showGadgetModal()">ADD BORROWING BOOK</b-button>
     </h2>
     <!-- Add GadGet Modal -->
     <div>
-      <b-modal id="modal-1" v-model="show" title="ADD GADGET">
+      <b-modal id="modal-borrow" v-model="show" title="ADD BORROWING BOOK">
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
           <b-row class="mb-1 text-center" align-v="start">
             <b-col cols="1.7"></b-col>
             <b-col>RoomType</b-col>
             <b-col>RoomName</b-col>
-          </b-row>
-          <b-row class="mb-1">
-            <b-col cols="1.5">Room</b-col>
-            <b-col>
-              <b-form-select v-model="roomType" :options="roomTypes" required></b-form-select>
-            </b-col>
-            <b-col>
-              <b-form-select v-model="roomName" :options="roomNames" required></b-form-select>
-            </b-col>
           </b-row>
           <b-row class="mb-1">
             <b-col cols="1.5" class>Gadget Name</b-col>
@@ -177,7 +168,6 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       id="table-transition-example"
-      :tbody-transition-props="transProps"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -188,13 +178,6 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button
-            size="sm"
-            v-b-modal.modal-1
-            variant="primary"
-            class="m-2"
-            @click="fetchUpdatedData(row.item)"
-          >Update</b-button>
           <b-button
             size="sm"
             variant="danger"
@@ -214,7 +197,7 @@ import Datepicker from "vuejs-datepicker";
 import { en, th } from "vuejs-datepicker/dist/locale";
 
 export default {
-  name: "Gadget",
+  name: "Borrow",
   props: {},
   data() {
     return {
@@ -225,8 +208,8 @@ export default {
       cal: {
         date: new Date(),
         disabledDates: {
-          // to: new Date(), // Disable all dates up to specific date
-          from: new Date() // Disable all dates after specific date
+         to: new Date(), // Disable all dates up to specific date
+        //   from: new Date() // Disable all dates after specific date
           // days: [6, 0], // Disable Saturday's and Sunday's
           // daysOfMonth: [29, 30, 31], // Disable 29th, 30th and 31st of each month
           // dates: [ // Disable an array of dates
@@ -255,19 +238,11 @@ export default {
       },
       gadgetName: "",
       fields: [
-        { key: "GadgetName", sortable: true },
-        { key: "Status", sortable: false },
-        { key: "PurchasedDate", sortable: true },
-        { key: "RoomName", sortable: false },
+        { key: "isbn", label:"ISBN",sortable: true },
+        { key: "author", sortable: false },
+        { key: "bookname", sortable: true },
         "Manage"
       ],
-      newGadget: {
-        id: null,
-        Name: null,
-        Status: null,
-        PurchasedDate: null,
-        Room_id: null
-      },
       show: false,
       roomName: "",
       roomType: "",
@@ -339,46 +314,15 @@ export default {
         }
       }
     }
-    // filterOn: function() {
-    //   if (this.filterOn.includes("Status") && this.filterOn.length === 1) {
-    //     this.IsTypeToSearch = false;
-    //     this.filterOption.push("Available", "NotAvailable");
-    //   } else {
-    //     this.IsTypeTosearch = true;
-    //     this.filterOption = this.filterOption.filter(mem => {
-    //       return mem != "Available" && mem != "NotAvailable";
-    //     });
-    //   }
-    //   if (this.filterOn.includes("RoomName") && this.filterOn.length === 1) {
-    //     this.IsTypeToSearch = false;
-    //     this.filterOption.concat(this.allRoomNames);
-    //   } else {
-    //     this.IsTypeTosearch = true;
-    //     this.filterOption = this.filterOption.filter(mem => {
-    //       return !this.allRoomNames.includes(mem);
-    //     });
-    //   }
-    // }
   },
 
   methods: {
-    onFiltered(filteredItems) {
-      totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-    checkAction: function() {
-      if (this.action == "ADD") {
-        this.addGadget();
-      } else if (this.action == "UPDATE") {
-        this.updateGadget();
-      }
-    },
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
         var m = "0" + mo;
       } else {
-        m = mo;q
+        m = mo;
       }
       let dd = date.getDate();
       if (dd <= 9) {
@@ -390,96 +334,17 @@ export default {
       this.newGadget.PurchasedDate = dateFormat;
       return dateFormat;
     },
-    fetchGadgets: function() {
-      this.$store.dispatch("room/fetchGadgets");
+    fetchBorrow: function(){
+      this.$store.dispatch("borrow/fetchBorrow");
     },
-    addGadget: function() {
-      this.handleGadget();
-      this.handleGadgetValue().then(success => {
-        if (success) {
-          this.show = false;
-
-          this.$store.dispatch("room/postGadget", this.newGadget);
-          //animate View
-        } else {
-          alert("data is not valid");
-        }
-      });
-    },
-    showGadgetModal: function() {
-      this.action = "ADD";
-      //show modal true
-      this.show = true;
-      this.fetchRooms();
-    },
-    fetchRooms: function() {
-      this.$store.dispatch("room/fetchRooms");
-    },
-    //setting newGadget
-    handleGadget: function() {
-      this.newGadget.Name = this.gadgetName;
-      if (this.action == "ADD") {
-        this.newGadget.Status = "Available";
-      } else {
-        //UPDATE
-        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
-        this.newGadget.Status = this.available;
-        this.newGadget;
-      }
-      // this.newGadget.id = this.
-      // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind
-      // console.log(this.newGadget);
-    },
-    handleGadgetValue: async function() {
-      // check form is valid
-      if (
-        this.roomName === "" ||
-        this.roomType === "" ||
-        this.gadgetName === ""
-      ) {
-        return false;
-        // need to check format
-      }
-      //
-      return true;
-    },
-    deletedGadget: function(id) {
+    deleteBorrow: function(id) {
       // get data
-      this.$store.dispatch("room/deleteGadget", id);
-    },
-    fetchUpdatedData: function(item) {
-      // console.log(item)
-      this.action = "UPDATE";
-      this.roomType = item.RoomType;
-      this.roomName = item.RoomName;
-      this.roomName = item.RoomName;
-      this.available = item.Status;
-      this.gadgetName = item.GadgetName;
-      let stringDate = item.PurchasedDate;
-      //setting newGadget id
-      this.newGadget.id = item.GadgetID;
-      // alert(stringDate)
-      let arr = stringDate.split("-");
-      // alert(arr)
-      this.cal.date = new Date(arr[0], parseInt(arr[1]) - 1, arr[2]);
-      this.show = true;
-    },
-    updateGadget: function() {
-      this.handleGadget();
-      this.handleGadgetValue().then(success => {
-        if (success) {
-          this.show = false;
-          this.$store.dispatch("room/updateGadget", this.newGadget);
-          //animate View
-        } else {
-          alert("data is not valid to update");
-        }
-      });
+      this.$store.dispatch("borrow/deleteBorrow", id);
     },
     showDeleteConfirm(item) {
       this.$bvModal
         .msgBoxConfirm("Please confirm that you want to delete.", {
-          title: "Please Confirm",
+          title: "PleasConfirm",
           size: "sm",
           buttonSize: "sm",
           okVariant: "danger",
@@ -502,11 +367,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchGadgets();
-    this.fetchRooms();
-    for (roomType in this.roomTypes) {
-      this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
-    }
+    this.fetchBorrow()
   },
   components: {
     Datepicker
