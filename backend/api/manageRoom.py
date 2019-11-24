@@ -63,8 +63,7 @@ def getRoom():
         response.append({
             "id": row[0],
             "Name": row[1],
-            "LibrarianFName": row[2],
-            "LibrarianLName": row[3],
+            "LibrarianName": row[2] + " " + row[3],
             "Type": row[4]
         })
     return Response(response, status = status.HTTP_200_OK)
@@ -81,23 +80,30 @@ def room(request, id=None):
         return Response({"id": id}, status = status.HTTP_200_OK)
     
     elif request.method == 'POST':
-        statement = ("SELECT Username FROM `api_librarian` WHERE FName=%s AND LName=%s")
-        cursor = connection.cursor()
-        cursor.execute(statement, [request.data["LibrarianFName"], request.data["LibrarianLName"]])
-        Librarian_id = cursor.fetchall()[0]
         statement = ("INSERT INTO `api_room`(`Name`, `Status`, `Librarian_id`, `RoomType_id`)\
-                        VALUES (%s,'Available',%s,%s)")
-        cursor.execute(statement, [request.data["Name"], Librarian_id, request.data["Type"]])
+                        VALUES (%s,%s,%s,%s)")
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["Name"], "Available",request.data["LibrarianUsername"], request.data["Type"]])
         return getRoom()
     
     elif request.method == 'PUT':
-        statement = ("SELECT Username FROM `api_librarian` WHERE FName=%s AND LName=%s")
-        cursor = connection.cursor()
-        cursor.execute(statement, [request.data["LibrarianFName"], request.data["LibrarianLName"]])
-        Librarian_id = cursor.fetchall()[0]
         statement = ("UPDATE `api_room`\
                         SET `Name`=%s,`Librarian_id`=%s,`RoomType_id`=%s\
                         WHERE id=%s")
-        cursor.execute(statement, [request.data["Name"], Librarian_id, request.data["Type"], request.data["id"]])
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["Name"], request.data["LibrarianUsername"], request.data["Type"], request.data["id"]])
         return Response(request.data, status = status.HTTP_200_OK)
 
+
+@api_view(['GET'])
+def getAllLibrarians(request):
+    statement = ("SELECT Username, FName, LName FROM `api_librarian`")
+    cursor = connection.cursor()
+    cursor.execute(statement)
+    response = []
+    for row in cursor.fetchall():
+        response.append({
+            "Username": row[0],
+            "LibrarianName": row[1] + " " + row[2],
+        })
+    return Response(response, status = status.HTTP_200_OK)
