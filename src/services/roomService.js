@@ -12,7 +12,7 @@ export default {
     // alert(JSON.stringify(newGadget))
       return api.post('Gadget/manageGadget/',JSON.stringify(newGadget)).then(response => {
         // alert(JSON.stringify(response.data))
-        alert("new gadgets coming")
+        // alert("new gadgets coming")
         return response.data
       })
     .catch((e) => {

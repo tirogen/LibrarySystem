@@ -210,6 +210,8 @@
 
     <!-- End of Filter form -->
     <b-table
+      v-else
+      show-empty
       :items="books"
       :fields="fields"
       striped
@@ -250,7 +252,6 @@
         </b-card>
       </template>
     </b-table>
-    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 

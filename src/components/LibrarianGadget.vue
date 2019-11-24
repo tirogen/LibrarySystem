@@ -6,7 +6,11 @@
     </h2>
     <!-- Add GadGet Modal -->
     <div>
-      <b-modal id="modal-1" v-model="show" title="ADD GADGET">
+      <b-modal id="modal-1" v-model="show">
+        <template v-slot:modal-header>
+          <!-- Emulate built in modal header close button action -->
+          <h5>{{(action=="ADD") ? "ADD GADGET" : "UPDATE GADGET"}}</h5>
+        </template>
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
           <b-row class="mb-1 text-center" align-v="start">
             <b-col cols="1.7"></b-col>
@@ -60,8 +64,8 @@
       </b-modal>
     </div>
     <!-- End of add Gadget modal -->
-    <!-- FILTER FEATURE -->
 
+    <!-- FILTER FEATURE -->
     <b-row>
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -165,7 +169,8 @@
 
     <!-- End of Filter form -->
     <b-table
-      v-else show-empty
+      v-else
+      show-empty
       :items="gadgets"
       :fields="fields"
       striped
@@ -191,14 +196,14 @@
       <template v-slot:row-details="row">
         <b-card>
           <b-button
-            size="sm"
+            size="lg"
             v-b-modal.modal-1
             variant="primary"
             class="m-2"
             @click="fetchUpdatedData(row.item)"
           >Update</b-button>
           <b-button
-            size="sm"
+            size="lg"
             variant="danger"
             class="m-2"
             @click="showDeleteConfirm(row.item)"
@@ -206,7 +211,6 @@
         </b-card>
       </template>
     </b-table>
-    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 
@@ -379,13 +383,13 @@ export default {
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
-        var m = "0" + mo
+        var m = "0" + mo;
       } else {
-        m = mo
+        m = mo;
       }
       let dd = date.getDate();
       if (dd <= 9) {
-        var d = "0" + dd
+        var d = "0" + dd;
       } else {
         d = dd;
       }
@@ -506,8 +510,10 @@ export default {
   mounted() {
     this.fetchGadgets();
     this.fetchRooms();
-    for (roomType in this.roomTypes) {
-      this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
+    if (this.roomTypes != undefined) {
+      for (roomType in this.roomTypes) {
+        this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
+      }
     }
   },
   components: {
