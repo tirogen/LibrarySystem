@@ -66,11 +66,11 @@
       </template>
       <template v-slot:row-details="row">
         <b-card>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="sm" variant="primary" class="m-2" @click="CheckIn(row.item.id)">Check in</b-button>
-          <b-button v-else-if="row.item.TimeOut == '00:00:00'" size="sm" variant="success" class="m-2" @click="CheckOut(row.item.id)">Check out</b-button>
-          <b-button v-else disabled size="sm" class="m-2">Disabled</b-button>
-          <b-button v-if="row.item.TimeIn == '00:00:00'" size="sm" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.RoomTime_id)">Delete</b-button>
-          <b-button v-else disabled size="sm" variant="danger" class="m-2">Delete</b-button>
+          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="primary" class="m-2" @click="CheckIn(row.item.id)">Check in</b-button>
+          <b-button v-else-if="row.item.TimeOut == '00:00:00'" size="lg" variant="success" class="m-2" @click="CheckOut(row.item.id)">Check out</b-button>
+          <b-button v-else disabled size="lg" class="m-2">Disabled</b-button>
+          <b-button v-if="row.item.TimeIn == '00:00:00'" size="lg" variant="danger" class="m-2" @click="showDeleteConfirm(row.item.RoomTime_id)">Delete</b-button>
+          <b-button v-else disabled size="lg" variant="danger" class="m-2">Delete</b-button>
         </b-card>
       </template>
     </b-table>
