@@ -51,10 +51,10 @@
         </div>
       </div>
     </div>
-    <div>{{reservedTimeSlot}}</div>
-    <div>{{timePeriodOptions}}</div>
-    <div>you selected {{selectedRoom}}</div>
-    <div>you selected {{selectedTimePeriod}}</div>
+<!--    <div>{{reservedTimeSlot}}</div>-->
+<!--    <div>{{timePeriodOptions}}</div>-->
+<!--    <div>you selected {{selectedRoom}}</div>-->
+<!--    <div>you selected {{selectedTimePeriod}}</div>-->
     <div class="mt-5">
       <div class="row">
         <div class="col-sm-4">
