@@ -3,33 +3,35 @@
     <Borrow />
     <Book />
     <Gadget />
+    <LibrarianRoomType />
+    <LibrarianRoom />
     <LibrarianReserved />
     <LibrarianPunish />
-
   </div>
 </template>
 
 <script>
-import LibrarianReserved from './LibrarianReserved'
-import LibrarianPunish from './LibrarianPunish/LibrarianPunish'
-import Gadget from './LibrarianGadget'
-import Book from './LibrarianBook'
-import Borrow from './LibrarianManageBorrow'
-
+import LibrarianReserved from "./LibrarianReserved";
+import LibrarianPunish from "./LibrarianPunish/LibrarianPunish";
+import Gadget from "./LibrarianGadget";
+import Book from "./LibrarianBook";
+import Borrow from "./LibrarianManageBorrow";
+import LibrarianRoomType from "./LibrarianRoomType";
+import LibrarianRoom from "./LibrarianRoom";
 
 export default {
-  name: 'Librarian',
-  props: {
-
-  },
+  name: "Librarian",
+  props: {},
   components: {
     Borrow,
     LibrarianReserved,
     Gadget,
     LibrarianPunish,
-    Book
+    Book,
+    LibrarianRoomType,
+    LibrarianRoom
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -52,5 +54,4 @@ a {
 img {
   width: 250px;
 }
-
 </style>

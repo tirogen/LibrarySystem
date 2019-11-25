@@ -6,7 +6,11 @@
     </h2>
     <!-- Add GadGet Modal -->
     <div>
-      <b-modal id="modal-1" v-model="show" title="ADD GADGET">
+      <b-modal id="modal-1" v-model="show">
+        <template v-slot:modal-header>
+          <!-- Emulate built in modal header close button action -->
+          <h5>{{(action=="ADD") ? "ADD GADGET" : "UPDATE GADGET"}}</h5>
+        </template>
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
           <b-row class="mb-1 text-center" align-v="start">
             <b-col cols="1.7"></b-col>
@@ -53,15 +57,15 @@
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-            <b-button variant="primary" size="sm" class="float" @click="checkAction()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float" @click="checkAction()">OK</b-button>
             <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>
       </b-modal>
     </div>
     <!-- End of add Gadget modal -->
-    <!-- FILTER FEATURE -->
 
+    <!-- FILTER FEATURE -->
     <b-row>
       <b-col lg="6" class="my-1">
         <b-form-group
@@ -165,6 +169,8 @@
 
     <!-- End of Filter form -->
     <b-table
+      v-else
+      show-empty
       :items="gadgets"
       :fields="fields"
       striped
@@ -178,6 +184,7 @@
       :sort-direction="sortDirection"
       id="table-transition-example"
       :tbody-transition-props="transProps"
+      @filtered="onFiltered"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -189,14 +196,14 @@
       <template v-slot:row-details="row">
         <b-card>
           <b-button
-            size="sm"
+            size="lg"
             v-b-modal.modal-1
             variant="primary"
             class="m-2"
             @click="fetchUpdatedData(row.item)"
           >Update</b-button>
           <b-button
-            size="sm"
+            size="lg"
             variant="danger"
             class="m-2"
             @click="showDeleteConfirm(row.item)"
@@ -204,7 +211,6 @@
         </b-card>
       </template>
     </b-table>
-    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 
@@ -363,7 +369,8 @@ export default {
 
   methods: {
     onFiltered(filteredItems) {
-      totalRows = filteredItems.length;
+      // totalRows = filteredItems.length;
+      // this.$store.dispatch('room/setFilter',filteredItems.length)
       this.currentPage = 1;
     },
     checkAction: function() {
@@ -378,7 +385,7 @@ export default {
       if (mo <= 9) {
         var m = "0" + mo;
       } else {
-        m = mo;q
+        m = mo;
       }
       let dd = date.getDate();
       if (dd <= 9) {
@@ -424,7 +431,6 @@ export default {
         //UPDATE
         this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
         this.newGadget.Status = this.available;
-        this.newGadget;
       }
       // this.newGadget.id = this.
       // this.newGadget.PurchasedDate = this.date >> does in customFormat already bind
@@ -504,8 +510,10 @@ export default {
   mounted() {
     this.fetchGadgets();
     this.fetchRooms();
-    for (roomType in this.roomTypes) {
-      this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
+    if (this.roomTypes != undefined) {
+      for (roomType in this.roomTypes) {
+        this.allRoomNames.concat(Object.keys(this.rooms[roomType]));
+      }
     }
   },
   components: {

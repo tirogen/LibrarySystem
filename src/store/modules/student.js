@@ -16,6 +16,7 @@ const state = {
   reservationInProgress: false,
   reservationSuccess: false,
   reservationError: false,
+  studentList: []
 }
 
 const getters = {
@@ -73,6 +74,9 @@ const mutations = {
   },
   removeReservation(state, reservationId) {
     state.activeReservation = state.activeReservation.filter(reservation => reservation.reservationId !== reservationId)
+  },
+  setStudentList(state, studentList) {
+    state.studentList = studentList
   }
 }
 
@@ -138,7 +142,16 @@ const actions = {
     }).catch(err => {
       commit('error', err)
     })
-  }
+  },
+  fetchStudentList({commit}) {
+    commit('loading')
+    studentService.fetchStudentList().then(response => {
+      commit('setStudentList', response.data)
+      commit('success')
+    }).catch(err => {
+      commit('error', err)
+    })
+  },
 }
 
 function generateTimeSlots() {

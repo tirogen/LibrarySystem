@@ -38,12 +38,12 @@ const actions = {
       commit('error')
     })
   },
-  addBorrow({commit}, borrow) 
+  addBorrow({commit}, obj) 
   {
     commit('loading')
-    borrowService.deleteBorow(id).then(data => {
+    borrowService.addBorrow(obj).then(data => {
       //delte from local table
-      commit('deleteBorrow', data)
+      commit('setBorrow', data)
       commit('success')
     }).catch(err => {
       commit('error')
