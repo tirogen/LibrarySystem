@@ -12,8 +12,11 @@ export default {
       .then(response => response.data)
   },
   postBorrow(obj) {
-    console.log(obj)
+    // console.log(obj)
     return api.post('borrow/borrow/',obj)
       .then(response => response.data)
+  },
+  getCalculate(id) {
+    return api.post(`Punish/calculatePoint/${id}/`)
   }
 }

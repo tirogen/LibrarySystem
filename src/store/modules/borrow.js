@@ -6,13 +6,18 @@ import borrowService from '../../services/borrowService';
 
 const state = {
   ...cloneDeep(baseState),
-  borrows: []
+  borrows: [],
+  studentScore: {}
+  // { 
+  //   "Student_id" : "",
+  //   "TotalPoint" : ""
+  // }
 }
 
 const getters = {
   borrows: state => {
     return state.borrows
-  }
+  },
 }
 
 const actions = {
@@ -51,6 +56,16 @@ const actions = {
     }).catch(err => {
       commit('error')
     })
+  },
+  fetchStudentPoint({commit}, username) {
+    commit('loading')
+    borrowService.getCalculate(username).then(data=> {
+      commit('setStudentScore',data.data)
+      commit('success')
+    }).catch(err => {
+      commit('error')
+    })
+
   }
 
 }
@@ -69,6 +84,9 @@ const mutations = {
       }
       return true
     })
+  },
+  setStudentScore(state,data) {
+    state.studentScore = data
   }
 }
 
