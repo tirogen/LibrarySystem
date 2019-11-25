@@ -60,7 +60,6 @@ def manageBorrowBook(request, id=None):
         cursor.execute(statement, [id])
         return Response({'borrowID': id},status = status.HTTP_200_OK)
     elif request.method == 'POST':
-		
 		# if request.data["name"] == "":
         statement = ("INSERT INTO `api_booktime`(`Startdate`,`EndDate`,`RenewTimes`)\
 						VALUES (%s, %s, '2')")

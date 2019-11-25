@@ -7,7 +7,8 @@ import borrowService from '../../services/borrowService';
 const state = {
   ...cloneDeep(baseState),
   borrows: [],
-  studentScore: {}
+  studentScore: {},
+  borrowsBookID : [],
   // { 
   //   "Student_id" : "",
   //   "TotalPoint" : ""
@@ -38,7 +39,7 @@ const actions = {
     commit('loading')
     borrowService.deleteBorrow(id).then(data => {
       //delte from local table
-      alert(data)
+      // alert(data)
       commit('deleteBorrow', data)
       commit('success')
     }).catch(err => {
@@ -47,11 +48,12 @@ const actions = {
   },
   postBorrow({commit}, obj) 
   {
-    alert("add")
+    // alert("add")
     commit('loading')
     borrowService.postBorrow(obj).then(data => {
       //delte from local table
       commit('setBorrow', data)
+      state.borrowsBookID.push(obj["bookID"])
       commit('success')
     }).catch(err => {
       commit('error')
@@ -74,7 +76,7 @@ const mutations = {
   ...cloneDeep(baseMutations),
   setBorrow(state, borrows) {
     // transform books obj to books array 
-    console.log(borrows)
+    // console.log(borrows)
     state.borrows = borrows
   },
   deleteBorrow(state, data) {
@@ -86,6 +88,7 @@ const mutations = {
     })
   },
   setStudentScore(state,data) {
+    // console.log(data)
     state.studentScore = data
   }
 }

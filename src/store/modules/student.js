@@ -76,6 +76,8 @@ const mutations = {
     state.activeReservation = state.activeReservation.filter(reservation => reservation.reservationId !== reservationId)
   },
   setStudentList(state, studentList) {
+    // alert("set")
+    // console.log(studentList)
     state.studentList = studentList
   }
 }
@@ -146,6 +148,7 @@ const actions = {
   fetchStudentList({commit}) {
     commit('loading')
     studentService.fetchStudentList().then(response => {
+      // console.log(response.data)
       commit('setStudentList', response.data)
       commit('success')
     }).catch(err => {

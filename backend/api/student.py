@@ -5,22 +5,20 @@ from rest_framework import status
 
 
 def getStudentList():
-    statement = ("SELECT api_borrow.Student_id\
-                    FROM api_borrow\
-			        INNER JOIN api_student ON api_student.Username=api_borrow.Student_id")
+    statement = ("SELECT api_student.Username\
+                    FROM api_student")
     cursor = connection.cursor()
     cursor.execute(statement)
     response = []
     for row in cursor.fetchall():
-        obj = {
-            "studentID": row[0],
-        }
-        response.append(obj)
+        # obj = {
+        #     "studentID": row[0],
+        # }
+        response.append(row[0])
     return Response(response, status=status.HTTP_200_OK)
 
-
-@api_view(['GET', 'POST', 'DELETE'])
-def studentList(request, id=None):
+@api_view(['GET'])
+def studentList(request):
     if request.method == 'GET':
         return getStudentList()
 

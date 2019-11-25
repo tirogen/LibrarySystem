@@ -41,10 +41,8 @@ export default {
 
   getStudentName(studentId) {
     return api.get(`student/name/id/${studentId}/`)
-  }
-
-  //
-  // fetchStudentList(){
-  //   return api.get('student/')
-  // },
+  },
+  fetchStudentList(){
+    return api.get(`student/studentList`)
+  },
 }

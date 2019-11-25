@@ -40,7 +40,7 @@ def penalty(request, id=None):
         cursor.execute(statement, [request.data["Name"], request.data["Point"], request.data["id"]])
         return Response(request.data, status = status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def calculatePoint(request, id):
     statement = ("SELECT api_punish.Student_id ,SUM(api_penalty.Point) TotalPoint\
                     FROM api_punish\
@@ -50,10 +50,17 @@ def calculatePoint(request, id):
     cursor.execute(statement, [id])
     response = []
     for row in cursor.fetchall():
-        response.append({
-            "Student_id": row[0],
-            "TotalPoint": MAX_POINT - row[1]
-        })
+        # if(row[1] == )
+        if row[1] == None :
+            response.append({
+                "Student_id": id,
+                "TotalPoint": MAX_POINT
+            }) 
+        else :
+            response.append({
+                "Student_id": row[0],
+                "TotalPoint": MAX_POINT - row[1]
+            })
     return Response(response, status = status.HTTP_200_OK)
 
 @api_view(['POST', 'DELETE'])

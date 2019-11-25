@@ -11,7 +11,7 @@
           <b-row class="mb-1">
             <b-col cols="1.5" class>Username</b-col>
             <b-col>
-              <b-form-input id="name-input" v-model="username" required></b-form-input>
+              <b-form-select id="name-input" :options="studentList" v-model="username" required></b-form-select>
             </b-col>
           </b-row>
 
@@ -130,6 +130,8 @@
 
     <!-- End of Filter form -->
     <b-table
+      v-else
+      show-empty
       :items="borrows"
       :fields="fields"
       striped
@@ -198,7 +200,6 @@ export default {
       },
       bookName: "",
       fields: [
-        
         "bookID",
         { key: "bookISBN", sortable: true },
         { key: "bookName", sortable: true },
@@ -222,7 +223,7 @@ export default {
       },
       filterOption: [],
       IsTypeToSearch: true,
-      option : "enddate"
+      option: "enddate"
     };
   },
   computed: {
@@ -235,22 +236,24 @@ export default {
       },
       totalRows: state => state.borrow.borrows.length,
       isbnList: state => state.book.isbns,
-      bookdict: state => state.book.bookdict
+      bookdict: state => state.book.bookdict,
+      studentList: state => state.student.studentList,
+      studentScore: state => state.borrow.studentScore
     }),
     availableIDList: function() {
-        if(this.bookdict == {} || this.isISBNvalid == false) {
-          return []
-        }
-        const bookdict = this.bookdict
-        const bookisbn = this.bookisbn
-        const obj = bookdict[bookisbn]
-        const arr = obj["number"].filter((num)=> {
-          const index = bookdict[bookisbn]["number"].findIndex(mem => mem == num);
-          return bookdict[bookisbn]["status"][index] == "Available";
-        });
-        console.log(arr)
-        return arr
-      },
+      if (this.bookdict == {} || this.isISBNvalid == false) {
+        return [];
+      }
+      const bookdict = this.bookdict;
+      const bookisbn = this.bookisbn;
+      const obj = bookdict[bookisbn];
+      const arr = obj["number"].filter(num => {
+        const index = bookdict[bookisbn]["number"].findIndex(mem => mem == num);
+        return bookdict[bookisbn]["status"][index] == "Available";
+      });
+      // console.log(arr);
+      return arr;
+    },
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -271,20 +274,41 @@ export default {
       } else {
         this.disableBookid = true;
       }
+    },
+    username: function() {
+      if(this.studentList.includes(this.username)) {
+        this.$store.dispatch("borrow/fetchStudentPoint", this.username);
+      }
+    },
+    studentScore: function() {
+      // console.log(this.studentScore[0]);
+      if (this.studentScore[0]["Student_id"] == this.username) {
+        alert("check student score");
+        if (this.studentScore[0]["TotalPoint"] <= 0) {
+          alert("borrow restricted for this misbehaved student");
+          this.username = "";
+        } else {
+          alert("no blacklist")
+        }
+      }
     }
+    // ,
+    // bookdict: function() {
+    //   alert("2")
+    // }
   },
 
   methods: {
     addBorrow() {
       // already set endDate
-      this.option = "startdate"
-      this.obj.startDate = this.customFormatter(new Date())
-      this.option = "enddate"
-      this.obj.bookID = this.bookid
-      this.obj.studentID = this.username
-      this.obj.endDate = this.endDate
-      this.$store.dispatch('borrow/postBorrow',this.obj)
-      this.show = false
+      this.option = "startdate";
+      this.obj.startDate = this.customFormatter(new Date());
+      this.option = "enddate";
+      this.obj.bookID = this.bookid;
+      this.obj.studentID = this.username;
+      this.obj.endDate = this.endDate;
+      this.$store.dispatch("borrow/postBorrow", this.obj);
+      this.show = false;
     },
     customFormatter(date) {
       let mo = date.getMonth() + 1;
@@ -300,9 +324,9 @@ export default {
         d = dd;
       }
       let dateFormat = date.getFullYear() + "-" + m + "-" + d;
-      if(this.option == "enddate") {
+      if (this.option == "enddate") {
         this.endDate = dateFormat;
-      } 
+      }
       return dateFormat;
     },
     fetchBorrow: function() {
@@ -312,9 +336,13 @@ export default {
       // get data
       this.$store.dispatch("borrow/deleteBorrow", id);
     },
-    showBorrowModal : function() {
+    showBorrowModal: function() {
       // show and what are u gonna do
-      console.log("ss")
+      // console.log("ss");
+      this.$store.dispatch('book/fetchBooks')
+      this.username = ""
+      this.bookisbn = ""
+      this.bookid = ""
     },
     showDeleteConfirm(item) {
       this.$bvModal
@@ -332,7 +360,7 @@ export default {
         .then(value => {
           if (value) {
             // alert(Object.keys(item))
-            alert("delete")
+            // alert("delete");
             this.deleteBorrow(item.borrowID);
           } else {
             // asdasda
@@ -342,6 +370,8 @@ export default {
   },
   mounted() {
     this.fetchBorrow();
+    // this.$store.dispatch("borrow/fetchStudentPoint");
+    this.$store.dispatch("student/fetchStudentList");
   },
   components: {
     Datepicker

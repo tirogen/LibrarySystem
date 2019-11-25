@@ -17,6 +17,6 @@ export default {
       .then(response => response.data)
   },
   getCalculate(id) {
-    return api.post(`Punish/calculatePoint/${id}/`)
+    return api.post(`punish/calculatePoint/${id}/`)
   }
 }

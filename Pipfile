@@ -15,6 +15,10 @@ mysqlclient = "*"
 [dev-packages]
 pylint = "*"
 autopep8 = "*"
+black = "*"
 
 [requires]
 python_version = "3.7.5"
+
+[pipenv]
+allow_prereleases = true
