@@ -9,12 +9,12 @@ import {
 
 const state = {
   ...cloneDeep(baseState),
-  reservedRooms: []
+  roomTypes: []
 }
 
 const getters = {
-  reservedRooms: state => {
-    return state.reservedRooms
+  roomTypes: state => {
+    return state.roomTypes
   }
 }
 
@@ -27,14 +27,30 @@ const actions = {
         commit('success')
       })
   },
-  deleteRoomTypes({commit}, type) {
+  deleteRoomType({commit}, type) {
     commit('loading')
     librarianService.deleteRoomType(type)
       .then(response => {
         commit('deleteRoomType', {response,type})
         commit('success')
       })
-  }
+  },
+  updateRoomType({commit}, {OldType, Type, Capacity}) {
+    commit('loading')
+    librarianService.updateRoomType({OldType, Type, Capacity})
+      .then(response => {
+        commit('updateRoomType', response)
+        commit('success')
+      })
+  },
+  addRoomType({commit}, {Type, Capacity}) {
+    commit('loading')
+    librarianService.addRoomType({Type, Capacity})
+      .then(response => {
+        commit('addRoomType', response)
+        commit('success')
+      })
+  },
 }
 
 const mutations = {
@@ -45,6 +61,19 @@ const mutations = {
   deleteRoomType(state, {response, type}) {
     if (response == 200) {
       state.roomTypes = state.roomTypes.filter(roomType => roomType.Type != type)
+    }
+  },
+  updateRoomType(state, response) {
+    if (response.status == 200) {
+      let index = state.roomTypes.findIndex(roomType => {
+        return roomType.Type == response.data.OldType
+      })
+      state.roomTypes[index] = response.data
+    }
+  },
+  addRoomType(state, response) {
+    if (response.status == 200) {
+      state.roomTypes = response.data
     }
   }
 }

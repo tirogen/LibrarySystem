@@ -9,7 +9,7 @@ from django.db import connection
 
 @api_view(['GET'])
 def getBorrowingBook(request, id):
-    statement = ("SELECT api_book.Isbn_id, api_isbn.Name, api_booktime.StartDate, api_booktime.EndDate, api_booktime.RenewTimes\
+    statement = ("SELECT api_book.id, api_isbn.Name, api_booktime.StartDate, api_booktime.EndDate, api_booktime.RenewTimes\
                     FROM api_borrow\
                     INNER JOIN api_book ON api_borrow.Book_id=api_book.id\
                     INNER JOIN api_isbn ON api_book.Isbn_id=api_isbn.Isbn\
@@ -20,10 +20,17 @@ def getBorrowingBook(request, id):
     response = []
     for row in cursor.fetchall():
         response.append({
-            "ISBN": row[0],
+            "ID": row[0],
             "BookName": row[1],
             "BorrowDate": row[2],
             "ReturnDate": row[3],
             "RenewTime": row[4]
         })
     return Response(response, status = status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def renewTime(request):
+    statement = ("UPDATE `api_booktime` SET `EndDate`=%s, `RenewTimes`=%s WHERE id=%s")
+    cursor = connection.cursor()
+    cursor.execute(statement, [request.data["EndDate"], request.data["RenewTimes"], request.data["id"]])
+    return Response(request.data, status = status.HTTP_200_OK)
