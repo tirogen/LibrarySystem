@@ -11,7 +11,6 @@
       id="modal-renew-update"
       ref="modal"
       title="Renew Time"
-      @hidden="resetModal"
       @ok="handleOk()"
     >
     <p>Confirm renew time</p>
@@ -45,21 +44,19 @@ export default {
   },
   methods: {
     setModal(item) {
-      this.renew.EndDate = item.EndDate+7;
-      this.renew.RenewTimes = item.RenewTimes-1;
-      this.renew.id = item.id;
+      let date = new Date(item.ReturnDate);
+      date.setDate(date.getDate()+7);
+      this.renew.EndDate = date;
+      this.renew.RenewTimes = item.RenewTime-1;
+      this.renew.id = item.ID;
       this.$refs.modal.show();
     },
-    resetModal() {
-      this.renew.EndDate = '';
-      this.renew.RenewTimes = '';
-      this.renew.id = '';
-    },
     handleOk() {
-      if (this.renew.RenewTimes >= 0) {
+      if (this.renew.RenewTimes == 0) {
         alert("Can not renew time");
         return;
       }
+      console.log(this.renew)
       this.$store.dispatch("borrowing/updateRenewTime", this.renew);
       this.$nextTick(() => this.$refs.modal.hide());
     }

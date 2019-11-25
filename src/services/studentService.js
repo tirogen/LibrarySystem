@@ -37,7 +37,7 @@ export default {
   },
 
   updateRenewTime(data){
-    return api.put(`student/borrowing/renew`, data)
+    return api.put(`student/borrowing/renew/`, JSON.stringify(data))
   },
 
 }

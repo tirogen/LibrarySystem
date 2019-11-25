@@ -30,7 +30,8 @@ def getBorrowingBook(request, id):
 
 @api_view(['PUT'])
 def renewTime(request):
-    statement = ("UPDATE `api_booktime` SET `EndDate`=%s, `RenewTimes`=%s WHERE id=%s")
-    cursor = connection.cursor()
-    cursor.execute(statement, [request.data["EndDate"], request.data["RenewTimes"], request.data["id"]])
-    return Response(request.data, status = status.HTTP_200_OK)
+    if(request.method == 'PUT'):
+        statement = ("UPDATE `api_booktime` SET `EndDate`=%s, `RenewTimes`=%s WHERE id=%s")
+        cursor = connection.cursor()
+        cursor.execute(statement, [request.data["EndDate"], request.data["RenewTimes"], request.data["id"]])
+        return Response(request.data, status = status.HTTP_200_OK)
