@@ -23,7 +23,6 @@ export default {
     const date = moment().format('YYYY-MM-DD')
     return api.get(`student/reservation/active/${id}/${date}/`)
   },
-
   cancelReservation(reservationId){
     return api.delete(`student/reservation/${reservationId}`)
   },
