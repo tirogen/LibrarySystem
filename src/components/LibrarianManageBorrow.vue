@@ -25,7 +25,13 @@
           <b-row class="mb-1">
             <b-col cols="1.5" class>Book_ID</b-col>
             <b-col>
-              <b-form-input id="name-input" v-model="bookid" required></b-form-input>
+              <b-form-select
+                id="name-input"
+                :disabled="disableBookid"
+                v-model="bookid"
+                :options="availableIDList"
+                required
+              ></b-form-select>
             </b-col>
           </b-row>
 
@@ -48,7 +54,7 @@
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-            <b-button variant="primary" size="sm" class="float" @click="checkAction()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float" @click="addBorrow()">OK</b-button>
             <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>
@@ -84,8 +90,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-      </b-col>
+      <b-col lg="6" class="my-1"></b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -125,7 +130,7 @@
 
     <!-- End of Filter form -->
     <b-table
-      :items="borrow"
+      :items="borrows"
       :fields="fields"
       striped
       responsive="sm"
@@ -169,6 +174,18 @@ export default {
   props: {},
   data() {
     return {
+      isISBNvalid: false,
+      username: "",
+      bookisbn: "",
+      bookid: 0,
+      disableBookid: false,
+      endDate: "",
+      obj: {
+        startDate: "",
+        endDate: "",
+        bookID: "",
+        studentID: ""
+      },
       statuses: ["Available", "NotAvailable"],
       action: "ADD",
       en: en,
@@ -176,14 +193,16 @@ export default {
       cal: {
         date: new Date(),
         disabledDates: {
-         to: new Date()
+          to: new Date()
         }
       },
       bookName: "",
       fields: [
+        
+        "bookID",
         { key: "bookISBN", sortable: true },
-        { key: "bookname", sortable: true },
-        { key: "studentName", sortable: true },
+        { key: "bookName", sortable: true },
+        { key: "studentID", sortable: true },
         { key: "endDate", sortable: false },
         "Manage"
       ],
@@ -202,7 +221,8 @@ export default {
         name: "flip-list"
       },
       filterOption: [],
-      IsTypeToSearch: true
+      IsTypeToSearch: true,
+      option : "enddate"
     };
   },
   computed: {
@@ -210,15 +230,27 @@ export default {
       isLoading: state => state.borrow.isLoading,
       isSuccess: state => state.borrow.isSuccess,
       isError: state => state.borrow.isError,
-      borrow: state => {
-        // alert("vuex gadget update")
-        return state.borrow;
+      borrows: state => {
+        return state.borrow.borrows;
       },
-      borrow: state => state.borrow,
-      book: state => Object.keys(state.book.book),
-      studentID: state => state.studentID,
-      totalRows: state => state.borrow.length
+      totalRows: state => state.borrow.borrows.length,
+      isbnList: state => state.book.isbns,
+      bookdict: state => state.book.bookdict
     }),
+    availableIDList: function() {
+        if(this.bookdict == {} || this.isISBNvalid == false) {
+          return []
+        }
+        const bookdict = this.bookdict
+        const bookisbn = this.bookisbn
+        const obj = bookdict[bookisbn]
+        const arr = obj["number"].filter((num)=> {
+          const index = bookdict[bookisbn]["number"].findIndex(mem => mem == num);
+          return bookdict[bookisbn]["status"][index] == "Available";
+        });
+        console.log(arr)
+        return arr
+      },
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -232,21 +264,28 @@ export default {
     }
   },
   watch: {
-    book: function() {
-      if (this.action == "ADD") {
-        this.$store.dispatch("book/fetchbooks", this.book);
-      } else if (this.action == "UPDATE" && this.book != "") {
-        // check roomType in key
-        // this.rooms[]
-        // if (this.roomName == "") {
-        this.$store.dispatch("book/fetchbooks", this.book);
-        // }
+    bookisbn: function() {
+      this.isISBNvalid = this.isbnList.includes(this.bookisbn);
+      if (this.isISBNvalid) {
+        this.disableBookid = false;
+      } else {
+        this.disableBookid = true;
       }
-      //  this.roomNames = Object.keys(dat[this.roomType])
     }
   },
 
   methods: {
+    addBorrow() {
+      // already set endDate
+      this.option = "startdate"
+      this.obj.startDate = this.customFormatter(new Date())
+      this.option = "enddate"
+      this.obj.bookID = this.bookid
+      this.obj.studentID = this.username
+      this.obj.endDate = this.endDate
+      this.$store.dispatch('borrow/postBorrow',this.obj)
+      this.show = false
+    },
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
@@ -261,15 +300,21 @@ export default {
         d = dd;
       }
       let dateFormat = date.getFullYear() + "-" + m + "-" + d;
-      this.newBorrow.EndDate = dateFormat;
+      if(this.option == "enddate") {
+        this.endDate = dateFormat;
+      } 
       return dateFormat;
     },
-    fetchBorrow: function(){
+    fetchBorrow: function() {
       this.$store.dispatch("borrow/fetchBorrow");
     },
     deleteBorrow: function(id) {
       // get data
       this.$store.dispatch("borrow/deleteBorrow", id);
+    },
+    showBorrowModal : function() {
+      // show and what are u gonna do
+      console.log("ss")
     },
     showDeleteConfirm(item) {
       this.$bvModal
@@ -287,8 +332,8 @@ export default {
         .then(value => {
           if (value) {
             // alert(Object.keys(item))
-
-            this.deletedBorrow(item.ID);
+            alert("delete")
+            this.deleteBorrow(item.borrowID);
           } else {
             // asdasda
           }
@@ -296,7 +341,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchBorrow()
+    this.fetchBorrow();
   },
   components: {
     Datepicker

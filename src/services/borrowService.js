@@ -12,6 +12,7 @@ export default {
       .then(response => response.data)
   },
   postBorrow(obj) {
+    console.log(obj)
     return api.post('borrow/borrow/',obj)
       .then(response => response.data)
   }

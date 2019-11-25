@@ -13,6 +13,12 @@ const state = {
 const getters = {
   books: state => {
     return state.books
+  },
+  bookdict: state => {
+    return state.bookdict
+  },
+  isbns: state => {
+    return state.isbns
   }
 }
 

@@ -61,6 +61,9 @@ urlpatterns = [
 
     #borrow
     path('api/borrow/borrow/',manageBorrowBook),
+    path('api/borrow/borrow/<str:id>/', manageBorrowBook),
+
+
 
     #manageroom
     path('api/manageRoom/roomTypes/', roomType),
