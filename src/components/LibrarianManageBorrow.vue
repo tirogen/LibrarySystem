@@ -4,7 +4,7 @@
       Borrow Book
       <b-button v-b-modal.modal-borrow @click="showGadgetModal()">ADD BORROWING BOOK</b-button>
     </h2>
-    <!-- Add GadGet Modal -->
+    <!-- Add Borrow Modal -->
     <div>
       <b-modal id="modal-borrow" v-model="show" title="ADD BORROWING BOOK">
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
@@ -50,30 +50,10 @@
         </template>
       </b-modal>
     </div>
-    <!-- End of add Gadget modal -->
+    <!-- End of add Borrow modal -->
     <!-- FILTER FEATURE -->
 
     <b-row>
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="sortBySelect"
-          class="mb-0"
-        ></b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="initialSortSelect"
-          class="mb-0"
-        ></b-form-group>
-      </b-col>
-
       <b-col lg="6" class="my-1">
         <b-form-group
           label="Filter"
@@ -101,21 +81,6 @@
       </b-col>
 
       <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Filter On"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          description="Leave all unchecked to filter on all data"
-          class="mb-0"
-        >
-          <b-form-checkbox-group v-model="filterOn" class="mt-1">
-            <b-form-checkbox value="GadgetName">GadgetName</b-form-checkbox>
-            <b-form-checkbox value="Status">Status</b-form-checkbox>
-            <b-form-checkbox value="PurchasedDate">Purchased Date</b-form-checkbox>
-            <b-form-checkbox value="RoomName">Room Name</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
       </b-col>
 
       <b-col sm="5" md="6" class="my-1">
@@ -156,7 +121,7 @@
 
     <!-- End of Filter form -->
     <b-table
-      :items="gadgets"
+      :items="borrow"
       :fields="fields"
       striped
       responsive="sm"
@@ -208,45 +173,19 @@ export default {
       cal: {
         date: new Date(),
         disabledDates: {
-         to: new Date(), // Disable all dates up to specific date
-        //   from: new Date() // Disable all dates after specific date
-          // days: [6, 0], // Disable Saturday's and Sunday's
-          // daysOfMonth: [29, 30, 31], // Disable 29th, 30th and 31st of each month
-          // dates: [ // Disable an array of dates
-          //   new Date(2016, 9, 16),
-          //   new Date(2016, 9, 17),
-          //   new Date(2016, 9, 18)
-          // ],
-          // ranges: [{ // Disable dates in given ranges (exclusive).
-          //   from: new Date(2016, 11, 25),
-          //   to: new Date(2016, 11, 30)
-          // }, {
-          //   from: new Date(2017, 1, 12),
-          //   to: new Date(2017, 2, 25)
-          // }],
-          // a custom function that returns true if the date is disabled
-          // this can be used for wiring you own logic to disable a date if none
-          // of the above conditions serve your purpose
-          // this function should accept a date and return true if is disabled
-          // customPredictor: function(date) {
-          //   // disables the date if it is a multiple of 5
-          //   if(date.getDate() % 333 == 0){
-          //     return true
-          //   }
-          // }
+         to: new Date()
         }
       },
-      gadgetName: "",
+      bookName: "",
       fields: [
-        { key: "isbn", label:"ISBN",sortable: true },
-        { key: "author", sortable: false },
+        { key: "bookISBN", sortable: true },
         { key: "bookname", sortable: true },
+        { key: "studentName", sortable: true },
         "Manage"
       ],
       show: false,
       roomName: "",
       roomType: "",
-      available: null,
       nameOption: "",
       currentPage: 1,
       perPage: 5,
@@ -267,17 +206,17 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.room.isLoading,
-      isSuccess: state => state.room.isSuccess,
-      isError: state => state.room.isError,
-      gadgets: state => {
+      isLoading: state => state.borrow.isLoading,
+      isSuccess: state => state.borrow.isSuccess,
+      isError: state => state.borrow.isError,
+      borrow: state => {
         // alert("vuex gadget update")
-        return state.room.gadgets;
+        return state.borrow;
       },
-      rooms: state => state.room.rooms,
-      roomTypes: state => Object.keys(state.room.rooms),
-      roomNames: state => state.room.roomNames,
-      totalRows: state => state.room.gadgets.length
+      borrow: state => state.borrow,
+      book: state => Object.keys(state.book.book.ISBN),
+      username: state => state.username,
+      totalRows: state => state.borrow.length
     }),
     sortOptions() {
       // Create an options list from our fields
@@ -292,27 +231,17 @@ export default {
     }
   },
   watch: {
-    roomType: function() {
+    book: function() {
       if (this.action == "ADD") {
-        this.$store.dispatch("room/fetchRoomNames", this.roomType);
-      } else if (this.action == "UPDATE" && this.roomType != "") {
+        this.$store.dispatch("book/fetchbooks", this.book);
+      } else if (this.action == "UPDATE" && this.book != "") {
         // check roomType in key
         // this.rooms[]
         // if (this.roomName == "") {
-        this.$store.dispatch("room/fetchRoomNames", this.roomType);
+        this.$store.dispatch("book/fetchbooks", this.book);
         // }
       }
       //  this.roomNames = Object.keys(dat[this.roomType])
-    },
-    roomName: function() {
-      if (this.action == "ADD") {
-        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
-      } else if (this.action == "UPDATE") {
-        if (this.roomName == "" && this.roomType != "") {
-          // this.$store.dispatch("room/fetchRoomNames", this.roomType);
-          this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
-        }
-      }
     }
   },
 
@@ -331,7 +260,7 @@ export default {
         d = dd;
       }
       let dateFormat = date.getFullYear() + "-" + m + "-" + d;
-      this.newGadget.PurchasedDate = dateFormat;
+      this.newBorrow.EndDate = dateFormat;
       return dateFormat;
     },
     fetchBorrow: function(){
@@ -357,9 +286,8 @@ export default {
         .then(value => {
           if (value) {
             // alert(Object.keys(item))
-            // alert(item.GadgetID)
 
-            this.deletedGadget(item.GadgetID);
+            this.deletedBorrow(item.ID);
           } else {
             // asdasda
           }

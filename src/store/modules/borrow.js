@@ -46,7 +46,6 @@ const mutations = {
   setBorrow(state, borrows) {
     // transform books obj to books array 
       state.borrows = borrows
-    )
   },
   deleteBorrow(state, data) {
     state.borrows = state.borrows.filter((borrow) => {

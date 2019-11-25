@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from django.db import connection
 from rest_framework import status
 
-
 def getBorrow():
     statement = ("SELECT * FROM `api_borrow`AS i\
 						INNER JOIN `api_booktime` AS b ON b.id=i.BookTime_id")
