@@ -4,29 +4,26 @@
       Borrowing Book
     </h2>
     <b-tabs>
-      <b-tab title="HI">
+      <b-tab title="Borrowing">
+        <BorrowingInfo></BorrowingInfo>
       </b-tab>
     </b-tabs>
   </div>
 </template>
-
 <script>
 import {mapState} from 'vuex'
+import BorrowingInfo from './BorrowingInfo.vue'
 export default {
   name: 'BorrowingList',
   props: {
 
   },
   components: {
-    
+    BorrowingInfo,
   },
   data() {
     return {
-      fields: ['id', 'Name', 'Point', 'Manage'],
-      penalty: {
-        'Name': '',
-        'Point': '',
-      }
+      fields: ['ID', 'BookName', 'BorrowDate', 'ReturnDate', 'RenewTime'],
 
     }
   },
@@ -35,10 +32,10 @@ export default {
     //end of add modal
   },
   computed: mapState({
-    //
+    borrows: state => state.borrowing.borrows
   }),
   mounted(){
-    //
+    this.$store.dispatch('borrowing/getBorrow','student1')
   }
 }
 

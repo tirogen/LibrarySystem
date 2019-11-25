@@ -209,8 +209,9 @@
     </div>
 
     <!-- End of Filter form -->
-
     <b-table
+      v-else
+      show-empty
       :items="books"
       :fields="fields"
       striped
@@ -222,6 +223,7 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
+      @filtered="onFiltered"
     >
       <template v-slot:cell(Manage)="row">
         <b-button
@@ -250,7 +252,6 @@
         </b-card>
       </template>
     </b-table>
-    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 
@@ -337,8 +338,11 @@ export default {
 
   methods: {
     onFiltered(filteredItems) {
-      this.$store.dispatch('book/setTotalRow',)
-      totalRows = filteredItems.length;
+      // this.$store.dispatch('book/setTotalRow',)
+      // totalRows = filteredItems.length;
+      // if(filterItems.length < this.perPage) {
+
+      // }
       this.currentPage = 1;
     },
     showDeleteConfirm(id) {

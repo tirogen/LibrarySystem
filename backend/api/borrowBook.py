@@ -4,12 +4,10 @@ from django.db import connection
 from rest_framework import status
 
 def getBorrow():
-    statement = ("SELECT * FROM `api_borrow`AS i\
-						INNER JOIN `api_booktime` AS b ON b.id=i.BookTime_id")
     statement = ("SELECT api_borrow.Student_id, api_student.FName, api_student.Lname, \
 				    api_book.Isbn_id,api_book.id,\
-					api_isbn.Name,api_isbn.Category,api_isbn.Author\
-					api_booktime.StartDate, api_booktime.EndDate\
+					api_isbn.Name,api_isbn.Category,api_isbn.Author,\
+					api_booktime.StartDate,api_booktime.EndDate,\
 					api_borrow.id\
                     FROM api_borrow\
                     INNER JOIN api_book ON api_borrow.Book_id=api_book.id\
@@ -56,13 +54,29 @@ def manageBorrowBook(request, id=None):
         return getBorrow()
 
     elif request.method == 'DELETE':
+		# id >> borrowID
         cursor = connection.cursor()
-        statement = ("SELECT BookTime_id FROM `api_borrow` WHERE id=%s")
-        cursor.execute(statement, [id])
-        bookTimeID = cursor.fetchall()[0][0]
         statement = ("DELETE FROM `api_borrow` WHERE id=%s")
         cursor.execute(statement, [id])
-        statement = ("SELECT * FROM `api_booktime` WHERE id=%s")
-        cursor.execute(statement, [bookTimeID])
-        # row = cursor.fetchall()
-        # iflen(row) == 0):
+        return Response({'borrowID': id},status = status.HTTP_200_OK)
+    elif request.method == 'POST':
+		
+		# if request.data["name"] == "":
+        statement = ("INSERT INTO `api_booktime`(`Startdate`,`EndDate`,'RenewTimes')\
+						VALUES (%s, %s, 2)")
+        cursor = connection.cursor()
+        cursor.execute(statement, (request.data["startDate"],request.data["endDate"]))
+        bookTimeID = cursor.lastrowid
+        statement = ("INSERT INTO `api_borrow` (`Book_id`,`BookTime_id`,`Student_id`)\
+						VALUES (%s,%s,%s)")
+        cursor.execute(statement,(request.data["bookID"],int(bookTimeID),request["studentID"]))
+
+		# need to get id from this api_booktime id
+
+		# else:
+		# 	statement = ("INSERT INTO `api_isbn`(`Isbn`, `Category`, `Author`, `Name`) VALUES (%s, %s, %s, %s);")
+		# 	cursor = connection.cursor()
+		# 	cursor.execute(statement, [request.data["isbn"], request.data["category"], request.data["author"], request.data["name"]])
+		# 	statement = ("INSERT INTO `api_book`(`Status`,`Isbn_id`) VALUES ('Available', %s);")
+		# 	cursor.execute(statement, [request.data["isbn"]])
+        return getBorrow()

@@ -152,7 +152,6 @@
         </b-card>
       </template>
     </b-table>
-    <b-button block variant="primary">See all</b-button>
   </div>
 </template>
 

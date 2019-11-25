@@ -37,6 +37,17 @@ const actions = {
     }).catch(err => {
       commit('error')
     })
+  },
+  addBorrow({commit}, obj) 
+  {
+    commit('loading')
+    borrowService.addBorrow(obj).then(data => {
+      //delte from local table
+      commit('setBorrow', data)
+      commit('success')
+    }).catch(err => {
+      commit('error')
+    })
   }
 
 }
@@ -49,14 +60,8 @@ const mutations = {
   },
   deleteBorrow(state, data) {
     state.borrows = state.borrows.filter((borrow) => {
-      if(borrow.isbn == data["isbn"]) {
-        book.number = book.number.filter((id)=> id!=data["id"])
-        book.num = book.num-1
-        if(book.number.length == 0) {
-          return false
-        } else {
-          return true
-        }
+      if(borrow.borrowID == data["borrowID"]) {
+        return false
       }
       return true
     })

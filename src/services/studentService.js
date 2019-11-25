@@ -34,6 +34,10 @@ export default {
 
   fetchBorrowingBook(id){
     return api.get(`student/borrowing/${id}/`)
-  }
+  },
+
+  updateRenewTime(data){
+    return api.put(`student/borrowing/renew`, data)
+  },
 
 }
