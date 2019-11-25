@@ -46,20 +46,20 @@ export default {
     setModal(item) {
       let date = new Date(item.ReturnDate);
       date.setDate(date.getDate()+7);
-      this.renew.EndDate = date;
+      let month = date.getUTCMonth()+1;
+      this.renew.EndDate = date.getFullYear()+'-'+month+'-'+date.getDate();
       this.renew.RenewTimes = item.RenewTime-1;
       this.renew.id = item.ID;
       this.$refs.modal.show();
     },
     handleOk() {
-      if (this.renew.RenewTimes == 0) {
+      if (this.renew.RenewTimes < 0) {
         alert("Can not renew time");
         return;
       }
-      console.log(this.renew)
       this.$store.dispatch("borrowing/updateRenewTime", this.renew);
       this.$nextTick(() => this.$refs.modal.hide());
-    }
+    },
     //end of update modal
   },
   computed: mapState({

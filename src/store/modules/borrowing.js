@@ -29,10 +29,10 @@ const state = {
       },
       updateRenewTime(state, response){
         if(response.status == 200){
-          let index = state.borrows.findIndex(borrow => borrow.id == response.data.id);
-          state.borrows[index].EndDate = response.data.EndDate;
-          state.borrows[index].RenewTimes = response.data.RenewTimes;
-          state.borrows[index].id = response.data.id;
+          let index = state.borrows.findIndex(borrow => borrow.ID == response.data.id);
+          state.borrows[index].ReturnDate = response.data.EndDate;
+          state.borrows[index].RenewTime = response.data.RenewTimes;
+          state.borrows[index].ID = response.data.id;
         }
       },
 
