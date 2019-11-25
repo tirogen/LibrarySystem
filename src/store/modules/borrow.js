@@ -10,8 +10,8 @@ const state = {
 }
 
 const getters = {
-  books: state => {
-    return state.books
+  borrows: state => {
+    return state.borrows
   }
 }
 

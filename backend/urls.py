@@ -60,7 +60,7 @@ urlpatterns = [
     path('api/student/borrowing/renew/', renewTime),
 
     #borrow
-    path('api/borrow/borrow/',manageBorrowBook)
+    path('api/borrow/borrow/',manageBorrowBook),
 
     #manageroom
     path('api/manageRoom/roomTypes/', roomType),

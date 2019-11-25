@@ -2,31 +2,35 @@
   <div class="jumbotron bg-overlay">
     <h2>
       Borrow Book
-      <b-button v-b-modal.modal-borrow @click="showGadgetModal()">ADD BORROWING BOOK</b-button>
+      <b-button v-b-modal.modal-borrow @click="showBorrowModal()">ADD BORROWING BOOK</b-button>
     </h2>
     <!-- Add Borrow Modal -->
     <div>
       <b-modal id="modal-borrow" v-model="show" title="ADD BORROWING BOOK">
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
-          <b-row class="mb-1 text-center" align-v="start">
-            <b-col cols="1.7"></b-col>
-            <b-col>RoomType</b-col>
-            <b-col>RoomName</b-col>
-          </b-row>
           <b-row class="mb-1">
-            <b-col cols="1.5" class>Gadget Name</b-col>
+            <b-col cols="1.5" class>Username</b-col>
             <b-col>
-              <b-form-input id="name-input" v-model="gadgetName" required></b-form-input>
+              <b-form-input id="name-input" v-model="username" required></b-form-input>
             </b-col>
           </b-row>
-          <b-row v-if="this.action=='UPDATE'">
-            <b-col cols="1.5" class>Available Status</b-col>
+
+          <b-row class="mb-1">
+            <b-col cols="1.5" class>Book_ISBN</b-col>
             <b-col>
-              <b-form-select v-model="available" :options="statuses"></b-form-select>
+              <b-form-input id="name-input" v-model="bookisbn" required></b-form-input>
             </b-col>
           </b-row>
+
           <b-row class="mb-1">
-            <b-col cols="4.5" class>Purchase Date</b-col>
+            <b-col cols="1.5" class>Book_ID</b-col>
+            <b-col>
+              <b-form-input id="name-input" v-model="bookid" required></b-form-input>
+            </b-col>
+          </b-row>
+
+          <b-row class="mb-1">
+            <b-col cols="4.5" class>EndDate</b-col>
             <b-col class="text-center">
               <datepicker
                 :format="customFormatter"
@@ -38,7 +42,7 @@
             </b-col>
           </b-row>
           <b-row align-h="start">
-            <b-col>CLICK BOX TO CHANGE PURCHASE DATE</b-col>
+            <b-col>CLICK BOX TO CHANGE END DATE</b-col>
           </b-row>
         </b-container>
         <template v-slot:modal-footer>
@@ -180,11 +184,10 @@ export default {
         { key: "bookISBN", sortable: true },
         { key: "bookname", sortable: true },
         { key: "studentName", sortable: true },
+        { key: "endDate", sortable: false },
         "Manage"
       ],
       show: false,
-      roomName: "",
-      roomType: "",
       nameOption: "",
       currentPage: 1,
       perPage: 5,
@@ -199,7 +202,6 @@ export default {
         name: "flip-list"
       },
       filterOption: [],
-      allRoomNames: [],
       IsTypeToSearch: true
     };
   },
@@ -213,8 +215,8 @@ export default {
         return state.borrow;
       },
       borrow: state => state.borrow,
-      book: state => Object.keys(state.book.book.ISBN),
-      username: state => state.username,
+      book: state => Object.keys(state.book.book),
+      studentID: state => state.studentID,
       totalRows: state => state.borrow.length
     }),
     sortOptions() {
