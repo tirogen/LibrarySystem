@@ -58,7 +58,7 @@ urlpatterns = [
     path('api/student/reservation/<str:reservationId>/', cancelReservation),
     path('api/student/borrowing/renew/', renewTime),
     path('api/student/borrowing/<str:id>/', getBorrowingBook),
-    path('api/student/id/<str:studentId>/name', getStudentNameById),
+    path('api/student/name/id/<str:studentId>/', getStudentNameById),
 
     path('api/student/studentList',studentList),
     #borrow

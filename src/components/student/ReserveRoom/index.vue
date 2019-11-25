@@ -81,50 +81,50 @@
       <h6 class="mb-2"><strong>Require Student ID</strong></h6>
       <div class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student1.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student1.id" :onChange="setStudentNameOnInput(1)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student1 {{student1.id}}
+          {{student1.name}}
         </div>
       </div>
       <div v-if="selectedType !== 'The Box'" class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student2.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student2.id" :onChange="setStudentNameOnInput(2)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student2 {{student2.id}}
+          {{student2.name}}
         </div>
       </div>
       <div v-if="selectedType !== 'The Box'" class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student3.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student3.id" :onChange="setStudentNameOnInput(3)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student3 {{student3.id}}
+          {{student3.name}}
         </div>
       </div>
       <div v-if="selectedType !== 'The Box'" class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student4.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student4.id" :onChange="setStudentNameOnInput(4)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student4 {{student4.id}}
+          {{student4.name}}
         </div>
       </div>
       <div v-if="selectedType === 'Seminar Room'" class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student5.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student5.id" :onChange="setStudentNameOnInput(5)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student5 {{student5.id}}
+          {{student5.name}}
         </div>
       </div>
       <div v-if="selectedType === 'Seminar Room'" class="row">
         <div class="mr-3 student-id-input">
-          <b-form-input v-model="student6.id" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="student6.id" :onChange="setStudentNameOnInput(6)" placeholder="Enter your name"></b-form-input>
         </div>
         <div class="student-name">
-          Name for student6 {{student6.id}}
+          {{student6.name}}
         </div>
       </div>
       <b-button pill v-b-modal.reserve-room-confirm-modal variant="outline-secondary" class="my-3" :disabled="!validateFormSubmit()">
@@ -139,6 +139,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
+import studentService from '../../../services/studentService'
 
 export default {
   components: {},
@@ -174,6 +175,7 @@ export default {
   mounted() {
     this.$store.dispatch('student/initializeState')
     this.$store.dispatch('student/fetchRoomTypes')
+    this.setStudentNameOnInput(1)
   },
   computed: {
     ...mapState({
@@ -259,6 +261,25 @@ export default {
       })
       const periods = this.generateTimePeriods(this.selectedDuration / 30, timeSlots)
       return periods
+    },
+    async setStudentNameOnInput(inputNumber) {
+      const inputKey = `student${inputNumber}`
+      const studentId = this[inputKey].id
+      if (studentId.length === 8 && studentId.slice(0, 7) === 'student') {
+        let result = ''
+        await studentService.getStudentName(studentId).then(response => {
+          if (response.status === 204) result = 'Not Found'
+          else {
+            const data = response.data[0]
+            result = `${data.Firstname} ${data.Lastname}`
+          }
+        }).catch(err => {
+          console.error(err)
+        })
+        this[inputKey].name = result
+      } else {
+        this[inputKey].name = 'Invalid ID'
+      }
     },
     generateTimePeriods(slotNeeds, timeSlots) {
       const periods = []

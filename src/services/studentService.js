@@ -39,8 +39,12 @@ export default {
     return api.put(`student/borrowing/renew/`, data)
   },
 
-  fetchStudentList(){
-    return api.get('student/')
+  getStudentName(studentId) {
+    return api.get(`student/name/id/${studentId}/`)
   }
 
+  //
+  // fetchStudentList(){
+  //   return api.get('student/')
+  // },
 }

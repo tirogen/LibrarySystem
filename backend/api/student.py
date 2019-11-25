@@ -38,8 +38,8 @@ def getStudentNameById(request, studentId):
         else:
             for record in records:
                 response.append({
-                    'FirstName': record[0],
-                    'LastName' : record[1]
+                    'Firstname': record[0],
+                    'Lastname' : record[1]
                 })
             return Response(response, status=status.HTTP_200_OK)
     except Error:
