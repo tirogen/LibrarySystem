@@ -13,8 +13,8 @@ from .api.reservedRoom import getReservedRooms, manageRoom, deleteReservedRoom, 
 from .api.Gadget import manageGadget
 from .api.book import book
 from .api.room import roomTypes, getAvailableTimeSlot, getRoomNameByType, bookForRoom, getActiveReservation, cancelReservation
-from .api.borrow import getBorrowingBook, renewTime
 from .api.borrowBook import manageBorrowBook
+from .api.borrow import getBorrowingBook, renewTime
 from .api.manageRoom import roomType, room, getAllLibrarians
 from .api.student import studentList, getStudentNameById
 router = routers.DefaultRouter()
@@ -63,6 +63,9 @@ urlpatterns = [
     path('api/student/studentList',studentList),
     #borrow
     path('api/borrow/borrow/',manageBorrowBook),
+    path('api/borrow/borrow/<str:id>/', manageBorrowBook),
+
+
 
     #manageroom
     path('api/manageRoom/roomTypes/', roomType),

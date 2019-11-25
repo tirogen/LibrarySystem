@@ -10,8 +10,8 @@ const state = {
 }
 
 const getters = {
-  books: state => {
-    return state.books
+  borrows: state => {
+    return state.borrows
   }
 }
 
@@ -19,9 +19,10 @@ const actions = {
   fetchBorrow({ commit }) {
     commit('loading')
     borrowService.fetchBorrow()
-      .then(books => {
-        // alert("got book back")
-        commit('setBorrow', books)
+      .then(borrows => {
+        //alert("got borrow back")
+        // console.log(borrows)
+        commit('setBorrow', borrows)
         commit('success')
       })
       .catch(err => {
@@ -30,18 +31,20 @@ const actions = {
   },
   deleteBorrow({ commit }, id) {
     commit('loading')
-    borrowService.deleteBorow(id).then(data => {
+    borrowService.deleteBorrow(id).then(data => {
       //delte from local table
+      alert(data)
       commit('deleteBorrow', data)
       commit('success')
     }).catch(err => {
       commit('error')
     })
   },
-  addBorrow({commit}, obj) 
+  postBorrow({commit}, obj) 
   {
+    alert("add")
     commit('loading')
-    borrowService.addBorrow(obj).then(data => {
+    borrowService.postBorrow(obj).then(data => {
       //delte from local table
       commit('setBorrow', data)
       commit('success')
@@ -56,7 +59,8 @@ const mutations = {
   ...cloneDeep(baseMutations),
   setBorrow(state, borrows) {
     // transform books obj to books array 
-      state.borrows = borrows
+    console.log(borrows)
+    state.borrows = borrows
   },
   deleteBorrow(state, data) {
     state.borrows = state.borrows.filter((borrow) => {

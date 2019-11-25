@@ -2,31 +2,41 @@
   <div class="jumbotron bg-overlay">
     <h2>
       Borrow Book
-      <b-button v-b-modal.modal-borrow @click="showGadgetModal()">ADD BORROWING BOOK</b-button>
+      <b-button v-b-modal.modal-borrow @click="showBorrowModal()">ADD BORROWING BOOK</b-button>
     </h2>
-    <!-- Add GadGet Modal -->
+    <!-- Add Borrow Modal -->
     <div>
       <b-modal id="modal-borrow" v-model="show" title="ADD BORROWING BOOK">
         <b-container fluid class="bv-example-row bv-example-row-flex-cols">
-          <b-row class="mb-1 text-center" align-v="start">
-            <b-col cols="1.7"></b-col>
-            <b-col>RoomType</b-col>
-            <b-col>RoomName</b-col>
-          </b-row>
           <b-row class="mb-1">
-            <b-col cols="1.5" class>Gadget Name</b-col>
+            <b-col cols="1.5" class>Username</b-col>
             <b-col>
-              <b-form-input id="name-input" v-model="gadgetName" required></b-form-input>
+              <b-form-input id="name-input" v-model="username" required></b-form-input>
             </b-col>
           </b-row>
-          <b-row v-if="this.action=='UPDATE'">
-            <b-col cols="1.5" class>Available Status</b-col>
+
+          <b-row class="mb-1">
+            <b-col cols="1.5" class>Book_ISBN</b-col>
             <b-col>
-              <b-form-select v-model="available" :options="statuses"></b-form-select>
+              <b-form-input id="name-input" v-model="bookisbn" required></b-form-input>
             </b-col>
           </b-row>
+
           <b-row class="mb-1">
-            <b-col cols="4.5" class>Purchase Date</b-col>
+            <b-col cols="1.5" class>Book_ID</b-col>
+            <b-col>
+              <b-form-select
+                id="name-input"
+                :disabled="disableBookid"
+                v-model="bookid"
+                :options="availableIDList"
+                required
+              ></b-form-select>
+            </b-col>
+          </b-row>
+
+          <b-row class="mb-1">
+            <b-col cols="4.5" class>EndDate</b-col>
             <b-col class="text-center">
               <datepicker
                 :format="customFormatter"
@@ -38,42 +48,22 @@
             </b-col>
           </b-row>
           <b-row align-h="start">
-            <b-col>CLICK BOX TO CHANGE PURCHASE DATE</b-col>
+            <b-col>CLICK BOX TO CHANGE END DATE</b-col>
           </b-row>
         </b-container>
         <template v-slot:modal-footer>
           <div class="w-100">
             <!-- <p class="float-left">Submit to add gadget</p> -->
-            <b-button variant="primary" size="sm" class="float" @click="checkAction()">CONFIRM</b-button>
+            <b-button variant="primary" size="sm" class="float" @click="addBorrow()">OK</b-button>
             <b-button variant="primary" size="sm" class="float-right" @click="show=false">CANCEL</b-button>
           </div>
         </template>
       </b-modal>
     </div>
-    <!-- End of add Gadget modal -->
+    <!-- End of add Borrow modal -->
     <!-- FILTER FEATURE -->
 
     <b-row>
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="sortBySelect"
-          class="mb-0"
-        ></b-form-group>
-      </b-col>
-
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="initialSortSelect"
-          class="mb-0"
-        ></b-form-group>
-      </b-col>
-
       <b-col lg="6" class="my-1">
         <b-form-group
           label="Filter"
@@ -100,23 +90,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col lg="6" class="my-1">
-        <b-form-group
-          label="Filter On"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          description="Leave all unchecked to filter on all data"
-          class="mb-0"
-        >
-          <b-form-checkbox-group v-model="filterOn" class="mt-1">
-            <b-form-checkbox value="GadgetName">GadgetName</b-form-checkbox>
-            <b-form-checkbox value="Status">Status</b-form-checkbox>
-            <b-form-checkbox value="PurchasedDate">Purchased Date</b-form-checkbox>
-            <b-form-checkbox value="RoomName">Room Name</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-      </b-col>
+      <b-col lg="6" class="my-1"></b-col>
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
@@ -156,7 +130,7 @@
 
     <!-- End of Filter form -->
     <b-table
-      :items="gadgets"
+      :items="borrows"
       :fields="fields"
       striped
       responsive="sm"
@@ -200,6 +174,18 @@ export default {
   props: {},
   data() {
     return {
+      isISBNvalid: false,
+      username: "",
+      bookisbn: "",
+      bookid: 0,
+      disableBookid: false,
+      endDate: "",
+      obj: {
+        startDate: "",
+        endDate: "",
+        bookID: "",
+        studentID: ""
+      },
       statuses: ["Available", "NotAvailable"],
       action: "ADD",
       en: en,
@@ -207,45 +193,20 @@ export default {
       cal: {
         date: new Date(),
         disabledDates: {
-         to: new Date(), // Disable all dates up to specific date
-        //   from: new Date() // Disable all dates after specific date
-          // days: [6, 0], // Disable Saturday's and Sunday's
-          // daysOfMonth: [29, 30, 31], // Disable 29th, 30th and 31st of each month
-          // dates: [ // Disable an array of dates
-          //   new Date(2016, 9, 16),
-          //   new Date(2016, 9, 17),
-          //   new Date(2016, 9, 18)
-          // ],
-          // ranges: [{ // Disable dates in given ranges (exclusive).
-          //   from: new Date(2016, 11, 25),
-          //   to: new Date(2016, 11, 30)
-          // }, {
-          //   from: new Date(2017, 1, 12),
-          //   to: new Date(2017, 2, 25)
-          // }],
-          // a custom function that returns true if the date is disabled
-          // this can be used for wiring you own logic to disable a date if none
-          // of the above conditions serve your purpose
-          // this function should accept a date and return true if is disabled
-          // customPredictor: function(date) {
-          //   // disables the date if it is a multiple of 5
-          //   if(date.getDate() % 333 == 0){
-          //     return true
-          //   }
-          // }
+          to: new Date()
         }
       },
-      gadgetName: "",
+      bookName: "",
       fields: [
-        { key: "isbn", label:"ISBN",sortable: true },
-        { key: "author", sortable: false },
-        { key: "bookname", sortable: true },
+        
+        "bookID",
+        { key: "bookISBN", sortable: true },
+        { key: "bookName", sortable: true },
+        { key: "studentID", sortable: true },
+        { key: "endDate", sortable: false },
         "Manage"
       ],
       show: false,
-      roomName: "",
-      roomType: "",
-      available: null,
       nameOption: "",
       currentPage: 1,
       perPage: 5,
@@ -260,24 +221,36 @@ export default {
         name: "flip-list"
       },
       filterOption: [],
-      allRoomNames: [],
-      IsTypeToSearch: true
+      IsTypeToSearch: true,
+      option : "enddate"
     };
   },
   computed: {
     ...mapState({
-      isLoading: state => state.room.isLoading,
-      isSuccess: state => state.room.isSuccess,
-      isError: state => state.room.isError,
-      gadgets: state => {
-        // alert("vuex gadget update")
-        return state.room.gadgets;
+      isLoading: state => state.borrow.isLoading,
+      isSuccess: state => state.borrow.isSuccess,
+      isError: state => state.borrow.isError,
+      borrows: state => {
+        return state.borrow.borrows;
       },
-      rooms: state => state.room.rooms,
-      roomTypes: state => Object.keys(state.room.rooms),
-      roomNames: state => state.room.roomNames,
-      totalRows: state => state.room.gadgets.length
+      totalRows: state => state.borrow.borrows.length,
+      isbnList: state => state.book.isbns,
+      bookdict: state => state.book.bookdict
     }),
+    availableIDList: function() {
+        if(this.bookdict == {} || this.isISBNvalid == false) {
+          return []
+        }
+        const bookdict = this.bookdict
+        const bookisbn = this.bookisbn
+        const obj = bookdict[bookisbn]
+        const arr = obj["number"].filter((num)=> {
+          const index = bookdict[bookisbn]["number"].findIndex(mem => mem == num);
+          return bookdict[bookisbn]["status"][index] == "Available";
+        });
+        console.log(arr)
+        return arr
+      },
     sortOptions() {
       // Create an options list from our fields
       return this.fields
@@ -291,31 +264,28 @@ export default {
     }
   },
   watch: {
-    roomType: function() {
-      if (this.action == "ADD") {
-        this.$store.dispatch("room/fetchRoomNames", this.roomType);
-      } else if (this.action == "UPDATE" && this.roomType != "") {
-        // check roomType in key
-        // this.rooms[]
-        // if (this.roomName == "") {
-        this.$store.dispatch("room/fetchRoomNames", this.roomType);
-        // }
-      }
-      //  this.roomNames = Object.keys(dat[this.roomType])
-    },
-    roomName: function() {
-      if (this.action == "ADD") {
-        this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
-      } else if (this.action == "UPDATE") {
-        if (this.roomName == "" && this.roomType != "") {
-          // this.$store.dispatch("room/fetchRoomNames", this.roomType);
-          this.newGadget.Room_id = this.rooms[this.roomType][this.roomName];
-        }
+    bookisbn: function() {
+      this.isISBNvalid = this.isbnList.includes(this.bookisbn);
+      if (this.isISBNvalid) {
+        this.disableBookid = false;
+      } else {
+        this.disableBookid = true;
       }
     }
   },
 
   methods: {
+    addBorrow() {
+      // already set endDate
+      this.option = "startdate"
+      this.obj.startDate = this.customFormatter(new Date())
+      this.option = "enddate"
+      this.obj.bookID = this.bookid
+      this.obj.studentID = this.username
+      this.obj.endDate = this.endDate
+      this.$store.dispatch('borrow/postBorrow',this.obj)
+      this.show = false
+    },
     customFormatter(date) {
       let mo = date.getMonth() + 1;
       if (mo <= 9) {
@@ -330,15 +300,21 @@ export default {
         d = dd;
       }
       let dateFormat = date.getFullYear() + "-" + m + "-" + d;
-      this.newGadget.PurchasedDate = dateFormat;
+      if(this.option == "enddate") {
+        this.endDate = dateFormat;
+      } 
       return dateFormat;
     },
-    fetchBorrow: function(){
+    fetchBorrow: function() {
       this.$store.dispatch("borrow/fetchBorrow");
     },
     deleteBorrow: function(id) {
       // get data
       this.$store.dispatch("borrow/deleteBorrow", id);
+    },
+    showBorrowModal : function() {
+      // show and what are u gonna do
+      console.log("ss")
     },
     showDeleteConfirm(item) {
       this.$bvModal
@@ -356,9 +332,8 @@ export default {
         .then(value => {
           if (value) {
             // alert(Object.keys(item))
-            // alert(item.GadgetID)
-
-            this.deletedGadget(item.GadgetID);
+            alert("delete")
+            this.deleteBorrow(item.borrowID);
           } else {
             // asdasda
           }
@@ -366,7 +341,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchBorrow()
+    this.fetchBorrow();
   },
   components: {
     Datepicker
