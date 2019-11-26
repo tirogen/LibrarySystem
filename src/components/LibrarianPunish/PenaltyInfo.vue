@@ -1,6 +1,9 @@
 <template>
   <b-container>
     <b-table :items="penalties" :fields="fields" striped responsive="sm">
+      <template v-slot:cell(Point)="row">
+          -{{row.item.Point}}
+      </template>
         <template v-slot:cell(Manage)="row">
             <b-button size="sm" @click="row.toggleDetails" class="mr-2">
             {{ row.detailsShowing ? 'Hide' : 'Show'}} Manage

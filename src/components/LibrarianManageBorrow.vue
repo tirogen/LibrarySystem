@@ -282,13 +282,13 @@ export default {
     },
     studentScore: function() {
       // console.log(this.studentScore[0]);
-      if (this.studentScore[0]["Student_id"] == this.username) {
-        alert("check student score");
+      if (this.studentScore[0]["Student_id"] === this.username) {
+        //alert("check student score");
         if (this.studentScore[0]["TotalPoint"] <= 0) {
           alert("borrow restricted for this misbehaved student");
           this.username = "";
         } else {
-          alert("no blacklist")
+          //alert("no blacklist")
         }
       }
     }

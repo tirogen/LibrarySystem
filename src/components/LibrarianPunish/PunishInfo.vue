@@ -22,7 +22,7 @@
                 <b>Remaining Point: </b>{{punishInfo.remainingPoint}}
               </b-card-text>
               <b-dropdown id="dropdown-penalty" v-bind:text="selectedPenalty.Name" class="m-md-2">
-                <b-dropdown-item 
+                <b-dropdown-item
                   v-for="penalty in penalties"
                   :key="penalty.id"
                   @click="selectedPenalty=penalty"
@@ -30,14 +30,17 @@
                   {{penalty.Name}}
                 </b-dropdown-item>
               </b-dropdown>
-              <b-button @click="showPunishConfirm" size="sm" variant="danger" class="m-2">Punish</b-button>  
+              <b-button @click="showPunishConfirm" size="sm" variant="danger" class="m-2">Punish</b-button>
               <b-button @click="historyIsShow=!historyIsShow" size="sm" variant="primary" class="m-2">
                 {{historyIsShow?"Hide History":"Show History"}}
-              </b-button>   
+              </b-button>
             </b-card>
           </b-col>
         </b-row>
         <b-table :items="punishInfo.histories" :fields="fields" striped responsive="sm" v-if="historyIsShow">
+          <template v-slot:cell(Point)="row">
+            -{{row.item.Point}}
+          </template>
           <template v-slot:cell(Manage)="row">
             <b-button @click="showDeleteConfirm(row.item.id)" size="sm" variant="primary" class="m-2">Pardon</b-button>
           </template>

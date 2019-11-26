@@ -2,7 +2,8 @@
   <b-container>
     <b-table :items="borrows" :fields="fields" striped responsive="sm">
       <template v-slot:cell(Renew)="row">
-          <b-button @click="setModal(row.item)" size="sm" variant="primary" class="m-2">renew</b-button>
+          <b-button v-if="diffDate(row.item.ReturnDate)<=3 && diffDate(row.item.ReturnDate)>=0" @click="setModal(row.item)" size="sm" variant="primary" class="m-2">renew</b-button>
+          <b-button v-else @click="setModal(row.item)" disabled size="sm" class="m-2">renew</b-button>
       </template>
     </b-table>
 
@@ -21,6 +22,7 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 export default {
   name: "BorrowingInfo",
   props: {},
@@ -60,11 +62,16 @@ export default {
       this.$store.dispatch("borrowing/updateRenewTime", this.renew);
       this.$nextTick(() => this.$refs.modal.hide());
     },
+    diffDate(date){
+      return moment.duration((moment(date)).diff(moment())).asDays()
+    }
     //end of update modal
   },
-  computed: mapState({
-    borrows: state => state.borrowing.borrows
-  }),
+  computed: {
+    ...mapState({
+      borrows: state => state.borrowing.borrows
+    })
+  },
   mounted() {
     this.$store.dispatch("borrowing/getBorrow", "student1");
   }
